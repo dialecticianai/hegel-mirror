@@ -33,7 +33,8 @@ impl Selection {
         self.is_dragging = false;
     }
 
-    /// Check if a line is within the selected range
+    /// Check if a line is within the selected range (for future highlighting feature)
+    #[allow(dead_code)]
     pub fn contains_line(&self, line: usize) -> bool {
         if let (Some(start), Some(end)) = (self.start_line, self.end_line) {
             let (min_line, max_line) = if start <= end {

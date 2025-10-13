@@ -1,13 +1,13 @@
 # Test Coverage Report
 
-**Last Updated**: 2025-10-13 19:41
+**Last Updated**: 2025-10-13 19:46
 **Tool**: cargo-llvm-cov
-**Overall Coverage**: **2.08%** lines | **3.19%** regions | **5.00%** functions
+**Overall Coverage**: **2.10%** lines | **3.22%** regions | **5.19%** functions
 
 ## Summary
 
 ```
-TOTAL                            1566              1516     3.19%          80                76     5.00%        1204              1179     2.08%           0                 0         -
+TOTAL                            1553              1503     3.22%          77                73     5.19%        1193              1168     2.10%           0                 0         -
 ```
 
 ## Coverage by Module
@@ -16,7 +16,6 @@ TOTAL                            1566              1516     3.19%          80   
 |--------|--------------|-----------------|-----------|--------|
 | `app.rs` | 0.00% | 0.00% | 0.00% | 🔴 Needs Work |
 | `main.rs` | 0.00% | 0.00% | 0.00% | 🔴 Needs Work |
-| `models/chunk.rs` | 0.00% | 0.00% | 0.00% | 🔴 Needs Work |
 | `models/comment.rs` | 0.00% | 0.00% | 0.00% | 🔴 Needs Work |
 | `models/layout.rs` | 0.00% | 0.00% | 0.00% | 🔴 Needs Work |
 | `models/selection.rs` | 0.00% | 0.00% | 0.00% | 🔴 Needs Work |
@@ -46,7 +45,6 @@ TOTAL                            1566              1516     3.19%          80   
 ### 🔴 Needs Work (<40% lines)
 - `app.rs` - 0.00%
 - `main.rs` - 0.00%
-- `models/chunk.rs` - 0.00%
 - `models/comment.rs` - 0.00%
 - `models/layout.rs` - 0.00%
 - `models/selection.rs` - 0.00%
@@ -67,7 +65,7 @@ TOTAL                            1566              1516     3.19%          80   
 
 | Tier | Target | Current | Status |
 |------|--------|---------|--------|
-| Overall | ≥80% | 2.08% | ⏳ In Progress |
+| Overall | ≥80% | 2.10% | ⏳ In Progress |
 | Critical Paths | ≥95% | Check modules above | Policy |
 | New Modules | ≥80% | - | Policy |
 

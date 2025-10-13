@@ -22,8 +22,6 @@ pub struct Typography {
     pub code_size: f32,
     /// Code block size
     pub code_block_size: f32,
-    /// Line height multiplier
-    pub line_height: f32,
 }
 
 /// Spacing and layout settings
@@ -31,19 +29,16 @@ pub struct Typography {
 pub struct Spacing {
     /// Space after paragraphs
     pub paragraph: f32,
-    /// Space after headings
-    pub heading: f32,
     /// Padding inside code blocks
     pub code_block_padding: f32,
-    /// Inner margin for frames
-    pub inner_margin: f32,
     /// Corner radius for rounded elements
     pub corner_radius: f32,
     /// Minimum line height (in pixels)
     pub min_line_height: f32,
     /// Padding inside table cells
     pub table_cell_padding: f32,
-    /// Table border width
+    /// Table border width (for future table styling)
+    #[allow(dead_code)]
     pub table_border_width: f32,
 }
 
@@ -58,11 +53,14 @@ pub struct Colors {
     pub heading: egui::Color32,
     /// Text color for inline code
     pub inline_code: egui::Color32,
-    /// Table border color
+    /// Table border color (for future table styling)
+    #[allow(dead_code)]
     pub table_border: egui::Color32,
-    /// Table header background color
+    /// Table header background color (for future table styling)
+    #[allow(dead_code)]
     pub table_header_bg: egui::Color32,
-    /// Alternate row background color
+    /// Alternate row background color (for future table styling)
+    #[allow(dead_code)]
     pub table_row_alt_bg: egui::Color32,
     /// Selection highlight background color
     pub selection_highlight: egui::Color32,

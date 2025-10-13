@@ -1,6 +1,6 @@
 # Lines of Code Report
 
-**Last Updated**: 2025-10-13 19:41
+**Last Updated**: 2025-10-13 19:46
 **Tool**: [cloc](https://github.com/AlDanial/cloc) + wc
 
 ---
@@ -9,13 +9,13 @@
 
 | Metric | Rust Code | Documentation (.md) | Total |
 |--------|-----------|---------------------|-------|
-| **Lines** | 1,551 | 3,715 | 5,266 |
-| **Comments** | 164 | - | 164 |
-| **Blank Lines** | 164 | - | 164 |
-| **Total Lines** | 1,879 | 3,715 | 5,594 |
+| **Lines** | 1,541 | 3,713 | 5,254 |
+| **Comments** | 163 | - | 163 |
+| **Blank Lines** | 161 | - | 161 |
+| **Total Lines** | 1,865 | 3,713 | 5,578 |
 | **Files** | 24 | 20 | 44 |
 
-**Documentation Ratio**: 2.40 lines of docs per line of code
+**Documentation Ratio**: 2.41 lines of docs per line of code
 
 ---
 
@@ -24,9 +24,9 @@
 ```
 Language                     files          blank        comment           code
 -------------------------------------------------------------------------------
-Rust                            24            164            164           1551
+Rust                            24            161            163           1541
 -------------------------------------------------------------------------------
-SUM:                            24            164            164           1551
+SUM:                            24            161            163           1541
 -------------------------------------------------------------------------------
 ```
 
@@ -38,17 +38,17 @@ SUM:                            24            164            164           1551
 |------|-------------|------------|------------|--------|--------|
 | `app.rs` | 134 | 134 | 0 | 0.0% | ✅ |
 | `main.rs` | 75 | 75 | 0 | 0.0% | ✅ |
-| `models/chunk.rs` | 44 | 44 | 0 | 0.0% | ✅ |
+| `models/chunk.rs` | 35 | 35 | 0 | 0.0% | ✅ |
 | `models/comment.rs` | 34 | 34 | 0 | 0.0% | ✅ |
 | `models/layout.rs` | 71 | 71 | 0 | 0.0% | ✅ |
 | `models/mod.rs` | 11 | 11 | 0 | 0.0% | ✅ |
-| `models/selection.rs` | 49 | 49 | 0 | 0.0% | ✅ |
+| `models/selection.rs` | 50 | 50 | 0 | 0.0% | ✅ |
 | `models/table.rs` | 22 | 22 | 0 | 0.0% | ✅ |
 | `parsing/chunks.rs` | 164 | 164 | 0 | 0.0% | ✅ |
 | `parsing/mod.rs` | 5 | 5 | 0 | 0.0% | ✅ |
 | `parsing/parser.rs` | 231 | 231 | 0 | 0.0% | ⚠️ Large |
-| `parsing/position.rs` | 51 | 39 | 12 | 23.5% | ✅ |
-| `rendering/chunk.rs` | 319 | 319 | 0 | 0.0% | ⚠️ Large |
+| `parsing/position.rs` | 52 | 40 | 12 | 23.1% | ✅ |
+| `rendering/chunk.rs` | 317 | 317 | 0 | 0.0% | ⚠️ Large |
 | `rendering/code.rs` | 39 | 39 | 0 | 0.0% | ✅ |
 | `rendering/comments.rs` | 137 | 137 | 0 | 0.0% | ✅ |
 | `rendering/image.rs` | 40 | 40 | 0 | 0.0% | ✅ |
@@ -58,8 +58,8 @@ SUM:                            24            164            164           1551
 | `rendering/ui.rs` | 119 | 119 | 0 | 0.0% | ✅ |
 | `syntax/highlighter.rs` | 51 | 51 | 0 | 0.0% | ✅ |
 | `syntax/mod.rs` | 3 | 3 | 0 | 0.0% | ✅ |
-| `theme/default.rs` | 48 | 48 | 0 | 0.0% | ✅ |
-| `theme/mod.rs` | 105 | 105 | 0 | 0.0% | ✅ |
+| `theme/default.rs` | 45 | 45 | 0 | 0.0% | ✅ |
+| `theme/mod.rs` | 103 | 103 | 0 | 0.0% | ✅ |
 
 **⚠️ Warning:** 2 file(s) over 200 impl lines - consider splitting for maintainability
 
@@ -70,7 +70,7 @@ SUM:                            24            164            164           1551
 | File | Lines |
 |------|-------|
 | `CLAUDE.md` | 259 |
-| `COVERAGE_REPORT.md` | 94 |
+| `COVERAGE_REPORT.md` | 92 |
 | `DDD.md` | 543 |
 | `EMOJIS.md` | 139 |
 | `LEXICON.md` | 84 |
@@ -96,7 +96,7 @@ SUM:                            24            164            164           1551
 
 | Metric | Target | Current | Status |
 |--------|--------|---------|--------|
-| Docs/Code Ratio | ≥0.3 | 2.40 | ✅ Excellent |
+| Docs/Code Ratio | ≥0.3 | 2.41 | ✅ Excellent |
 | README exists | Yes | ✅ | Met |
 | ARCHITECTURE.md | Optional | ❌ | Optional |
 

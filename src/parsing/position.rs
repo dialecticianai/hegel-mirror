@@ -32,6 +32,7 @@ impl LineOffsets {
 }
 
 /// Convert byte offset to (line, col) - both 1-indexed (legacy function for tests)
+#[allow(dead_code)]
 pub fn byte_to_line_col(source: &str, byte_offset: usize) -> (usize, usize) {
     let offsets = LineOffsets::new(source);
     offsets.byte_to_line_col(source, byte_offset)

@@ -8,13 +8,10 @@ pub const THEME: Theme = Theme {
         heading_sizes: [32.0, 28.0, 24.0, 20.0, 16.0, 14.0],
         code_size: 13.0,
         code_block_size: 13.0,
-        line_height: 1.5,
     },
     spacing: Spacing {
         paragraph: 4.0,
-        heading: 8.0,
         code_block_padding: 10.0,
-        inner_margin: 10.0,
         corner_radius: 4.0,
         min_line_height: 16.0,
         table_cell_padding: 8.0,

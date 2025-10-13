@@ -5,12 +5,17 @@ use std::ops::Range;
 #[derive(Clone, Debug)]
 pub struct TextChunk {
     pub text: String,
-    /// Byte range in source markdown
+    /// Byte range in source markdown (for column precision feature)
+    #[allow(dead_code)]
     pub byte_range: Range<usize>,
     /// Line/col range in source markdown (1-indexed)
     pub line_start: usize,
+    /// Column start (for column precision feature)
+    #[allow(dead_code)]
     pub col_start: usize,
     pub line_end: usize,
+    /// Column end (for column precision feature)
+    #[allow(dead_code)]
     pub col_end: usize,
     /// Styling
     pub bold: bool,
@@ -27,18 +32,4 @@ pub struct TextChunk {
     pub table: Option<Table>,
     /// Cached render height (for lazy loading without flicker)
     pub cached_height: Option<f32>,
-}
-
-impl TextChunk {
-    pub fn is_image(&self) -> bool {
-        self.image_path.is_some()
-    }
-
-    pub fn is_code_block(&self) -> bool {
-        self.code_block_lang.is_some()
-    }
-
-    pub fn is_table(&self) -> bool {
-        self.table.is_some()
-    }
 }
