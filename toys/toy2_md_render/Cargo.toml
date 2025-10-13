@@ -1,0 +1,11 @@
+[package]
+name = "toy2_md_render"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+eframe = "0.29"
+egui = "0.29"
+pulldown-cmark = "0.12"
+image = "0.25"
+syntect = "5.2"

@@ -1,0 +1,61 @@
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.10s
+     Running `target/debug/toy1_markdown_render test.md`
+[METRICS] FPS: 122.3, Frame time: 8.18ms
+[METRICS] FPS: 70.6, Frame time: 14.16ms
+[METRICS] FPS: 291.2, Frame time: 3.43ms
+[METRICS] FPS: 120.7, Frame time: 8.29ms
+[METRICS] FPS: 75.1, Frame time: 13.31ms
+[METRICS] FPS: 325.7, Frame time: 3.07ms
+[METRICS] FPS: 306.9, Frame time: 3.26ms
+[METRICS] FPS: 330.6, Frame time: 3.03ms
+[METRICS] FPS: 67.0, Frame time: 14.94ms
+[SELECTION] Selection detected via LabelSelectionState
+[SELECTION] Selection detected via LabelSelectionState
+[SELECTION] Selection detected via LabelSelectionState
+[METRICS] FPS: 71.4, Frame time: 14.00ms
+[SELECTION] Selection detected via LabelSelectionState
+[SELECTION] Selection detected via LabelSelectionState
+[SELECTION] Selection detected via LabelSelectionState
+[SELECTION] Selection detected via LabelSelectionState
+[SELECTION] Selection detected via LabelSelectionState
+[METRICS] FPS: 76.4, Frame time: 13.09ms
+[SELECTION] Selection detected via LabelSelectionState
+[SELECTION] Selection detected via LabelSelectionState
+[SELECTION] Selection detected via LabelSelectionState
+[SELECTION] Selection detected via LabelSelectionState
+[METRICS] FPS: 316.8, Frame time: 3.16ms
+[SELECTION] Selection detected via LabelSelectionState
+[SELECTION] Selection detected via LabelSelectionState
+[SELECTION] Selection detected via LabelSelectionState
+[SELECTION] Selection detected via LabelSelectionState
+[SELECTION] Selection detected via LabelSelectionState
+[METRICS] FPS: 73.4, Frame time: 13.62ms
+[SELECTION] Selection detected via LabelSelectionState
+[SELECTION] Selection detected via LabelSelectionState
+[SELECTION] Selection detected via LabelSelectionState
+[METRICS] FPS: 79.5, Frame time: 12.58ms
+[METRICS] FPS: 332.4, Frame time: 3.01ms
+[METRICS] FPS: 438.1, Frame time: 2.28ms
+[METRICS] FPS: 72.3, Frame time: 13.83ms
+[DEBUG] Looking for text: "(selected text - press Cmd+C to capture)"
+[DEBUG] Trimmed: "(selected text - press Cmd+C to capture)"
+[DEBUG] Cache contains 19 entries
+[DEBUG]   Cache entry: "and" -> (10, 10)
+[DEBUG]   Cache entry: "test" -> (5, 5)
+[DEBUG]   Cache entry: "Lists" -> (9, 9)
+[DEBUG]   Cache entry: "Code Blocks" -> (13, 13)
+[DEBUG]   Cache entry: "Testing CommonMark rendering in egui." -> (32, 32)
+[COMMENT] Added comment: "qwdqwdqwd" at lines None
+[METRICS] FPS: 350.9, Frame time: 2.85ms
+[METRICS] FPS: 346.1, Frame time: 2.89ms
+[METRICS] FPS: 73.5, Frame time: 13.60ms
+[METRICS] FPS: 273.7, Frame time: 3.65ms
+[SELECTION] Selection detected via LabelSelectionState
+[METRICS] FPS: 123.8, Frame time: 8.08ms
+[METRICS] FPS: 74.2, Frame time: 13.48ms
+[METRICS] FPS: 393.0, Frame time: 2.54ms
+[METRICS] FPS: 73.8, Frame time: 13.55ms
+
+thread 'main' panicked at /Users/emadum/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/epaint-0.33.0/src/mutex.rs:101:17:
+DEBUG PANIC: Failed to acquire RwLock write after 10s. Deadlock?
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace

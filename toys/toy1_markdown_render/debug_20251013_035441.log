@@ -1,0 +1,184 @@
+   Compiling toy1_markdown_render v0.1.0 (/Users/emadum/Code/hegel-mirror/toys/toy1_markdown_render)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.52s
+     Running `target/debug/toy1_markdown_render test.md`
+[METRICS] FPS: 70.5, Frame time: 14.18ms
+[METRICS] FPS: 73.2, Frame time: 13.66ms
+[METRICS] FPS: 75.0, Frame time: 13.33ms
+[METRICS] FPS: 76.0, Frame time: 13.16ms
+[METRICS] FPS: 95.7, Frame time: 10.45ms
+[METRICS] FPS: 124.9, Frame time: 8.01ms
+[METRICS] FPS: 72.9, Frame time: 13.73ms
+[METRICS] FPS: 70.5, Frame time: 14.19ms
+[METRICS] FPS: 91.9, Frame time: 10.88ms
+[METRICS] FPS: 87.6, Frame time: 11.42ms
+[SELECTION] Selection detected via LabelSelectionState
+[SELECTION] Selection detected via LabelSelectionState
+[METRICS] FPS: 70.0, Frame time: 14.28ms
+[SELECTION] Selection detected via LabelSelectionState
+[SELECTION] Selection detected via LabelSelectionState
+[SELECTION] Selection detected via LabelSelectionState
+[SELECTION] Selection detected via LabelSelectionState
+[SELECTION] Selection detected via LabelSelectionState
+[METRICS] FPS: 324.5, Frame time: 3.08ms
+[SELECTION] Selection detected via LabelSelectionState
+[SELECTION] Selection detected via LabelSelectionState
+[SELECTION] Selection detected via LabelSelectionState
+[SELECTION] Selection detected via LabelSelectionState
+[SELECTION] Selection detected via LabelSelectionState
+[METRICS] FPS: 308.9, Frame time: 3.24ms
+[SELECTION] Selection detected via LabelSelectionState
+[SELECTION] Selection detected via LabelSelectionState
+[EVENT] Copy event detected
+[SELECTION] Selection detected via LabelSelectionState
+[SELECTION] Selection detected via LabelSelectionState
+[METRICS] FPS: 71.7, Frame time: 13.95ms
+[SELECTION] Selection detected via LabelSelectionState
+[SELECTION] Selection detected via LabelSelectionState
+[SELECTION] Selection detected via LabelSelectionState
+[SELECTION] Selection detected via LabelSelectionState
+[SELECTION] Selection detected via LabelSelectionState
+[METRICS] FPS: 72.6, Frame time: 13.77ms
+[SELECTION] Selection detected via LabelSelectionState
+[SELECTION] Selection detected via LabelSelectionState
+[EVENT] Copy event detected
+[SELECTION] Selection detected via LabelSelectionState
+[SELECTION] Selection detected via LabelSelectionState
+[SELECTION] Selection detected via LabelSelectionState
+[EVENT] Copy event detected
+[METRICS] FPS: 120.6, Frame time: 8.29ms
+[SELECTION] Selection detected via LabelSelectionState
+[SELECTION] Selection detected via LabelSelectionState
+[SELECTION] Selection detected via LabelSelectionState
+[SELECTION] Selection detected via LabelSelectionState
+[METRICS] FPS: 120.5, Frame time: 8.30ms
+[SELECTION] Selection detected via LabelSelectionState
+[SELECTION] Selection detected via LabelSelectionState
+[EVENT] Copy event detected
+[SELECTION] Selection detected via LabelSelectionState
+[SELECTION] Selection detected via LabelSelectionState
+[EVENT] Copy event detected
+[SELECTION] Selection detected via LabelSelectionState
+[METRICS] FPS: 74.2, Frame time: 13.48ms
+[SELECTION] Selection detected via LabelSelectionState
+[EVENT] Copy event detected
+[SELECTION] Selection detected via LabelSelectionState
+[SELECTION] Selection detected via LabelSelectionState
+[SELECTION] Selection detected via LabelSelectionState
+[SELECTION] Selection detected via LabelSelectionState
+[METRICS] FPS: 120.7, Frame time: 8.28ms
+[SELECTION] Selection detected via LabelSelectionState
+[SELECTION] Selection detected via LabelSelectionState
+[SELECTION] Selection detected via LabelSelectionState
+[SELECTION] Selection detected via LabelSelectionState
+[METRICS] FPS: 120.4, Frame time: 8.31ms
+[SELECTION] Selection detected via LabelSelectionState
+[SELECTION] Selection detected via LabelSelectionState
+[SELECTION] Selection detected via LabelSelectionState
+[METRICS] FPS: 90.7, Frame time: 11.02ms
+[METRICS] FPS: 116.9, Frame time: 8.56ms
+[METRICS] FPS: 481.3, Frame time: 2.08ms
+[METRICS] FPS: 328.0, Frame time: 3.05ms
+[METRICS] FPS: 75.8, Frame time: 13.19ms
+[METRICS] FPS: 302.2, Frame time: 3.31ms
+[METRICS] FPS: 74.2, Frame time: 13.48ms
+[METRICS] FPS: 253.9, Frame time: 3.94ms
+[METRICS] FPS: 76.8, Frame time: 13.01ms
+[METRICS] FPS: 71.4, Frame time: 14.00ms
+[METRICS] FPS: 121.1, Frame time: 8.26ms
+[METRICS] FPS: 338.3, Frame time: 2.96ms
+[METRICS] FPS: 73.0, Frame time: 13.71ms
+[METRICS] FPS: 287.0, Frame time: 3.48ms
+[METRICS] FPS: 228.6, Frame time: 4.38ms
+[METRICS] FPS: 117.3, Frame time: 8.52ms
+[METRICS] FPS: 274.0, Frame time: 3.65ms
+[METRICS] FPS: 303.7, Frame time: 3.29ms
+[METRICS] FPS: 261.5, Frame time: 3.82ms
+[METRICS] FPS: 73.9, Frame time: 13.54ms
+[METRICS] FPS: 78.6, Frame time: 12.73ms
+[METRICS] FPS: 75.9, Frame time: 13.18ms
+[METRICS] FPS: 120.8, Frame time: 8.28ms
+[METRICS] FPS: 213.0, Frame time: 4.69ms
+[METRICS] FPS: 446.6, Frame time: 2.24ms
+[METRICS] FPS: 75.8, Frame time: 13.19ms
+[METRICS] FPS: 73.9, Frame time: 13.53ms
+[METRICS] FPS: 74.6, Frame time: 13.40ms
+[METRICS] FPS: 271.5, Frame time: 3.68ms
+[METRICS] FPS: 121.8, Frame time: 8.21ms
+[METRICS] FPS: 298.9, Frame time: 3.35ms
+[METRICS] FPS: 119.4, Frame time: 8.38ms
+[METRICS] FPS: 83.6, Frame time: 11.96ms
+[METRICS] FPS: 75.6, Frame time: 13.22ms
+[METRICS] FPS: 326.9, Frame time: 3.06ms
+[METRICS] FPS: 74.0, Frame time: 13.51ms
+[METRICS] FPS: 278.9, Frame time: 3.59ms
+[METRICS] FPS: 324.3, Frame time: 3.08ms
+[METRICS] FPS: 358.2, Frame time: 2.79ms
+[METRICS] FPS: 291.3, Frame time: 3.43ms
+[METRICS] FPS: 76.9, Frame time: 13.01ms
+[METRICS] FPS: 71.9, Frame time: 13.91ms
+[METRICS] FPS: 283.9, Frame time: 3.52ms
+[METRICS] FPS: 73.2, Frame time: 13.66ms
+[METRICS] FPS: 155.7, Frame time: 6.42ms
+[METRICS] FPS: 343.7, Frame time: 2.91ms
+[METRICS] FPS: 75.8, Frame time: 13.19ms
+[METRICS] FPS: 74.7, Frame time: 13.39ms
+[METRICS] FPS: 79.7, Frame time: 12.54ms
+[METRICS] FPS: 292.7, Frame time: 3.42ms
+[METRICS] FPS: 344.3, Frame time: 2.90ms
+[METRICS] FPS: 72.1, Frame time: 13.88ms
+[METRICS] FPS: 73.0, Frame time: 13.70ms
+[METRICS] FPS: 312.7, Frame time: 3.20ms
+[METRICS] FPS: 77.4, Frame time: 12.92ms
+[METRICS] FPS: 74.6, Frame time: 13.40ms
+[METRICS] FPS: 74.2, Frame time: 13.47ms
+[METRICS] FPS: 120.4, Frame time: 8.31ms
+[METRICS] FPS: 119.1, Frame time: 8.40ms
+[METRICS] FPS: 334.4, Frame time: 2.99ms
+[METRICS] FPS: 302.6, Frame time: 3.30ms
+[METRICS] FPS: 316.4, Frame time: 3.16ms
+[METRICS] FPS: 267.9, Frame time: 3.73ms
+[METRICS] FPS: 301.8, Frame time: 3.31ms
+[METRICS] FPS: 120.3, Frame time: 8.31ms
+[METRICS] FPS: 304.4, Frame time: 3.29ms
+[METRICS] FPS: 299.5, Frame time: 3.34ms
+[METRICS] FPS: 73.0, Frame time: 13.70ms
+[METRICS] FPS: 311.0, Frame time: 3.22ms
+[METRICS] FPS: 122.2, Frame time: 8.19ms
+[METRICS] FPS: 73.1, Frame time: 13.68ms
+[METRICS] FPS: 73.8, Frame time: 13.54ms
+[METRICS] FPS: 280.6, Frame time: 3.56ms
+[METRICS] FPS: 78.6, Frame time: 12.72ms
+[METRICS] FPS: 309.7, Frame time: 3.23ms
+[METRICS] FPS: 364.5, Frame time: 2.74ms
+[METRICS] FPS: 74.5, Frame time: 13.42ms
+[METRICS] FPS: 74.7, Frame time: 13.39ms
+[METRICS] FPS: 75.5, Frame time: 13.24ms
+[METRICS] FPS: 329.1, Frame time: 3.04ms
+[METRICS] FPS: 76.9, Frame time: 13.00ms
+[METRICS] FPS: 74.7, Frame time: 13.39ms
+[METRICS] FPS: 75.2, Frame time: 13.30ms
+[METRICS] FPS: 330.9, Frame time: 3.02ms
+[METRICS] FPS: 74.5, Frame time: 13.42ms
+[METRICS] FPS: 327.3, Frame time: 3.06ms
+[METRICS] FPS: 360.6, Frame time: 2.77ms
+[METRICS] FPS: 73.1, Frame time: 13.68ms
+[METRICS] FPS: 281.7, Frame time: 3.55ms
+[METRICS] FPS: 74.6, Frame time: 13.40ms
+[METRICS] FPS: 74.9, Frame time: 13.35ms
+[METRICS] FPS: 285.4, Frame time: 3.50ms
+[METRICS] FPS: 75.9, Frame time: 13.17ms
+[METRICS] FPS: 301.0, Frame time: 3.32ms
+[METRICS] FPS: 327.9, Frame time: 3.05ms
+[METRICS] FPS: 76.2, Frame time: 13.12ms
+[METRICS] FPS: 299.2, Frame time: 3.34ms
+[METRICS] FPS: 75.6, Frame time: 13.23ms
+[METRICS] FPS: 122.0, Frame time: 8.20ms
+[METRICS] FPS: 120.4, Frame time: 8.31ms
+[METRICS] FPS: 120.4, Frame time: 8.30ms
+[METRICS] FPS: 73.0, Frame time: 13.71ms
+[METRICS] FPS: 121.6, Frame time: 8.22ms
+[METRICS] FPS: 76.2, Frame time: 13.12ms
+[METRICS] FPS: 73.9, Frame time: 13.53ms
+[METRICS] FPS: 121.4, Frame time: 8.24ms
+[METRICS] FPS: 72.3, Frame time: 13.82ms
+[METRICS] FPS: 73.1, Frame time: 13.68ms

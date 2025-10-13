@@ -32,6 +32,14 @@
 
 **Mirror-specific additions:**
 
+**Never ask the human to run commands** - Always execute commands directly. Never say "try running X" or "test by running Y". Run it yourself and report results.
+
+**Never propose deferring work** - Everything is in scope unless explicitly declared out of scope. Don't suggest "defer to Phase 2" or "save for later" unless the problem is literally impossible (NASA-level hard with 10+ years effort). Solve problems now.
+
+**NEVER delete code to make tests pass** - If tests fail, fix the tests or fix the implementation. NEVER remove functionality to resolve test failures. Deletion to achieve passing tests is forbidden. No exceptions.
+
+**Concise beats comprehensive** - In specs, docs, and communication: precise and short beats verbose and complete. Cut ruthlessly.
+
 **Ephemerality is a feature** - No persistent project state, no configuration files, no hidden state. Launch → review → write → exit. Like `$EDITOR` for git commits.
 
 **Agent-first, human-compatible** - Designed for `hegel reflect` invocation by AI agents, but equally delightful for human use. The UI is the API.
@@ -220,6 +228,31 @@ nodes:
 **Export formats**: HTML, PDF, annotated Markdown with inline comments.
 
 **Plugin system**: Extensible comment handlers (run linters, check constraints, invoke external tools).
+
+---
+
+## External Documentation Cache
+
+**Prefer cargo doc, fallback to .webcache/**
+
+**For Rust crates**:
+- Use `cargo doc --no-deps -p <crate_name>` to generate local docs
+- Docs appear in `target/doc/<crate>/`
+- Use `lynx -dump -nolist target/doc/<crate>/path.html` to read them
+- Much faster than web fetches, always version-correct
+
+**For non-Rust docs** (.webcache/ fallback):
+- **Purpose**: Cache external web references locally
+- **Location**: `.webcache/` (gitignored)
+- **Download**: `curl -s <url> -o .webcache/<filename>.html`
+- **Why**:
+  - Offline access during development
+  - Version stability (web docs change)
+  - Faster lookup than repeated web fetches
+
+**Reading cached HTML files**:
+- Use `lynx -dump -nolist /path/to/file.html` to convert HTML → clean text
+- Strips HTML tags, formats tables, preserves structure, easier to parse than raw HTML
 
 ---
 

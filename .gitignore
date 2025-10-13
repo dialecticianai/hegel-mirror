@@ -20,3 +20,6 @@ Thumbs.db
 
 # Session handoff (ephemeral)
 HANDOFF.md
+
+# Hegel CLI artifacts
+.hegel/

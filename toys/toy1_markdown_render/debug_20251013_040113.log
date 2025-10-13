@@ -1,0 +1,40 @@
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.09s
+     Running `target/debug/toy1_markdown_render test.md`
+[METRICS] FPS: 73.6, Frame time: 13.59ms
+[METRICS] FPS: 122.3, Frame time: 8.18ms
+[METRICS] FPS: 76.8, Frame time: 13.02ms
+[METRICS] FPS: 358.2, Frame time: 2.79ms
+[METRICS] FPS: 126.3, Frame time: 7.92ms
+[METRICS] FPS: 119.1, Frame time: 8.39ms
+[METRICS] FPS: 330.9, Frame time: 3.02ms
+[SELECTION] Selection detected via LabelSelectionState
+[SELECTION] Selection detected via LabelSelectionState
+[SELECTION] Selection detected via LabelSelectionState
+[METRICS] FPS: 119.7, Frame time: 8.36ms
+[SELECTION] Selection detected via LabelSelectionState
+[SELECTION] Selection detected via LabelSelectionState
+[SELECTION] Selection detected via LabelSelectionState
+[SELECTION] Selection detected via LabelSelectionState
+[METRICS] FPS: 330.1, Frame time: 3.03ms
+[SELECTION] Selection detected via LabelSelectionState
+[SELECTION] Selection detected via LabelSelectionState
+[SELECTION] Selection detected via LabelSelectionState
+[SELECTION] Selection detected via LabelSelectionState
+[SELECTION] Selection detected via LabelSelectionState
+[METRICS] FPS: 120.0, Frame time: 8.33ms
+[SELECTION] Selection detected via LabelSelectionState
+[SELECTION] Selection detected via LabelSelectionState
+[SELECTION] Selection detected via LabelSelectionState
+[SELECTION] Selection detected via LabelSelectionState
+[SELECTION] Selection detected via LabelSelectionState
+[METRICS] FPS: 246.1, Frame time: 4.06ms
+[METRICS] FPS: 89.6, Frame time: 11.16ms
+[METRICS] FPS: 51.4, Frame time: 19.47ms
+[METRICS] FPS: 70.1, Frame time: 14.26ms
+[DEBUG] Text not found in source: "(selection active)"
+[COMMENT] Added comment: "asdasdads" at lines None
+[METRICS] FPS: 76.9, Frame time: 13.00ms
+[METRICS] FPS: 68.5, Frame time: 14.59ms
+[METRICS] FPS: 78.3, Frame time: 12.77ms
+[METRICS] FPS: 121.3, Frame time: 8.24ms
+[METRICS] FPS: 117.0, Frame time: 8.55ms

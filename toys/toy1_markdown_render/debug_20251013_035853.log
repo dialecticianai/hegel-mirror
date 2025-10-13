@@ -1,0 +1,72 @@
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.09s
+     Running `target/debug/toy1_markdown_render test.md`
+[METRICS] FPS: 120.6, Frame time: 8.29ms
+[METRICS] FPS: 76.2, Frame time: 13.13ms
+[METRICS] FPS: 72.6, Frame time: 13.77ms
+[METRICS] FPS: 74.7, Frame time: 13.39ms
+[METRICS] FPS: 311.9, Frame time: 3.21ms
+[METRICS] FPS: 261.8, Frame time: 3.82ms
+[METRICS] FPS: 70.5, Frame time: 14.18ms
+[METRICS] FPS: 72.3, Frame time: 13.84ms
+[METRICS] FPS: 343.6, Frame time: 2.91ms
+[SELECTION] Selection detected via LabelSelectionState
+[SELECTION] Selection detected via LabelSelectionState
+[SELECTION] Selection detected via LabelSelectionState
+[SELECTION] Selection detected via LabelSelectionState
+[SELECTION] Selection detected via LabelSelectionState
+[METRICS] FPS: 75.2, Frame time: 13.29ms
+[SELECTION] Selection detected via LabelSelectionState
+[SELECTION] Selection detected via LabelSelectionState
+[SELECTION] Selection detected via LabelSelectionState
+[SELECTION] Selection detected via LabelSelectionState
+[SELECTION] Selection detected via LabelSelectionState
+[METRICS] FPS: 305.3, Frame time: 3.28ms
+[SELECTION] Selection detected via LabelSelectionState
+[SELECTION] Selection detected via LabelSelectionState
+[SELECTION] Selection detected via LabelSelectionState
+[SELECTION] Selection detected via LabelSelectionState
+[METRICS] FPS: 425.9, Frame time: 2.35ms
+[SELECTION] Selection detected via LabelSelectionState
+[SELECTION] Selection detected via LabelSelectionState
+[SELECTION] Selection detected via LabelSelectionState
+[SELECTION] Selection detected via LabelSelectionState
+[SELECTION] Selection detected via LabelSelectionState
+[METRICS] FPS: 73.0, Frame time: 13.70ms
+[SELECTION] Selection detected via LabelSelectionState
+[SELECTION] Selection detected via LabelSelectionState
+[SELECTION] Selection detected via LabelSelectionState
+[SELECTION] Selection detected via LabelSelectionState
+[SELECTION] Selection detected via LabelSelectionState
+[METRICS] FPS: 119.6, Frame time: 8.36ms
+[SELECTION] Selection detected via LabelSelectionState
+[SELECTION] Selection detected via LabelSelectionState
+[SELECTION] Selection detected via LabelSelectionState
+[SELECTION] Selection detected via LabelSelectionState
+[METRICS] FPS: 72.8, Frame time: 13.74ms
+[SELECTION] Selection detected via LabelSelectionState
+[SELECTION] Selection detected via LabelSelectionState
+[SELECTION] Selection detected via LabelSelectionState
+[SELECTION] Selection detected via LabelSelectionState
+[SELECTION] Selection detected via LabelSelectionState
+[METRICS] FPS: 122.6, Frame time: 8.15ms
+[SELECTION] Selection detected via LabelSelectionState
+[SELECTION] Selection detected via LabelSelectionState
+[SELECTION] Selection detected via LabelSelectionState
+[SELECTION] Selection detected via LabelSelectionState
+[SELECTION] Selection detected via LabelSelectionState
+[METRICS] FPS: 82.9, Frame time: 12.06ms
+[SELECTION] Selection detected via LabelSelectionState
+[SELECTION] Selection detected via LabelSelectionState
+[SELECTION] Selection detected via LabelSelectionState
+[SELECTION] Selection detected via LabelSelectionState
+[SELECTION] Selection detected via LabelSelectionState
+[METRICS] FPS: 296.8, Frame time: 3.37ms
+[SELECTION] Selection detected via LabelSelectionState
+[SELECTION] Selection detected via LabelSelectionState
+[SELECTION] Selection detected via LabelSelectionState
+[SELECTION] Selection detected via LabelSelectionState
+[METRICS] FPS: 120.2, Frame time: 8.32ms
+[METRICS] FPS: 67.8, Frame time: 14.75ms
+[METRICS] FPS: 246.3, Frame time: 4.06ms
+[METRICS] FPS: 287.7, Frame time: 3.48ms
+[METRICS] FPS: 73.4, Frame time: 13.62ms

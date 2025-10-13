@@ -1,5 +1,15 @@
+mod app;
+mod models;
+mod parsing;
+mod rendering;
+mod syntax;
+
 use anyhow::Result;
+use app::MarkdownReviewApp;
 use clap::Parser;
+use eframe::egui;
+use std::fs;
+use std::path::Path;
 
 /// Ephemeral Markdown review UI for Dialectic-Driven Development
 #[derive(Parser, Debug)]
@@ -29,24 +39,36 @@ fn main() -> Result<()> {
         anyhow::bail!("No files specified. Usage: mirror FILE1.md [FILE2.md ...]");
     }
 
-    // MVP placeholder: Just print args and exit successfully
-    println!("Mirror v{}", env!("CARGO_PKG_VERSION"));
-    println!("Files: {:?}", args.files);
-    println!("Output directory: {}", args.out_dir);
-    println!("JSON output: {}", args.json);
-    println!("Headless: {}", args.headless);
-    println!("\n⚠️  MVP not yet implemented - this is a placeholder");
-
-    Ok(())
-}
-
-#[cfg(test)]
-mod tests {
-    use super::*;
-
-    #[test]
-    fn test_placeholder() {
-        // Placeholder test to ensure test infrastructure works
-        assert_eq!(2 + 2, 4);
+    if args.headless {
+        // Headless mode: just exit successfully
+        return Ok(());
     }
+
+    // For now, only support single file (multi-file tabs coming later)
+    let file_path = &args.files[0];
+    let markdown_content = fs::read_to_string(file_path)
+        .unwrap_or_else(|e| panic!("Failed to read {}: {}", file_path, e));
+
+    let base_path = Path::new(file_path)
+        .parent()
+        .unwrap_or(Path::new("."))
+        .to_path_buf();
+
+    let options = eframe::NativeOptions {
+        viewport: egui::ViewportBuilder::default().with_inner_size([1024.0, 768.0]),
+        ..Default::default()
+    };
+
+    eframe::run_native(
+        "Hegel Mirror",
+        options,
+        Box::new(move |cc| {
+            cc.egui_ctx.set_visuals(egui::Visuals::light());
+            Ok(Box::new(MarkdownReviewApp::new(
+                markdown_content,
+                base_path,
+            )))
+        }),
+    )
+    .map_err(|e| anyhow::anyhow!("eframe error: {}", e))
 }

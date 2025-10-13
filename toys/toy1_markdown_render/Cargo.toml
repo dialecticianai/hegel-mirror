@@ -1,0 +1,10 @@
+[package]
+name = "toy1_markdown_render"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+eframe = "0.33"
+egui = { path = "../../vendor/egui/crates/egui" }
+egui_commonmark = { path = "../../vendor/egui_commonmark/egui_commonmark" }
+pulldown-cmark = "0.12"

@@ -1,0 +1,36 @@
+   Compiling toy1_markdown_render v0.1.0 (/Users/emadum/Code/hegel-mirror/toys/toy1_markdown_render)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.46s
+     Running `target/debug/toy1_markdown_render test.md`
+[METRICS] FPS: 296.5, Frame time: 3.37ms
+[METRICS] FPS: 73.9, Frame time: 13.53ms
+[METRICS] FPS: 76.1, Frame time: 13.14ms
+[METRICS] FPS: 290.1, Frame time: 3.45ms
+[METRICS] FPS: 292.5, Frame time: 3.42ms
+[METRICS] FPS: 73.5, Frame time: 13.61ms
+[METRICS] FPS: 477.0, Frame time: 2.10ms
+[METRICS] FPS: 599.0, Frame time: 1.67ms
+[METRICS] FPS: 406.7, Frame time: 2.46ms
+[SELECTION] Selection detected via LabelSelectionState
+[SELECTION] Selection detected via LabelSelectionState
+[SELECTION] Selection detected via LabelSelectionState
+[METRICS] FPS: 72.9, Frame time: 13.71ms
+[SELECTION] Selection detected via LabelSelectionState
+[SELECTION] Selection detected via LabelSelectionState
+[SELECTION] Selection detected via LabelSelectionState
+[SELECTION] Selection detected via LabelSelectionState
+[SELECTION] Selection detected via LabelSelectionState
+[METRICS] FPS: 354.1, Frame time: 2.82ms
+[SELECTION] Selection detected via LabelSelectionState
+[SELECTION] Selection detected via LabelSelectionState
+[SELECTION] Selection detected via LabelSelectionState
+[SELECTION] Selection detected via LabelSelectionState
+[METRICS] FPS: 75.3, Frame time: 13.28ms
+[SELECTION] Selection detected via LabelSelectionState
+[SELECTION] Selection detected via LabelSelectionState
+[SELECTION] Selection detected via LabelSelectionState
+[SELECTION] Selection detected via LabelSelectionState
+[SELECTION] Selection detected via LabelSelectionState
+
+thread 'main' panicked at /Users/emadum/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/epaint-0.33.0/src/mutex.rs:101:17:
+DEBUG PANIC: Failed to acquire RwLock write after 10s. Deadlock?
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
