@@ -1,3 +1,4 @@
+mod chunks;
 mod parser;
 mod position;
 

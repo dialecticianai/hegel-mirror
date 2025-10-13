@@ -1,13 +1,13 @@
 # Test Coverage Report
 
-**Last Updated**: 2025-10-13 19:35
+**Last Updated**: 2025-10-13 19:40
 **Tool**: cargo-llvm-cov
-**Overall Coverage**: **2.34%** lines | **3.37%** regions | **5.48%** functions
+**Overall Coverage**: **2.08%** lines | **3.20%** regions | **5.00%** functions
 
 ## Summary
 
 ```
-TOTAL                            1482              1432     3.37%          73                69     5.48%        1070              1045     2.34%           0                 0         -
+TOTAL                            1563              1513     3.20%          80                76     5.00%        1203              1178     2.08%           0                 0         -
 ```
 
 ## Coverage by Module
@@ -21,9 +21,12 @@ TOTAL                            1482              1432     3.37%          73   
 | `models/layout.rs` | 0.00% | 0.00% | 0.00% | 🔴 Needs Work |
 | `models/selection.rs` | 0.00% | 0.00% | 0.00% | 🔴 Needs Work |
 | `models/table.rs` | 0.00% | 0.00% | 0.00% | 🔴 Needs Work |
+| `parsing/chunks.rs` | 0.00% | 0.00% | 0.00% | 🔴 Needs Work |
 | `parsing/parser.rs` | 0.00% | 0.00% | 0.00% | 🔴 Needs Work |
 | `parsing/position.rs` | 96.15% | 94.34% | 100.00% | 🟢 Excellent |
+| `rendering/chunk.rs` | 0.00% | 0.00% | 0.00% | 🔴 Needs Work |
 | `rendering/code.rs` | 0.00% | 0.00% | 0.00% | 🔴 Needs Work |
+| `rendering/comments.rs` | 0.00% | 0.00% | 0.00% | 🔴 Needs Work |
 | `rendering/image.rs` | 0.00% | 0.00% | 0.00% | 🔴 Needs Work |
 | `rendering/table.rs` | 0.00% | 0.00% | 0.00% | 🔴 Needs Work |
 | `rendering/text.rs` | 0.00% | 0.00% | 0.00% | 🔴 Needs Work |
@@ -48,8 +51,11 @@ TOTAL                            1482              1432     3.37%          73   
 - `models/layout.rs` - 0.00%
 - `models/selection.rs` - 0.00%
 - `models/table.rs` - 0.00%
+- `parsing/chunks.rs` - 0.00%
 - `parsing/parser.rs` - 0.00%
+- `rendering/chunk.rs` - 0.00%
 - `rendering/code.rs` - 0.00%
+- `rendering/comments.rs` - 0.00%
 - `rendering/image.rs` - 0.00%
 - `rendering/table.rs` - 0.00%
 - `rendering/text.rs` - 0.00%
@@ -61,7 +67,7 @@ TOTAL                            1482              1432     3.37%          73   
 
 | Tier | Target | Current | Status |
 |------|--------|---------|--------|
-| Overall | ≥80% | 2.34% | ⏳ In Progress |
+| Overall | ≥80% | 2.08% | ⏳ In Progress |
 | Critical Paths | ≥95% | Check modules above | Policy |
 | New Modules | ≥80% | - | Policy |
 
