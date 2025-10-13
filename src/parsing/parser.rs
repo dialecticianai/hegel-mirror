@@ -1,13 +1,16 @@
-use crate::models::TextChunk;
+use crate::models::{Table, TextChunk};
 use crate::parsing::position::byte_to_line_col;
-use pulldown_cmark::{CodeBlockKind, CowStr, Event, Parser, Tag, TagEnd};
+use pulldown_cmark::{CodeBlockKind, CowStr, Event, Options, Parser, Tag, TagEnd};
 use std::ops::Range;
 use std::path::Path;
 
 /// Parse markdown into chunks with position tracking
 pub fn parse_markdown(source: &str, base_path: &Path) -> Vec<TextChunk> {
     let mut chunks: Vec<TextChunk> = Vec::new();
-    let parser = Parser::new(source);
+    let mut options = Options::empty();
+    options.insert(Options::ENABLE_TABLES);
+    options.insert(Options::ENABLE_STRIKETHROUGH);
+    let parser = Parser::new_ext(source, options);
 
     // Track style state
     let mut bold = false;
@@ -17,32 +20,56 @@ pub fn parse_markdown(source: &str, base_path: &Path) -> Vec<TextChunk> {
     let mut in_code_block = false;
     let mut code_block_lang: Option<String> = None;
 
+    // Track table state
+    let mut in_table = false;
+    let mut in_table_head = false;
+    let mut current_table: Option<Table> = None;
+    let mut current_row: Vec<String> = Vec::new();
+    let mut current_cell: String = String::new();
+    let mut table_start_range: Option<Range<usize>> = None;
+
     for (event, range) in parser.into_offset_iter() {
         match event {
-            Event::Start(tag) => handle_start_tag(
-                tag,
-                &mut bold,
-                &mut italic,
-                &mut heading_level,
-                &mut current_image_url,
-                &mut in_code_block,
-                &mut code_block_lang,
-            ),
-            Event::End(tag) => handle_end_tag(
-                tag,
-                &mut bold,
-                &mut italic,
-                &mut heading_level,
-                &mut current_image_url,
-                &mut in_code_block,
-                &mut code_block_lang,
-                &mut chunks,
-                source,
-                base_path,
-                &range,
-            ),
+            Event::Start(Tag::Table(alignments)) => {
+                in_table = true;
+                current_table = Some(Table::new(alignments));
+                table_start_range = Some(range.clone());
+            }
+            Event::Start(Tag::TableHead) => {
+                in_table_head = true;
+            }
+            Event::Start(Tag::TableRow) => {
+                current_row.clear();
+            }
+            Event::Start(Tag::TableCell) => {
+                current_cell.clear();
+            }
+            Event::End(TagEnd::TableCell) => {
+                current_row.push(current_cell.clone());
+            }
+            Event::End(TagEnd::TableRow) => {
+                if let Some(table) = &mut current_table {
+                    if in_table_head {
+                        table.header = current_row.clone();
+                    } else {
+                        table.rows.push(current_row.clone());
+                    }
+                }
+            }
+            Event::End(TagEnd::TableHead) => {
+                in_table_head = false;
+            }
+            Event::End(TagEnd::Table) => {
+                if let Some(table) = current_table.take() {
+                    let table_range = table_start_range.take().unwrap_or(range.clone());
+                    push_table_chunk(&mut chunks, table, source, &table_range);
+                }
+                in_table = false;
+            }
             Event::Text(text) => {
-                if current_image_url.is_none() {
+                if in_table {
+                    current_cell.push_str(&text);
+                } else if current_image_url.is_none() {
                     push_text_chunk(
                         &mut chunks,
                         text.to_string(),
@@ -57,21 +84,59 @@ pub fn parse_markdown(source: &str, base_path: &Path) -> Vec<TextChunk> {
                 }
             }
             Event::Code(text) => {
-                push_code_chunk(
-                    &mut chunks,
-                    text.to_string(),
-                    source,
-                    &range,
-                    bold,
-                    italic,
-                    heading_level,
-                );
+                if in_table {
+                    current_cell.push_str(&text);
+                } else {
+                    push_code_chunk(
+                        &mut chunks,
+                        text.to_string(),
+                        source,
+                        &range,
+                        bold,
+                        italic,
+                        heading_level,
+                    );
+                }
             }
             Event::SoftBreak => {
-                push_break_chunk(&mut chunks, " ".to_string(), &range, false);
+                if !in_table {
+                    push_break_chunk(&mut chunks, " ".to_string(), &range, false);
+                }
             }
             Event::HardBreak => {
-                push_break_chunk(&mut chunks, "\n".to_string(), &range, true);
+                if !in_table {
+                    push_break_chunk(&mut chunks, "\n".to_string(), &range, true);
+                }
+            }
+            Event::Start(tag) => {
+                if !in_table {
+                    handle_start_tag(
+                        tag,
+                        &mut bold,
+                        &mut italic,
+                        &mut heading_level,
+                        &mut current_image_url,
+                        &mut in_code_block,
+                        &mut code_block_lang,
+                    );
+                }
+            }
+            Event::End(tag) => {
+                if !in_table {
+                    handle_end_tag(
+                        tag,
+                        &mut bold,
+                        &mut italic,
+                        &mut heading_level,
+                        &mut current_image_url,
+                        &mut in_code_block,
+                        &mut code_block_lang,
+                        &mut chunks,
+                        source,
+                        base_path,
+                        &range,
+                    );
+                }
             }
             _ => {}
         }
@@ -179,6 +244,7 @@ fn push_text_chunk(
         } else {
             None
         },
+        table: None,
         cached_height: None,
     });
 }
@@ -209,6 +275,7 @@ fn push_code_chunk(
         newline_after: false,
         image_path: None,
         code_block_lang: None,
+        table: None,
         cached_height: None,
     });
 }
@@ -233,6 +300,7 @@ fn push_break_chunk(
         newline_after: newline,
         image_path: None,
         code_block_lang: None,
+        table: None,
         cached_height: None,
     });
 }
@@ -262,6 +330,30 @@ fn push_image_chunk(
         newline_after: true,
         image_path: Some(image_path),
         code_block_lang: None,
+        table: None,
+        cached_height: None,
+    });
+}
+
+fn push_table_chunk(chunks: &mut Vec<TextChunk>, table: Table, source: &str, range: &Range<usize>) {
+    let (line_start, col_start) = byte_to_line_col(source, range.start);
+    let (line_end, col_end) = byte_to_line_col(source, range.end);
+
+    chunks.push(TextChunk {
+        text: "[Table]".to_string(),
+        byte_range: range.clone(),
+        line_start,
+        col_start,
+        line_end,
+        col_end,
+        bold: false,
+        italic: false,
+        code: false,
+        heading_level: None,
+        newline_after: true,
+        image_path: None,
+        code_block_lang: None,
+        table: Some(table),
         cached_height: None,
     });
 }

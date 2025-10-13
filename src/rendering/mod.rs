@@ -1,5 +1,6 @@
 mod code;
 mod image;
+mod table;
 mod text;
 mod ui;
 

@@ -1,5 +1,5 @@
 use crate::models::{Comment, Selection, TextChunk};
-use crate::rendering::{code, image, text};
+use crate::rendering::{code, image, table, text};
 use crate::syntax::SyntaxHighlighter;
 use crate::theme::Theme;
 use eframe::egui;
@@ -61,6 +61,27 @@ pub fn render_content(
                     // Render and cache actual height
                     let before_y = ui.cursor().min.y;
                     code::render_code_block(ui, &chunk.text, lang, highlighter, theme);
+                    let after_y = ui.cursor().min.y;
+                    chunk.cached_height = Some(after_y - before_y);
+                } else {
+                    // Use cached height for stable placeholder
+                    ui.add_space(estimated_height);
+                }
+                if chunk.newline_after {
+                    ui.add_space(theme.spacing.paragraph);
+                }
+            } else if let Some(table_data) = &chunk.table {
+                // Check if in viewport using cached height
+                let estimated_height = chunk.cached_height.unwrap_or(
+                    (table_data.rows.len() as f32 + 1.0) * theme.spacing.min_line_height,
+                );
+                let approx_rect =
+                    egui::Rect::from_min_size(start_pos, egui::vec2(600.0, estimated_height));
+
+                if is_in_viewport(ui, approx_rect) {
+                    // Render and cache actual height
+                    let before_y = ui.cursor().min.y;
+                    table::render_table(ui, table_data, theme, idx);
                     let after_y = ui.cursor().min.y;
                     chunk.cached_height = Some(after_y - before_y);
                 } else {

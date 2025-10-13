@@ -40,6 +40,10 @@ pub struct Spacing {
     pub corner_radius: f32,
     /// Minimum line height (in pixels)
     pub min_line_height: f32,
+    /// Padding inside table cells
+    pub table_cell_padding: f32,
+    /// Table border width
+    pub table_border_width: f32,
 }
 
 /// Color scheme
@@ -53,6 +57,12 @@ pub struct Colors {
     pub heading: egui::Color32,
     /// Text color for inline code
     pub inline_code: egui::Color32,
+    /// Table border color
+    pub table_border: egui::Color32,
+    /// Table header background color
+    pub table_header_bg: egui::Color32,
+    /// Alternate row background color
+    pub table_row_alt_bg: egui::Color32,
 }
 
 impl Theme {

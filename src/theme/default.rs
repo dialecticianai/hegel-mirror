@@ -17,6 +17,8 @@ pub const THEME: Theme = Theme {
         inner_margin: 10.0,
         corner_radius: 4.0,
         min_line_height: 16.0,
+        table_cell_padding: 8.0,
+        table_border_width: 1.0,
     },
     colors: Colors {
         // Dark code block background (like GitHub)
@@ -24,5 +26,8 @@ pub const THEME: Theme = Theme {
         text: egui::Color32::from_rgb(50, 50, 50),
         heading: egui::Color32::from_rgb(30, 30, 30),
         inline_code: egui::Color32::from_rgb(214, 73, 108),
+        table_border: egui::Color32::from_rgb(200, 200, 200),
+        table_header_bg: egui::Color32::from_rgb(240, 240, 240),
+        table_row_alt_bg: egui::Color32::from_rgb(250, 250, 250),
     },
 };

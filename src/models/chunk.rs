@@ -1,3 +1,4 @@
+use super::Table;
 use std::ops::Range;
 
 /// A rendered chunk of text with its source position
@@ -22,6 +23,8 @@ pub struct TextChunk {
     pub image_path: Option<String>,
     /// Code block language (if this is a code block)
     pub code_block_lang: Option<String>,
+    /// Table data (if this is a table)
+    pub table: Option<Table>,
     /// Cached render height (for lazy loading without flicker)
     pub cached_height: Option<f32>,
 }
@@ -33,5 +36,9 @@ impl TextChunk {
 
     pub fn is_code_block(&self) -> bool {
         self.code_block_lang.is_some()
+    }
+
+    pub fn is_table(&self) -> bool {
+        self.table.is_some()
     }
 }
