@@ -21,8 +21,17 @@ pub fn render_content(
     highlighter: &SyntaxHighlighter,
     theme: &Theme,
 ) {
+    // Handle drag release
+    if !ui.input(|i| i.pointer.any_down()) && selection.is_dragging {
+        selection.end_drag();
+    }
+
     for (idx, chunk) in chunks.iter_mut().enumerate() {
         let start_pos = ui.cursor().min;
+
+        // Check if this chunk's lines are in the selected range
+        let chunk_selected =
+            (chunk.line_start..=chunk.line_end).any(|line| selection.contains_line(line));
 
         if let Some(image_path) = &chunk.image_path {
             // Check if in viewport using cached height
@@ -35,8 +44,10 @@ pub fn render_content(
                 image::load_image_texture(ctx, image_path, loaded_images);
                 if let Some(response) = image::render_image(ui, image_path, loaded_images) {
                     chunk.cached_height = Some(response.rect.height());
+                    // Images can be selected by clicking (single line selection)
                     if response.clicked() {
-                        selection.set_single_chunk(idx, chunk.text.len());
+                        selection.start_drag(chunk.line_start);
+                        selection.end_drag();
                     }
                 }
             } else {
@@ -91,11 +102,32 @@ pub fn render_content(
                 ui.add_space(theme.spacing.paragraph);
             }
         } else {
-            // Text is cheap, always render
-            let response = text::render_text_chunk(ui, chunk, theme);
-            if response.clicked() {
-                selection.set_single_chunk(idx, chunk.text.len());
+            // Text chunks: render with selection support
+            let before_y = ui.cursor().min.y;
+
+            // Paint selection highlight if this chunk is selected
+            if chunk_selected {
+                let estimated_height = chunk.cached_height.unwrap_or(theme.spacing.min_line_height);
+                let highlight_rect = egui::Rect::from_min_size(
+                    start_pos,
+                    egui::vec2(ui.available_width(), estimated_height),
+                );
+                ui.painter()
+                    .rect_filled(highlight_rect, 0.0, theme.colors.selection_highlight);
             }
+
+            // Render the text chunk
+            let response = text::render_text_chunk(ui, chunk, theme);
+            let after_y = ui.cursor().min.y;
+            chunk.cached_height = Some(after_y - before_y);
+
+            // Handle selection via drag
+            if response.drag_started() {
+                selection.start_drag(chunk.line_start);
+            } else if response.dragged() {
+                selection.update_drag(chunk.line_start);
+            }
+
             if chunk.newline_after {
                 ui.add_space(theme.spacing.paragraph);
             }
@@ -106,7 +138,7 @@ pub fn render_content(
 /// Render the comment UI section
 pub fn render_comment_section(
     ui: &mut egui::Ui,
-    chunks: &[TextChunk],
+    _chunks: &[TextChunk],
     selection: &Selection,
     comment_text: &mut String,
     comments: &mut Vec<Comment>,
@@ -115,34 +147,29 @@ pub fn render_comment_section(
     ui.separator();
 
     // Show current selection info
-    if let (Some(start), Some(end)) = (selection.start_chunk, selection.end_chunk) {
-        if start < chunks.len() && end < chunks.len() {
-            let start_chunk = &chunks[start];
-            let end_chunk = &chunks[end];
+    if let (Some(start_line), Some(end_line)) = (selection.start_line, selection.end_line) {
+        let (min_line, max_line) = if start_line <= end_line {
+            (start_line, end_line)
+        } else {
+            (end_line, start_line)
+        };
 
-            ui.label(format!(
-                "Selection: L{}:C{} → L{}:C{}",
-                start_chunk.line_start,
-                start_chunk.col_start,
-                end_chunk.line_end,
-                end_chunk.col_end
-            ));
+        ui.label(format!("Selection: Lines {}-{}", min_line, max_line));
 
-            ui.horizontal(|ui| {
-                ui.label("Comment:");
-                ui.text_edit_singleline(comment_text);
-                if ui.button("Add Comment").clicked() && !comment_text.is_empty() {
-                    comments.push(Comment::new(
-                        comment_text.clone(),
-                        start_chunk.line_start,
-                        start_chunk.col_start,
-                        end_chunk.line_end,
-                        end_chunk.col_end,
-                    ));
-                    comment_text.clear();
-                }
-            });
-        }
+        ui.horizontal(|ui| {
+            ui.label("Comment:");
+            ui.text_edit_singleline(comment_text);
+            if ui.button("Add Comment").clicked() && !comment_text.is_empty() {
+                comments.push(Comment::new(
+                    comment_text.clone(),
+                    min_line,
+                    0, // col_start: 0 (beginning of line)
+                    max_line,
+                    0, // col_end: 0 (simplified for MVP)
+                ));
+                comment_text.clear();
+            }
+        });
     }
 
     ui.separator();

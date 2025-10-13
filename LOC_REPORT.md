@@ -1,6 +1,6 @@
 # Lines of Code Report
 
-**Last Updated**: 2025-10-13 17:41
+**Last Updated**: 2025-10-13 17:56
 **Tool**: [cloc](https://github.com/AlDanial/cloc) + wc
 
 ---
@@ -9,13 +9,13 @@
 
 | Metric | Rust Code | Documentation (.md) | Total |
 |--------|-----------|---------------------|-------|
-| **Lines** | 1,061 | 3,703 | 4,764 |
-| **Comments** | 84 | - | 84 |
-| **Blank Lines** | 99 | - | 99 |
-| **Total Lines** | 1,244 | 3,703 | 4,947 |
+| **Lines** | 1,096 | 3,703 | 4,799 |
+| **Comments** | 93 | - | 93 |
+| **Blank Lines** | 108 | - | 108 |
+| **Total Lines** | 1,297 | 3,703 | 5,000 |
 | **Files** | 20 | 20 | 40 |
 
-**Documentation Ratio**: 3.49 lines of docs per line of code
+**Documentation Ratio**: 3.38 lines of docs per line of code
 
 ---
 
@@ -24,9 +24,9 @@
 ```
 Language                     files          blank        comment           code
 -------------------------------------------------------------------------------
-Rust                            20             99             84           1061
+Rust                            20            108             93           1096
 -------------------------------------------------------------------------------
-SUM:                            20             99             84           1061
+SUM:                            20            108             93           1096
 -------------------------------------------------------------------------------
 ```
 
@@ -41,7 +41,7 @@ SUM:                            20             99             84           1061
 | `models/chunk.rs` | 44 | 44 | 0 | 0.0% | ✅ |
 | `models/comment.rs` | 34 | 34 | 0 | 0.0% | ✅ |
 | `models/mod.rs` | 9 | 9 | 0 | 0.0% | ✅ |
-| `models/selection.rs` | 27 | 27 | 0 | 0.0% | ✅ |
+| `models/selection.rs` | 49 | 49 | 0 | 0.0% | ✅ |
 | `models/table.rs` | 22 | 22 | 0 | 0.0% | ✅ |
 | `parsing/mod.rs` | 4 | 4 | 0 | 0.0% | ✅ |
 | `parsing/parser.rs` | 359 | 359 | 0 | 0.0% | ⚠️ Large |
@@ -50,12 +50,12 @@ SUM:                            20             99             84           1061
 | `rendering/image.rs` | 40 | 40 | 0 | 0.0% | ✅ |
 | `rendering/mod.rs` | 7 | 7 | 0 | 0.0% | ✅ |
 | `rendering/table.rs` | 83 | 83 | 0 | 0.0% | ✅ |
-| `rendering/text.rs` | 31 | 31 | 0 | 0.0% | ✅ |
-| `rendering/ui.rs` | 153 | 153 | 0 | 0.0% | ✅ |
+| `rendering/text.rs` | 32 | 32 | 0 | 0.0% | ✅ |
+| `rendering/ui.rs` | 180 | 180 | 0 | 0.0% | ✅ |
 | `syntax/highlighter.rs` | 51 | 51 | 0 | 0.0% | ✅ |
 | `syntax/mod.rs` | 3 | 3 | 0 | 0.0% | ✅ |
-| `theme/default.rs` | 40 | 40 | 0 | 0.0% | ✅ |
-| `theme/mod.rs` | 89 | 89 | 0 | 0.0% | ✅ |
+| `theme/default.rs` | 41 | 41 | 0 | 0.0% | ✅ |
+| `theme/mod.rs` | 91 | 91 | 0 | 0.0% | ✅ |
 
 **⚠️ Warning:** 1 file(s) over 200 impl lines - consider splitting for maintainability
 
@@ -92,7 +92,7 @@ SUM:                            20             99             84           1061
 
 | Metric | Target | Current | Status |
 |--------|--------|---------|--------|
-| Docs/Code Ratio | ≥0.3 | 3.49 | ✅ Excellent |
+| Docs/Code Ratio | ≥0.3 | 3.38 | ✅ Excellent |
 | README exists | Yes | ✅ | Met |
 | ARCHITECTURE.md | Optional | ❌ | Optional |
 

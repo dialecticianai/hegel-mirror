@@ -64,6 +64,8 @@ pub struct Colors {
     pub table_header_bg: egui::Color32,
     /// Alternate row background color
     pub table_row_alt_bg: egui::Color32,
+    /// Selection highlight background color
+    pub selection_highlight: egui::Color32,
 }
 
 /// Page-level layout settings

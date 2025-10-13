@@ -27,5 +27,6 @@ pub fn render_text_chunk(ui: &mut egui::Ui, chunk: &TextChunk, theme: &Theme) ->
             .color(theme.colors.text);
     }
 
-    ui.label(text)
+    // Make label sense drags for selection
+    ui.label(text).interact(egui::Sense::click_and_drag())
 }

@@ -29,6 +29,7 @@ pub const THEME: Theme = Theme {
         table_border: egui::Color32::from_rgb(200, 200, 200),
         table_header_bg: egui::Color32::from_rgb(240, 240, 240),
         table_row_alt_bg: egui::Color32::from_rgb(250, 250, 250),
+        selection_highlight: egui::Color32::from_rgba_premultiplied(100, 150, 255, 50),
     },
     layout: Layout {
         page_margin_left: 40.0,
