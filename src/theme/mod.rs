@@ -81,6 +81,20 @@ pub struct Layout {
     pub page_margin_bottom: f32,
     /// Maximum content width (None = no limit, Some(px) = fixed max)
     pub max_content_width: Option<f32>,
+    /// Comment box width
+    pub comment_box_width: f32,
+    /// Comment box height
+    pub comment_box_height: f32,
+    /// Comment box margin from right edge
+    pub comment_box_margin_right: f32,
+    /// Comments list width
+    pub comments_list_width: f32,
+    /// Comments list height
+    pub comments_list_height: f32,
+    /// Comments list margin from left edge
+    pub comments_list_margin_left: f32,
+    /// Comments list margin from bottom edge
+    pub comments_list_margin_bottom: f32,
 }
 
 impl Theme {

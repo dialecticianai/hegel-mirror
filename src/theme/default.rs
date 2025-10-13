@@ -37,5 +37,12 @@ pub const THEME: Theme = Theme {
         page_margin_top: 20.0,
         page_margin_bottom: 20.0,
         max_content_width: Some(900.0), // Readable line length
+        comment_box_width: 300.0,
+        comment_box_height: 120.0,
+        comment_box_margin_right: 20.0,
+        comments_list_width: 300.0,
+        comments_list_height: 180.0,
+        comments_list_margin_left: 20.0,
+        comments_list_margin_bottom: 200.0,
     },
 };

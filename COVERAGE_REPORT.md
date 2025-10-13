@@ -1,13 +1,13 @@
 # Test Coverage Report
 
-**Last Updated**: 2025-10-13 19:04
+**Last Updated**: 2025-10-13 19:08
 **Tool**: cargo-llvm-cov
-**Overall Coverage**: **2.25%** lines | **2.38%** regions | **3.03%** functions
+**Overall Coverage**: **2.17%** lines | **2.28%** regions | **2.94%** functions
 
 ## Summary
 
 ```
-TOTAL                            1263              1233     2.38%          66                64     3.03%         933               912     2.25%           0                 0         -
+TOTAL                            1313              1283     2.28%          68                66     2.94%         966               945     2.17%           0                 0         -
 ```
 
 ## Coverage by Module
@@ -61,7 +61,7 @@ TOTAL                            1263              1233     2.38%          66   
 
 | Tier | Target | Current | Status |
 |------|--------|---------|--------|
-| Overall | ≥80% | 2.25% | ⏳ In Progress |
+| Overall | ≥80% | 2.17% | ⏳ In Progress |
 | Critical Paths | ≥95% | Check modules above | Policy |
 | New Modules | ≥80% | - | Policy |
 

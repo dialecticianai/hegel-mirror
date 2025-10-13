@@ -105,17 +105,18 @@ impl eframe::App for MarkdownReviewApp {
                             &self.theme,
                             &mut self.layout_map,
                         );
-
-                        render_comment_section(
-                            ui,
-                            &self.chunks,
-                            &self.selection,
-                            &mut self.comment_text,
-                            &mut self.comments,
-                            &self.theme,
-                        );
                     });
                 });
+
+                // Render comment UI as floating window (outside scroll area)
+                render_comment_section(
+                    ctx,
+                    &self.layout_map,
+                    &self.selection,
+                    &mut self.comment_text,
+                    &mut self.comments,
+                    &self.theme,
+                );
 
                 ui.add_space(self.theme.layout.page_margin_bottom);
             });
