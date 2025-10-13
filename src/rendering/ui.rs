@@ -28,6 +28,41 @@ fn calculate_line_from_y(
     line_start + line_index.min(line_count - 1)
 }
 
+/// Handle common selection interactions (drag start, click) for any response
+/// Returns true if clicked (for click-to-clear detection)
+fn handle_selection_interaction(
+    response: &egui::Response,
+    chunk: &TextChunk,
+    before_y: f32,
+    after_y: f32,
+    selection: &mut Selection,
+) -> bool {
+    let mut was_clicked = false;
+
+    // Handle drag start with precise line calculation
+    if response.drag_started() {
+        if let Some(interact_pos) = response.interact_pointer_pos() {
+            let precise_line = calculate_line_from_y(
+                chunk.line_start,
+                chunk.line_end,
+                before_y,
+                after_y,
+                interact_pos.y,
+            );
+            selection.start_drag(precise_line);
+        } else {
+            selection.start_drag(chunk.line_start);
+        }
+    }
+
+    // Track clicks for click-to-clear
+    if response.clicked() {
+        was_clicked = true;
+    }
+
+    was_clicked
+}
+
 /// Render the main UI with markdown content (with stable lazy loading)
 pub fn render_content(
     ui: &mut egui::Ui,
@@ -137,25 +172,14 @@ pub fn render_content(
                     egui::Sense::click_and_drag(),
                 );
 
-                if table_response.drag_started() {
-                    // Calculate precise line where drag started
-                    if let Some(interact_pos) = table_response.interact_pointer_pos() {
-                        let precise_line = calculate_line_from_y(
-                            chunk.line_start,
-                            chunk.line_end,
-                            before_y,
-                            after_y,
-                            interact_pos.y,
-                        );
-                        selection.start_drag(precise_line);
-                    } else {
-                        selection.start_drag(chunk.line_start);
-                    }
-                }
-                // Don't call update_drag here - let the hover-based approach handle it
-
-                // Track clicks to clear selection
-                if table_response.clicked() {
+                // Handle selection interactions (unified with text chunks)
+                if handle_selection_interaction(
+                    &table_response,
+                    chunk,
+                    before_y,
+                    after_y,
+                    selection,
+                ) {
                     chunk_was_clicked = true;
                 }
             } else {
@@ -182,26 +206,8 @@ pub fn render_content(
             // Record position in layout map
             layout_map.record_chunk(chunk.line_start, chunk.line_end, before_y, after_y);
 
-            // Handle selection via drag
-            if response.drag_started() {
-                // Calculate precise line where drag started
-                if let Some(interact_pos) = response.interact_pointer_pos() {
-                    let precise_line = calculate_line_from_y(
-                        chunk.line_start,
-                        chunk.line_end,
-                        before_y,
-                        after_y,
-                        interact_pos.y,
-                    );
-                    selection.start_drag(precise_line);
-                } else {
-                    selection.start_drag(chunk.line_start);
-                }
-            }
-            // Don't call update_drag here - let the hover-based approach handle it
-
-            // Track clicks to clear selection
-            if response.clicked() {
+            // Handle selection interactions (unified with table chunks)
+            if handle_selection_interaction(&response, chunk, before_y, after_y, selection) {
                 chunk_was_clicked = true;
             }
 
