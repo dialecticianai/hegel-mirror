@@ -1,5 +1,5 @@
 use crate::models::{Table, TextChunk};
-use crate::parsing::position::byte_to_line_col;
+use crate::parsing::position::LineOffsets;
 use pulldown_cmark::{CodeBlockKind, CowStr, Event, Options, Parser, Tag, TagEnd};
 use std::ops::Range;
 use std::path::Path;
@@ -7,6 +7,10 @@ use std::path::Path;
 /// Parse markdown into chunks with position tracking
 pub fn parse_markdown(source: &str, base_path: &Path) -> Vec<TextChunk> {
     let mut chunks: Vec<TextChunk> = Vec::new();
+
+    // Build line offset table once for O(log n) lookups
+    let line_offsets = LineOffsets::new(source);
+
     let mut options = Options::empty();
     options.insert(Options::ENABLE_TABLES);
     options.insert(Options::ENABLE_STRIKETHROUGH);
@@ -62,7 +66,7 @@ pub fn parse_markdown(source: &str, base_path: &Path) -> Vec<TextChunk> {
             Event::End(TagEnd::Table) => {
                 if let Some(table) = current_table.take() {
                     let table_range = table_start_range.take().unwrap_or(range.clone());
-                    push_table_chunk(&mut chunks, table, source, &table_range);
+                    push_table_chunk(&mut chunks, table, source, &line_offsets, &table_range);
                 }
                 in_table = false;
             }
@@ -74,6 +78,7 @@ pub fn parse_markdown(source: &str, base_path: &Path) -> Vec<TextChunk> {
                         &mut chunks,
                         text.to_string(),
                         source,
+                        &line_offsets,
                         &range,
                         bold,
                         italic,
@@ -91,6 +96,7 @@ pub fn parse_markdown(source: &str, base_path: &Path) -> Vec<TextChunk> {
                         &mut chunks,
                         text.to_string(),
                         source,
+                        &line_offsets,
                         &range,
                         bold,
                         italic,
@@ -134,6 +140,7 @@ pub fn parse_markdown(source: &str, base_path: &Path) -> Vec<TextChunk> {
                         &mut chunks,
                         source,
                         base_path,
+                        &line_offsets,
                         &range,
                     );
                 }
@@ -183,6 +190,7 @@ fn handle_end_tag(
     chunks: &mut Vec<TextChunk>,
     source: &str,
     base_path: &Path,
+    line_offsets: &LineOffsets,
     range: &Range<usize>,
 ) {
     match tag {
@@ -205,7 +213,14 @@ fn handle_end_tag(
         }
         TagEnd::Image => {
             if let Some(url) = current_image_url.take() {
-                push_image_chunk(chunks, url.as_ref(), source, base_path, range);
+                push_image_chunk(
+                    chunks,
+                    url.as_ref(),
+                    source,
+                    base_path,
+                    &line_offsets,
+                    range,
+                );
             }
         }
         _ => {}
@@ -216,6 +231,7 @@ fn push_text_chunk(
     chunks: &mut Vec<TextChunk>,
     text: String,
     source: &str,
+    line_offsets: &LineOffsets,
     range: &Range<usize>,
     bold: bool,
     italic: bool,
@@ -223,8 +239,8 @@ fn push_text_chunk(
     heading_level: Option<u8>,
     code_block_lang: &Option<String>,
 ) {
-    let (line_start, col_start) = byte_to_line_col(source, range.start);
-    let (line_end, col_end) = byte_to_line_col(source, range.end);
+    let (line_start, col_start) = line_offsets.byte_to_line_col(source, range.start);
+    let (line_end, col_end) = line_offsets.byte_to_line_col(source, range.end);
 
     chunks.push(TextChunk {
         text,
@@ -253,13 +269,14 @@ fn push_code_chunk(
     chunks: &mut Vec<TextChunk>,
     text: String,
     source: &str,
+    line_offsets: &LineOffsets,
     range: &Range<usize>,
     bold: bool,
     italic: bool,
     heading_level: Option<u8>,
 ) {
-    let (line_start, col_start) = byte_to_line_col(source, range.start);
-    let (line_end, col_end) = byte_to_line_col(source, range.end);
+    let (line_start, col_start) = line_offsets.byte_to_line_col(source, range.start);
+    let (line_end, col_end) = line_offsets.byte_to_line_col(source, range.end);
 
     chunks.push(TextChunk {
         text,
@@ -310,10 +327,11 @@ fn push_image_chunk(
     url: &str,
     source: &str,
     base_path: &Path,
+    line_offsets: &LineOffsets,
     range: &Range<usize>,
 ) {
-    let (line_start, col_start) = byte_to_line_col(source, range.start);
-    let (line_end, col_end) = byte_to_line_col(source, range.end);
+    let (line_start, col_start) = line_offsets.byte_to_line_col(source, range.start);
+    let (line_end, col_end) = line_offsets.byte_to_line_col(source, range.end);
     let image_path = base_path.join(url).to_string_lossy().to_string();
 
     chunks.push(TextChunk {
@@ -335,9 +353,15 @@ fn push_image_chunk(
     });
 }
 
-fn push_table_chunk(chunks: &mut Vec<TextChunk>, table: Table, source: &str, range: &Range<usize>) {
-    let (line_start, col_start) = byte_to_line_col(source, range.start);
-    let (line_end, col_end) = byte_to_line_col(source, range.end);
+fn push_table_chunk(
+    chunks: &mut Vec<TextChunk>,
+    table: Table,
+    source: &str,
+    line_offsets: &LineOffsets,
+    range: &Range<usize>,
+) {
+    let (line_start, col_start) = line_offsets.byte_to_line_col(source, range.start);
+    let (line_end, col_end) = line_offsets.byte_to_line_col(source, range.end);
 
     chunks.push(TextChunk {
         text: "[Table]".to_string(),

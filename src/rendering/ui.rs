@@ -82,8 +82,27 @@ pub fn render_content(
     // Track if any chunk was clicked (to distinguish click from drag)
     let mut chunk_was_clicked = false;
 
+    // Only build layout map if we have an active selection or are dragging
+    let need_layout_map = selection.is_active() || selection.is_dragging;
+
+    // Get viewport bounds for early exit optimization
+    let viewport = ui.clip_rect();
+    let mut past_viewport = false;
+
     for (idx, chunk) in chunks.iter_mut().enumerate() {
         let start_pos = ui.cursor().min;
+
+        // Early exit if we're well past the viewport and have cached heights
+        // This is safe because we maintain Y positions via add_space
+        if past_viewport && chunk.cached_height.is_some() {
+            // Skip processing this chunk entirely
+            let estimated_height = chunk.cached_height.unwrap();
+            ui.add_space(estimated_height);
+            if chunk.newline_after {
+                ui.add_space(theme.spacing.paragraph);
+            }
+            continue;
+        }
 
         if let Some(image_path) = &chunk.image_path {
             // Check if in viewport using cached height
@@ -110,8 +129,10 @@ pub fn render_content(
             }
 
             let after_y = ui.cursor().min.y;
-            // Record position in layout map
-            layout_map.record_chunk(chunk.line_start, chunk.line_end, before_y, after_y);
+            // Record position in layout map (only if needed for selection)
+            if need_layout_map {
+                layout_map.record_chunk(chunk.line_start, chunk.line_end, before_y, after_y);
+            }
 
             if chunk.newline_after {
                 ui.add_space(theme.spacing.paragraph);
@@ -139,8 +160,10 @@ pub fn render_content(
             }
 
             let after_y = ui.cursor().min.y;
-            // Record position in layout map
-            layout_map.record_chunk(chunk.line_start, chunk.line_end, before_y, after_y);
+            // Record position in layout map (only if needed for selection)
+            if need_layout_map {
+                layout_map.record_chunk(chunk.line_start, chunk.line_end, before_y, after_y);
+            }
 
             if chunk.newline_after {
                 ui.add_space(theme.spacing.paragraph);
@@ -188,8 +211,10 @@ pub fn render_content(
             }
 
             let after_y = ui.cursor().min.y;
-            // Record position in layout map
-            layout_map.record_chunk(chunk.line_start, chunk.line_end, before_y, after_y);
+            // Record position in layout map (only if needed for selection)
+            if need_layout_map {
+                layout_map.record_chunk(chunk.line_start, chunk.line_end, before_y, after_y);
+            }
 
             if chunk.newline_after {
                 ui.add_space(theme.spacing.paragraph);
@@ -198,22 +223,48 @@ pub fn render_content(
             // Text chunks: render with selection support
             let before_y = ui.cursor().min.y;
 
-            // Render the text chunk
-            let response = text::render_text_chunk(ui, chunk, theme);
-            let after_y = ui.cursor().min.y;
-            chunk.cached_height = Some(after_y - before_y);
+            // Estimate height based on line count
+            let line_count = chunk.text.lines().count().max(1);
+            let estimated_height = line_count as f32 * theme.spacing.min_line_height;
+            let approx_rect =
+                egui::Rect::from_min_size(start_pos, egui::vec2(600.0, estimated_height));
 
-            // Record position in layout map
-            layout_map.record_chunk(chunk.line_start, chunk.line_end, before_y, after_y);
+            if is_in_viewport(ui, approx_rect) {
+                // In viewport - render and cache actual height
+                let response = text::render_text_chunk(ui, chunk, theme);
+                let after_y = ui.cursor().min.y;
+                chunk.cached_height = Some(after_y - before_y);
 
-            // Handle selection interactions (unified with table chunks)
-            if handle_selection_interaction(&response, chunk, before_y, after_y, selection) {
-                chunk_was_clicked = true;
+                // Record position in layout map (only if needed for selection)
+                if need_layout_map {
+                    layout_map.record_chunk(chunk.line_start, chunk.line_end, before_y, after_y);
+                }
+
+                // Handle selection interactions (unified with table chunks)
+                if handle_selection_interaction(&response, chunk, before_y, after_y, selection) {
+                    chunk_was_clicked = true;
+                }
+            } else {
+                // Outside viewport - use cached height if available, otherwise estimate
+                let height = chunk.cached_height.unwrap_or(estimated_height);
+                ui.add_space(height);
+                let after_y = ui.cursor().min.y;
+
+                // Record position in layout map (only if needed for selection)
+                if need_layout_map {
+                    layout_map.record_chunk(chunk.line_start, chunk.line_end, before_y, after_y);
+                }
             }
 
             if chunk.newline_after {
                 ui.add_space(theme.spacing.paragraph);
             }
+        }
+
+        // Check if we've moved past the viewport bottom
+        // Once past, we can start skipping expensive processing
+        if !past_viewport && start_pos.y > viewport.max.y + 1000.0 {
+            past_viewport = true;
         }
     }
 

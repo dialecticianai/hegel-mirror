@@ -1,6 +1,6 @@
 # Lines of Code Report
 
-**Last Updated**: 2025-10-13 19:13
+**Last Updated**: 2025-10-13 19:35
 **Tool**: [cloc](https://github.com/AlDanial/cloc) + wc
 
 ---
@@ -9,13 +9,13 @@
 
 | Metric | Rust Code | Documentation (.md) | Total |
 |--------|-----------|---------------------|-------|
-| **Lines** | 1,324 | 3,706 | 5,030 |
-| **Comments** | 140 | - | 140 |
-| **Blank Lines** | 142 | - | 142 |
-| **Total Lines** | 1,606 | 3,706 | 5,312 |
+| **Lines** | 1,397 | 3,706 | 5,103 |
+| **Comments** | 158 | - | 158 |
+| **Blank Lines** | 154 | - | 154 |
+| **Total Lines** | 1,709 | 3,706 | 5,415 |
 | **Files** | 21 | 20 | 41 |
 
-**Documentation Ratio**: 2.80 lines of docs per line of code
+**Documentation Ratio**: 2.65 lines of docs per line of code
 
 ---
 
@@ -24,9 +24,9 @@
 ```
 Language                     files          blank        comment           code
 -------------------------------------------------------------------------------
-Rust                            21            142            140           1324
+Rust                            21            154            158           1397
 -------------------------------------------------------------------------------
-SUM:                            21            142            140           1324
+SUM:                            21            154            158           1397
 -------------------------------------------------------------------------------
 ```
 
@@ -36,7 +36,7 @@ SUM:                            21            142            140           1324
 
 | File | Total Lines | Impl Lines | Test Lines | Test % | Status |
 |------|-------------|------------|------------|--------|--------|
-| `app.rs` | 125 | 125 | 0 | 0.0% | ✅ |
+| `app.rs` | 134 | 134 | 0 | 0.0% | ✅ |
 | `main.rs` | 75 | 75 | 0 | 0.0% | ✅ |
 | `models/chunk.rs` | 44 | 44 | 0 | 0.0% | ✅ |
 | `models/comment.rs` | 34 | 34 | 0 | 0.0% | ✅ |
@@ -45,14 +45,14 @@ SUM:                            21            142            140           1324
 | `models/selection.rs` | 49 | 49 | 0 | 0.0% | ✅ |
 | `models/table.rs` | 22 | 22 | 0 | 0.0% | ✅ |
 | `parsing/mod.rs` | 4 | 4 | 0 | 0.0% | ✅ |
-| `parsing/parser.rs` | 359 | 359 | 0 | 0.0% | ⚠️ Large |
-| `parsing/position.rs` | 32 | 20 | 12 | 37.5% | ✅ |
+| `parsing/parser.rs` | 383 | 383 | 0 | 0.0% | ⚠️ Large |
+| `parsing/position.rs` | 51 | 39 | 12 | 23.5% | ✅ |
 | `rendering/code.rs` | 39 | 39 | 0 | 0.0% | ✅ |
 | `rendering/image.rs` | 40 | 40 | 0 | 0.0% | ✅ |
 | `rendering/mod.rs` | 7 | 7 | 0 | 0.0% | ✅ |
 | `rendering/table.rs` | 84 | 84 | 0 | 0.0% | ✅ |
 | `rendering/text.rs` | 33 | 33 | 0 | 0.0% | ✅ |
-| `rendering/ui.rs` | 370 | 370 | 0 | 0.0% | ⚠️ Large |
+| `rendering/ui.rs` | 421 | 421 | 0 | 0.0% | ⚠️ Large |
 | `syntax/highlighter.rs` | 51 | 51 | 0 | 0.0% | ✅ |
 | `syntax/mod.rs` | 3 | 3 | 0 | 0.0% | ✅ |
 | `theme/default.rs` | 48 | 48 | 0 | 0.0% | ✅ |
@@ -93,7 +93,7 @@ SUM:                            21            142            140           1324
 
 | Metric | Target | Current | Status |
 |--------|--------|---------|--------|
-| Docs/Code Ratio | ≥0.3 | 2.80 | ✅ Excellent |
+| Docs/Code Ratio | ≥0.3 | 2.65 | ✅ Excellent |
 | README exists | Yes | ✅ | Met |
 | ARCHITECTURE.md | Optional | ❌ | Optional |
 

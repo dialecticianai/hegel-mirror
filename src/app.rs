@@ -8,12 +8,12 @@ use std::collections::HashMap;
 use std::path::PathBuf;
 
 pub struct MarkdownReviewApp {
-    _source: String,
-    chunks: Vec<TextChunk>,
+    source: String,
+    base_path: PathBuf,
+    chunks: Option<Vec<TextChunk>>,
     selection: Selection,
     comment_text: String,
     comments: Vec<Comment>,
-    _base_path: PathBuf,
     loaded_images: HashMap<String, egui::TextureHandle>,
     highlighter: SyntaxHighlighter,
     theme: Theme,
@@ -22,16 +22,15 @@ pub struct MarkdownReviewApp {
 
 impl MarkdownReviewApp {
     pub fn new(markdown: String, base_path: PathBuf) -> Self {
-        let chunks = parse_markdown(&markdown, &base_path);
         let highlighter = SyntaxHighlighter::new();
 
         Self {
-            _source: markdown,
-            chunks,
+            source: markdown,
+            base_path,
+            chunks: None, // Parse lazily on first frame
             selection: Selection::default(),
             comment_text: String::new(),
             comments: Vec::new(),
-            _base_path: base_path,
             loaded_images: HashMap::new(),
             highlighter,
             theme: Theme::default_theme(),
@@ -42,6 +41,11 @@ impl MarkdownReviewApp {
 
 impl eframe::App for MarkdownReviewApp {
     fn update(&mut self, ctx: &egui::Context, _frame: &mut eframe::Frame) {
+        // Parse markdown on first frame (lazy initialization)
+        if self.chunks.is_none() {
+            self.chunks = Some(parse_markdown(&self.source, &self.base_path));
+        }
+
         egui::CentralPanel::default().show(ctx, |ui| {
             // Apply page-level scroll area
             egui::ScrollArea::vertical().show(ui, |ui| {
@@ -95,16 +99,21 @@ impl eframe::App for MarkdownReviewApp {
                         // Clear layout map at start of frame
                         self.layout_map.clear();
 
-                        render_content(
-                            ui,
-                            ctx,
-                            &mut self.chunks,
-                            &mut self.selection,
-                            &mut self.loaded_images,
-                            &self.highlighter,
-                            &self.theme,
-                            &mut self.layout_map,
-                        );
+                        // Only render if chunks are loaded
+                        if let Some(chunks) = &mut self.chunks {
+                            render_content(
+                                ui,
+                                ctx,
+                                chunks,
+                                &mut self.selection,
+                                &mut self.loaded_images,
+                                &self.highlighter,
+                                &self.theme,
+                                &mut self.layout_map,
+                            );
+                        } else {
+                            ui.label("Loading...");
+                        }
                     });
                 });
 

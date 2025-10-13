@@ -1,21 +1,40 @@
-/// Convert byte offset to (line, col) - both 1-indexed
-pub fn byte_to_line_col(source: &str, byte_offset: usize) -> (usize, usize) {
-    let mut line = 1;
-    let mut col = 1;
+/// Precomputed line offset table for fast byte-to-line conversion
+pub struct LineOffsets {
+    offsets: Vec<usize>, // Byte offset of each line start
+}
 
-    for (idx, ch) in source.char_indices() {
-        if idx >= byte_offset {
-            break;
+impl LineOffsets {
+    /// Build line offset table in O(n) time
+    pub fn new(source: &str) -> Self {
+        let mut offsets = vec![0]; // Line 1 starts at byte 0
+        for (idx, ch) in source.char_indices() {
+            if ch == '\n' {
+                offsets.push(idx + 1); // Next line starts after newline
+            }
         }
-        if ch == '\n' {
-            line += 1;
-            col = 1;
-        } else {
-            col += 1;
-        }
+        Self { offsets }
     }
 
-    (line, col)
+    /// Convert byte offset to (line, col) in O(log n) time - both 1-indexed
+    pub fn byte_to_line_col(&self, source: &str, byte_offset: usize) -> (usize, usize) {
+        // Binary search to find line number
+        let line = match self.offsets.binary_search(&byte_offset) {
+            Ok(idx) => idx + 1, // Exact match on line start
+            Err(idx) => idx,    // Insert position gives line number
+        };
+
+        // Calculate column by scanning from line start
+        let line_start = if line > 0 { self.offsets[line - 1] } else { 0 };
+        let col = source[line_start..byte_offset].chars().count() + 1;
+
+        (line, col)
+    }
+}
+
+/// Convert byte offset to (line, col) - both 1-indexed (legacy function for tests)
+pub fn byte_to_line_col(source: &str, byte_offset: usize) -> (usize, usize) {
+    let offsets = LineOffsets::new(source);
+    offsets.byte_to_line_col(source, byte_offset)
 }
 
 #[cfg(test)]

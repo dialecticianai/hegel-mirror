@@ -1,13 +1,13 @@
 # Test Coverage Report
 
-**Last Updated**: 2025-10-13 19:13
+**Last Updated**: 2025-10-13 19:35
 **Tool**: cargo-llvm-cov
-**Overall Coverage**: **2.09%** lines | **2.18%** regions | **2.82%** functions
+**Overall Coverage**: **2.34%** lines | **3.37%** regions | **5.48%** functions
 
 ## Summary
 
 ```
-TOTAL                            1377              1347     2.18%          71                69     2.82%        1004               983     2.09%           0                 0         -
+TOTAL                            1482              1432     3.37%          73                69     5.48%        1070              1045     2.34%           0                 0         -
 ```
 
 ## Coverage by Module
@@ -22,7 +22,7 @@ TOTAL                            1377              1347     2.18%          71   
 | `models/selection.rs` | 0.00% | 0.00% | 0.00% | 🔴 Needs Work |
 | `models/table.rs` | 0.00% | 0.00% | 0.00% | 🔴 Needs Work |
 | `parsing/parser.rs` | 0.00% | 0.00% | 0.00% | 🔴 Needs Work |
-| `parsing/position.rs` | 100.00% | 100.00% | 100.00% | 🟢 Excellent |
+| `parsing/position.rs` | 96.15% | 94.34% | 100.00% | 🟢 Excellent |
 | `rendering/code.rs` | 0.00% | 0.00% | 0.00% | 🔴 Needs Work |
 | `rendering/image.rs` | 0.00% | 0.00% | 0.00% | 🔴 Needs Work |
 | `rendering/table.rs` | 0.00% | 0.00% | 0.00% | 🔴 Needs Work |
@@ -34,7 +34,7 @@ TOTAL                            1377              1347     2.18%          71   
 ## Coverage Tiers
 
 ### 🟢 Excellent (≥90% lines)
-- `parsing/position.rs` - 100.00%
+- `parsing/position.rs` - 96.15%
 
 ### 🟡 Good (70-89% lines)
 
@@ -61,7 +61,7 @@ TOTAL                            1377              1347     2.18%          71   
 
 | Tier | Target | Current | Status |
 |------|--------|---------|--------|
-| Overall | ≥80% | 2.09% | ⏳ In Progress |
+| Overall | ≥80% | 2.34% | ⏳ In Progress |
 | Critical Paths | ≥95% | Check modules above | Policy |
 | New Modules | ≥80% | - | Policy |
 
