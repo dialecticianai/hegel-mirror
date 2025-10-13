@@ -11,6 +11,23 @@ fn is_in_viewport(ui: &egui::Ui, widget_rect: egui::Rect) -> bool {
     widget_rect.intersects(viewport)
 }
 
+/// Calculate which line within a chunk corresponds to a given Y position
+/// Returns the precise line number based on interpolation within the chunk
+fn calculate_line_from_y(
+    line_start: usize,
+    line_end: usize,
+    chunk_y_start: f32,
+    chunk_y_end: f32,
+    y_pos: f32,
+) -> usize {
+    let chunk_height = chunk_y_end - chunk_y_start;
+    let line_count = (line_end - line_start + 1).max(1);
+    let y_offset = y_pos - chunk_y_start;
+    let line_height = chunk_height / line_count as f32;
+    let line_index = (y_offset / line_height).floor() as usize;
+    line_start + line_index.min(line_count - 1)
+}
+
 /// Render the main UI with markdown content (with stable lazy loading)
 pub fn render_content(
     ui: &mut egui::Ui,
@@ -26,10 +43,6 @@ pub fn render_content(
     if !ui.input(|i| i.pointer.any_down()) && selection.is_dragging {
         selection.end_drag();
     }
-
-    // Check if we're currently dragging and need to update selection based on hover
-    let is_dragging = selection.is_dragging;
-    let hover_pos = ui.input(|i| i.pointer.hover_pos());
 
     for (idx, chunk) in chunks.iter_mut().enumerate() {
         let start_pos = ui.cursor().min;
@@ -122,24 +135,21 @@ pub fn render_content(
                 );
 
                 if table_response.drag_started() {
-                    selection.start_drag(chunk.line_start);
-                } else if table_response.dragged() {
-                    selection.update_drag(chunk.line_start);
-                }
-
-                // If we're dragging and mouse is hovering over this table, update selection
-                if is_dragging && !table_response.dragged() {
-                    if let Some(pos) = hover_pos {
-                        let after_y = ui.cursor().min.y;
-                        let table_rect = egui::Rect::from_min_max(
-                            egui::pos2(start_pos.x, before_y),
-                            egui::pos2(start_pos.x + ui.available_width(), after_y),
+                    // Calculate precise line where drag started
+                    if let Some(interact_pos) = table_response.interact_pointer_pos() {
+                        let precise_line = calculate_line_from_y(
+                            chunk.line_start,
+                            chunk.line_end,
+                            before_y,
+                            after_y,
+                            interact_pos.y,
                         );
-                        if table_rect.contains(pos) {
-                            selection.update_drag(chunk.line_start);
-                        }
+                        selection.start_drag(precise_line);
+                    } else {
+                        selection.start_drag(chunk.line_start);
                     }
                 }
+                // Don't call update_drag here - let the hover-based approach handle it
             } else {
                 // Use cached height for stable placeholder
                 ui.add_space(estimated_height);
@@ -166,26 +176,40 @@ pub fn render_content(
 
             // Handle selection via drag
             if response.drag_started() {
-                selection.start_drag(chunk.line_start);
-            } else if response.dragged() {
-                selection.update_drag(chunk.line_start);
-            }
-
-            // If we're dragging and mouse is hovering over this chunk, update selection
-            if is_dragging && !response.dragged() {
-                if let Some(pos) = hover_pos {
-                    let chunk_rect = egui::Rect::from_min_max(
-                        egui::pos2(start_pos.x, before_y),
-                        egui::pos2(start_pos.x + ui.available_width(), after_y),
+                // Calculate precise line where drag started
+                if let Some(interact_pos) = response.interact_pointer_pos() {
+                    let precise_line = calculate_line_from_y(
+                        chunk.line_start,
+                        chunk.line_end,
+                        before_y,
+                        after_y,
+                        interact_pos.y,
                     );
-                    if chunk_rect.contains(pos) {
-                        selection.update_drag(chunk.line_start);
-                    }
+                    selection.start_drag(precise_line);
+                } else {
+                    selection.start_drag(chunk.line_start);
                 }
             }
+            // Don't call update_drag here - let the hover-based approach handle it
 
             if chunk.newline_after {
                 ui.add_space(theme.spacing.paragraph);
+            }
+        }
+    }
+
+    // Update selection based on hover (second pass after all chunks rendered)
+    // This ensures bidirectional drag works (both up and down)
+    if selection.is_dragging {
+        if let Some(hover_pos) = ui.input(|i| i.pointer.hover_pos()) {
+            // Use layout map to find which line we're hovering over
+            for &(line_start, line_end, y_start, y_end) in &layout_map.chunks {
+                if hover_pos.y >= y_start && hover_pos.y <= y_end {
+                    let precise_line =
+                        calculate_line_from_y(line_start, line_end, y_start, y_end, hover_pos.y);
+                    selection.update_drag(precise_line);
+                    break;
+                }
             }
         }
     }

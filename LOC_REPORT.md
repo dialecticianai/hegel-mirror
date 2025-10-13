@@ -1,6 +1,6 @@
 # Lines of Code Report
 
-**Last Updated**: 2025-10-13 18:57
+**Last Updated**: 2025-10-13 19:04
 **Tool**: [cloc](https://github.com/AlDanial/cloc) + wc
 
 ---
@@ -9,13 +9,13 @@
 
 | Metric | Rust Code | Documentation (.md) | Total |
 |--------|-----------|---------------------|-------|
-| **Lines** | 1,203 | 3,705 | 4,908 |
-| **Comments** | 114 | - | 114 |
-| **Blank Lines** | 130 | - | 130 |
-| **Total Lines** | 1,447 | 3,705 | 5,152 |
+| **Lines** | 1,240 | 3,706 | 4,946 |
+| **Comments** | 123 | - | 123 |
+| **Blank Lines** | 131 | - | 131 |
+| **Total Lines** | 1,494 | 3,706 | 5,200 |
 | **Files** | 21 | 20 | 41 |
 
-**Documentation Ratio**: 3.08 lines of docs per line of code
+**Documentation Ratio**: 2.99 lines of docs per line of code
 
 ---
 
@@ -24,9 +24,9 @@
 ```
 Language                     files          blank        comment           code
 -------------------------------------------------------------------------------
-Rust                            21            130            114           1203
+Rust                            21            131            123           1240
 -------------------------------------------------------------------------------
-SUM:                            21            130            114           1203
+SUM:                            21            131            123           1240
 -------------------------------------------------------------------------------
 ```
 
@@ -40,7 +40,7 @@ SUM:                            21            130            114           1203
 | `main.rs` | 75 | 75 | 0 | 0.0% | ✅ |
 | `models/chunk.rs` | 44 | 44 | 0 | 0.0% | ✅ |
 | `models/comment.rs` | 34 | 34 | 0 | 0.0% | ✅ |
-| `models/layout.rs` | 48 | 48 | 0 | 0.0% | ✅ |
+| `models/layout.rs` | 71 | 71 | 0 | 0.0% | ✅ |
 | `models/mod.rs` | 11 | 11 | 0 | 0.0% | ✅ |
 | `models/selection.rs` | 49 | 49 | 0 | 0.0% | ✅ |
 | `models/table.rs` | 22 | 22 | 0 | 0.0% | ✅ |
@@ -52,7 +52,7 @@ SUM:                            21            130            114           1203
 | `rendering/mod.rs` | 7 | 7 | 0 | 0.0% | ✅ |
 | `rendering/table.rs` | 84 | 84 | 0 | 0.0% | ✅ |
 | `rendering/text.rs` | 33 | 33 | 0 | 0.0% | ✅ |
-| `rendering/ui.rs` | 256 | 256 | 0 | 0.0% | ⚠️ Large |
+| `rendering/ui.rs` | 280 | 280 | 0 | 0.0% | ⚠️ Large |
 | `syntax/highlighter.rs` | 51 | 51 | 0 | 0.0% | ✅ |
 | `syntax/mod.rs` | 3 | 3 | 0 | 0.0% | ✅ |
 | `theme/default.rs` | 41 | 41 | 0 | 0.0% | ✅ |
@@ -71,7 +71,7 @@ SUM:                            21            130            114           1203
 | `DDD.md` | 543 |
 | `EMOJIS.md` | 139 |
 | `LEXICON.md` | 84 |
-| `LOC_REPORT.md` | 111 |
+| `LOC_REPORT.md` | 112 |
 | `README.md` | 79 |
 | `ROADMAP.md` | 738 |
 | `toys/toy1_markdown_render/DEP_REVIEW.md` | 72 |
@@ -93,7 +93,7 @@ SUM:                            21            130            114           1203
 
 | Metric | Target | Current | Status |
 |--------|--------|---------|--------|
-| Docs/Code Ratio | ≥0.3 | 3.08 | ✅ Excellent |
+| Docs/Code Ratio | ≥0.3 | 2.99 | ✅ Excellent |
 | README exists | Yes | ✅ | Met |
 | ARCHITECTURE.md | Optional | ❌ | Optional |
 
