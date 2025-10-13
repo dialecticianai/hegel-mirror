@@ -1,13 +1,13 @@
 # Test Coverage Report
 
-**Last Updated**: 2025-10-13 19:40
+**Last Updated**: 2025-10-13 19:41
 **Tool**: cargo-llvm-cov
-**Overall Coverage**: **2.08%** lines | **3.20%** regions | **5.00%** functions
+**Overall Coverage**: **2.08%** lines | **3.19%** regions | **5.00%** functions
 
 ## Summary
 
 ```
-TOTAL                            1563              1513     3.20%          80                76     5.00%        1203              1178     2.08%           0                 0         -
+TOTAL                            1566              1516     3.19%          80                76     5.00%        1204              1179     2.08%           0                 0         -
 ```
 
 ## Coverage by Module

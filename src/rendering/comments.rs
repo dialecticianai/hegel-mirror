@@ -50,8 +50,9 @@ fn render_comment_input(
         let selection_y_end = layout_map.get_line_y(max_line).unwrap_or(selection_y_start);
 
         // Position the comment box at the selection Y position, in the right margin
-        let screen_width = ctx.screen_rect().width();
-        let screen_height = ctx.screen_rect().height();
+        let content_rect = ctx.content_rect();
+        let screen_width = content_rect.width();
+        let screen_height = content_rect.height();
         let window_x =
             screen_width - theme.layout.comment_box_width - theme.layout.comment_box_margin_right;
 
@@ -113,7 +114,7 @@ fn render_comment_input(
 }
 
 fn render_comments_list(ctx: &egui::Context, comments: &[Comment], theme: &Theme) {
-    let screen_height = ctx.screen_rect().height();
+    let screen_height = ctx.content_rect().height();
     egui::Window::new("Comments")
         .fixed_pos(egui::pos2(
             theme.layout.comments_list_margin_left,

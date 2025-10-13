@@ -1,6 +1,6 @@
 # Lines of Code Report
 
-**Last Updated**: 2025-10-13 19:40
+**Last Updated**: 2025-10-13 19:41
 **Tool**: [cloc](https://github.com/AlDanial/cloc) + wc
 
 ---
@@ -9,13 +9,13 @@
 
 | Metric | Rust Code | Documentation (.md) | Total |
 |--------|-----------|---------------------|-------|
-| **Lines** | 1,550 | 3,712 | 5,262 |
+| **Lines** | 1,551 | 3,715 | 5,266 |
 | **Comments** | 164 | - | 164 |
 | **Blank Lines** | 164 | - | 164 |
-| **Total Lines** | 1,878 | 3,712 | 5,590 |
+| **Total Lines** | 1,879 | 3,715 | 5,594 |
 | **Files** | 24 | 20 | 44 |
 
-**Documentation Ratio**: 2.39 lines of docs per line of code
+**Documentation Ratio**: 2.40 lines of docs per line of code
 
 ---
 
@@ -24,9 +24,9 @@
 ```
 Language                     files          blank        comment           code
 -------------------------------------------------------------------------------
-Rust                            24            164            164           1550
+Rust                            24            164            164           1551
 -------------------------------------------------------------------------------
-SUM:                            24            164            164           1550
+SUM:                            24            164            164           1551
 -------------------------------------------------------------------------------
 ```
 
@@ -50,7 +50,7 @@ SUM:                            24            164            164           1550
 | `parsing/position.rs` | 51 | 39 | 12 | 23.5% | ✅ |
 | `rendering/chunk.rs` | 319 | 319 | 0 | 0.0% | ⚠️ Large |
 | `rendering/code.rs` | 39 | 39 | 0 | 0.0% | ✅ |
-| `rendering/comments.rs` | 136 | 136 | 0 | 0.0% | ✅ |
+| `rendering/comments.rs` | 137 | 137 | 0 | 0.0% | ✅ |
 | `rendering/image.rs` | 40 | 40 | 0 | 0.0% | ✅ |
 | `rendering/mod.rs` | 10 | 10 | 0 | 0.0% | ✅ |
 | `rendering/table.rs` | 84 | 84 | 0 | 0.0% | ✅ |
@@ -74,7 +74,7 @@ SUM:                            24            164            164           1550
 | `DDD.md` | 543 |
 | `EMOJIS.md` | 139 |
 | `LEXICON.md` | 84 |
-| `LOC_REPORT.md` | 112 |
+| `LOC_REPORT.md` | 115 |
 | `README.md` | 79 |
 | `ROADMAP.md` | 738 |
 | `toys/toy1_markdown_render/DEP_REVIEW.md` | 72 |
@@ -96,7 +96,7 @@ SUM:                            24            164            164           1550
 
 | Metric | Target | Current | Status |
 |--------|--------|---------|--------|
-| Docs/Code Ratio | ≥0.3 | 2.39 | ✅ Excellent |
+| Docs/Code Ratio | ≥0.3 | 2.40 | ✅ Excellent |
 | README exists | Yes | ✅ | Met |
 | ARCHITECTURE.md | Optional | ❌ | Optional |
 
