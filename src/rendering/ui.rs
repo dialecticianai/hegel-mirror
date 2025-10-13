@@ -1,6 +1,7 @@
 use crate::models::{Comment, Selection, TextChunk};
 use crate::rendering::{code, image, text};
 use crate::syntax::SyntaxHighlighter;
+use crate::theme::Theme;
 use eframe::egui;
 use std::collections::HashMap;
 
@@ -18,6 +19,7 @@ pub fn render_content(
     selection: &mut Selection,
     loaded_images: &mut HashMap<String, egui::TextureHandle>,
     highlighter: &SyntaxHighlighter,
+    theme: &Theme,
 ) {
     egui::ScrollArea::vertical().show(ui, |ui| {
         for (idx, chunk) in chunks.iter_mut().enumerate() {
@@ -43,21 +45,22 @@ pub fn render_content(
                     ui.add_space(estimated_height);
                 }
                 if chunk.newline_after {
-                    ui.add_space(4.0);
+                    ui.add_space(theme.spacing.paragraph);
                 }
             } else if let Some(lang) = &chunk.code_block_lang {
                 // Check if in viewport using cached height
                 let line_count = chunk.text.lines().count().max(1);
-                let estimated_height = chunk
-                    .cached_height
-                    .unwrap_or((line_count as f32 * 16.0) + 20.0);
+                let estimated_height = chunk.cached_height.unwrap_or(
+                    (line_count as f32 * theme.spacing.min_line_height)
+                        + theme.spacing.code_block_padding * 2.0,
+                );
                 let approx_rect =
                     egui::Rect::from_min_size(start_pos, egui::vec2(600.0, estimated_height));
 
                 if is_in_viewport(ui, approx_rect) {
                     // Render and cache actual height
                     let before_y = ui.cursor().min.y;
-                    code::render_code_block(ui, &chunk.text, lang, highlighter);
+                    code::render_code_block(ui, &chunk.text, lang, highlighter, theme);
                     let after_y = ui.cursor().min.y;
                     chunk.cached_height = Some(after_y - before_y);
                 } else {
@@ -65,16 +68,16 @@ pub fn render_content(
                     ui.add_space(estimated_height);
                 }
                 if chunk.newline_after {
-                    ui.add_space(4.0);
+                    ui.add_space(theme.spacing.paragraph);
                 }
             } else {
                 // Text is cheap, always render
-                let response = text::render_text_chunk(ui, chunk);
+                let response = text::render_text_chunk(ui, chunk, theme);
                 if response.clicked() {
                     selection.set_single_chunk(idx, chunk.text.len());
                 }
                 if chunk.newline_after {
-                    ui.add_space(4.0);
+                    ui.add_space(theme.spacing.paragraph);
                 }
             }
         }
@@ -88,6 +91,7 @@ pub fn render_comment_section(
     selection: &Selection,
     comment_text: &mut String,
     comments: &mut Vec<Comment>,
+    _theme: &Theme,
 ) {
     ui.separator();
 

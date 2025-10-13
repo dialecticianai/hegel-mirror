@@ -3,6 +3,7 @@ mod models;
 mod parsing;
 mod rendering;
 mod syntax;
+mod theme;
 
 use anyhow::Result;
 use app::MarkdownReviewApp;

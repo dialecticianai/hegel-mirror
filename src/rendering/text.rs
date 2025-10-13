@@ -1,8 +1,9 @@
 use crate::models::TextChunk;
+use crate::theme::Theme;
 use eframe::egui;
 
 /// Render a plain text chunk with styling
-pub fn render_text_chunk(ui: &mut egui::Ui, chunk: &TextChunk) -> egui::Response {
+pub fn render_text_chunk(ui: &mut egui::Ui, chunk: &TextChunk, theme: &Theme) -> egui::Response {
     let mut text = egui::RichText::new(&chunk.text);
 
     if chunk.bold {
@@ -12,10 +13,18 @@ pub fn render_text_chunk(ui: &mut egui::Ui, chunk: &TextChunk) -> egui::Response
         text = text.italics();
     }
     if chunk.code {
-        text = text.code();
+        text = text
+            .code()
+            .size(theme.typography.code_size)
+            .color(theme.colors.inline_code);
     }
     if let Some(level) = chunk.heading_level {
-        text = text.heading().size(24.0 - (level as f32 * 2.0));
+        let size = theme.typography.heading_sizes[(level - 1).min(5) as usize];
+        text = text.heading().size(size).color(theme.colors.heading);
+    } else {
+        text = text
+            .size(theme.typography.body_size)
+            .color(theme.colors.text);
     }
 
     ui.label(text)

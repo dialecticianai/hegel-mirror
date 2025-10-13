@@ -2,6 +2,7 @@ use crate::models::{Comment, Selection, TextChunk};
 use crate::parsing::parse_markdown;
 use crate::rendering::{render_comment_section, render_content};
 use crate::syntax::SyntaxHighlighter;
+use crate::theme::Theme;
 use eframe::egui;
 use std::collections::HashMap;
 use std::path::PathBuf;
@@ -15,6 +16,7 @@ pub struct MarkdownReviewApp {
     _base_path: PathBuf,
     loaded_images: HashMap<String, egui::TextureHandle>,
     highlighter: SyntaxHighlighter,
+    theme: Theme,
 }
 
 impl MarkdownReviewApp {
@@ -31,6 +33,7 @@ impl MarkdownReviewApp {
             _base_path: base_path,
             loaded_images: HashMap::new(),
             highlighter,
+            theme: Theme::default_theme(),
         }
     }
 }
@@ -47,6 +50,7 @@ impl eframe::App for MarkdownReviewApp {
                 &mut self.selection,
                 &mut self.loaded_images,
                 &self.highlighter,
+                &self.theme,
             );
 
             render_comment_section(
@@ -55,6 +59,7 @@ impl eframe::App for MarkdownReviewApp {
                 &self.selection,
                 &mut self.comment_text,
                 &mut self.comments,
+                &self.theme,
             );
         });
     }
