@@ -1,6 +1,6 @@
 # Lines of Code Report
 
-**Last Updated**: 2025-10-13 19:08
+**Last Updated**: 2025-10-13 19:11
 **Tool**: [cloc](https://github.com/AlDanial/cloc) + wc
 
 ---
@@ -9,13 +9,13 @@
 
 | Metric | Rust Code | Documentation (.md) | Total |
 |--------|-----------|---------------------|-------|
-| **Lines** | 1,288 | 3,706 | 4,994 |
-| **Comments** | 134 | - | 134 |
-| **Blank Lines** | 132 | - | 132 |
-| **Total Lines** | 1,554 | 3,706 | 5,260 |
+| **Lines** | 1,319 | 3,706 | 5,025 |
+| **Comments** | 141 | - | 141 |
+| **Blank Lines** | 140 | - | 140 |
+| **Total Lines** | 1,600 | 3,706 | 5,306 |
 | **Files** | 21 | 20 | 41 |
 
-**Documentation Ratio**: 2.88 lines of docs per line of code
+**Documentation Ratio**: 2.81 lines of docs per line of code
 
 ---
 
@@ -24,9 +24,9 @@
 ```
 Language                     files          blank        comment           code
 -------------------------------------------------------------------------------
-Rust                            21            132            134           1288
+Rust                            21            140            141           1319
 -------------------------------------------------------------------------------
-SUM:                            21            132            134           1288
+SUM:                            21            140            141           1319
 -------------------------------------------------------------------------------
 ```
 
@@ -52,7 +52,7 @@ SUM:                            21            132            134           1288
 | `rendering/mod.rs` | 7 | 7 | 0 | 0.0% | ✅ |
 | `rendering/table.rs` | 84 | 84 | 0 | 0.0% | ✅ |
 | `rendering/text.rs` | 33 | 33 | 0 | 0.0% | ✅ |
-| `rendering/ui.rs` | 318 | 318 | 0 | 0.0% | ⚠️ Large |
+| `rendering/ui.rs` | 364 | 364 | 0 | 0.0% | ⚠️ Large |
 | `syntax/highlighter.rs` | 51 | 51 | 0 | 0.0% | ✅ |
 | `syntax/mod.rs` | 3 | 3 | 0 | 0.0% | ✅ |
 | `theme/default.rs` | 48 | 48 | 0 | 0.0% | ✅ |
@@ -93,7 +93,7 @@ SUM:                            21            132            134           1288
 
 | Metric | Target | Current | Status |
 |--------|--------|---------|--------|
-| Docs/Code Ratio | ≥0.3 | 2.88 | ✅ Excellent |
+| Docs/Code Ratio | ≥0.3 | 2.81 | ✅ Excellent |
 | README exists | Yes | ✅ | Met |
 | ARCHITECTURE.md | Optional | ❌ | Optional |
 

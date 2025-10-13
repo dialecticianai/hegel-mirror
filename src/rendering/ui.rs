@@ -44,6 +44,9 @@ pub fn render_content(
         selection.end_drag();
     }
 
+    // Track if any chunk was clicked (to distinguish click from drag)
+    let mut chunk_was_clicked = false;
+
     for (idx, chunk) in chunks.iter_mut().enumerate() {
         let start_pos = ui.cursor().min;
 
@@ -150,6 +153,11 @@ pub fn render_content(
                     }
                 }
                 // Don't call update_drag here - let the hover-based approach handle it
+
+                // Track clicks to clear selection
+                if table_response.clicked() {
+                    chunk_was_clicked = true;
+                }
             } else {
                 // Use cached height for stable placeholder
                 ui.add_space(estimated_height);
@@ -192,10 +200,20 @@ pub fn render_content(
             }
             // Don't call update_drag here - let the hover-based approach handle it
 
+            // Track clicks to clear selection
+            if response.clicked() {
+                chunk_was_clicked = true;
+            }
+
             if chunk.newline_after {
                 ui.add_space(theme.spacing.paragraph);
             }
         }
+    }
+
+    // Clear selection if clicked without dragging
+    if chunk_was_clicked && !selection.is_dragging {
+        selection.clear();
     }
 
     // Update selection based on hover (second pass after all chunks rendered)
@@ -252,16 +270,29 @@ pub fn render_comment_section(
             (end_line, start_line)
         };
 
-        // Get the Y position for the selection start
-        if let Some(selection_y) = layout_map.get_line_y(min_line) {
+        // Get the Y position for the selection start and end
+        if let Some(selection_y_start) = layout_map.get_line_y(min_line) {
+            let selection_y_end = layout_map.get_line_y(max_line).unwrap_or(selection_y_start);
+
             // Position the comment box at the selection Y position, in the right margin
             let screen_width = ctx.screen_rect().width();
+            let screen_height = ctx.screen_rect().height();
             let window_x = screen_width
                 - theme.layout.comment_box_width
                 - theme.layout.comment_box_margin_right;
 
+            // Clamp comment box to viewport with some padding
+            let viewport_padding = 20.0;
+            let clamped_y = selection_y_start
+                .max(viewport_padding)
+                .min(screen_height - theme.layout.comment_box_height - viewport_padding);
+
+            // Determine if selection is off-screen
+            let selection_above_viewport = selection_y_end < viewport_padding;
+            let selection_below_viewport = selection_y_start > screen_height - viewport_padding;
+
             egui::Window::new("Add Comment")
-                .fixed_pos(egui::pos2(window_x, selection_y))
+                .fixed_pos(egui::pos2(window_x, clamped_y))
                 .fixed_size(egui::vec2(
                     theme.layout.comment_box_width,
                     theme.layout.comment_box_height,
@@ -271,6 +302,21 @@ pub fn render_comment_section(
                 .title_bar(false)
                 .frame(egui::Frame::window(&ctx.style()).inner_margin(10.0))
                 .show(ctx, |ui| {
+                    // Show scroll indicator if selection is off-screen
+                    if selection_above_viewport {
+                        ui.horizontal(|ui| {
+                            ui.label("↑");
+                            ui.label(egui::RichText::new("Scroll up to see selection").weak());
+                        });
+                        ui.separator();
+                    } else if selection_below_viewport {
+                        ui.horizontal(|ui| {
+                            ui.label("↓");
+                            ui.label(egui::RichText::new("Scroll down to see selection").weak());
+                        });
+                        ui.separator();
+                    }
+
                     ui.label(format!("Selection: Lines {}-{}", min_line, max_line));
                     ui.add_space(5.0);
 
