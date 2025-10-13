@@ -41,26 +41,62 @@ impl MarkdownReviewApp {
 impl eframe::App for MarkdownReviewApp {
     fn update(&mut self, ctx: &egui::Context, _frame: &mut eframe::Frame) {
         egui::CentralPanel::default().show(ctx, |ui| {
-            ui.heading("Markdown Review - Toy 2 (Bare Metal)");
+            // Apply page-level scroll area
+            egui::ScrollArea::vertical().show(ui, |ui| {
+                // Apply page margins and max width
+                let available_width = ui.available_width();
+                let content_width = if let Some(max_width) = self.theme.layout.max_content_width {
+                    max_width.min(
+                        available_width
+                            - self.theme.layout.page_margin_left
+                            - self.theme.layout.page_margin_right,
+                    )
+                } else {
+                    available_width
+                        - self.theme.layout.page_margin_left
+                        - self.theme.layout.page_margin_right
+                };
 
-            render_content(
-                ui,
-                ctx,
-                &mut self.chunks,
-                &mut self.selection,
-                &mut self.loaded_images,
-                &self.highlighter,
-                &self.theme,
-            );
+                // Center content if max_width is set and we have room
+                let left_margin = if self.theme.layout.max_content_width.is_some() {
+                    ((available_width - content_width) / 2.0)
+                        .max(self.theme.layout.page_margin_left)
+                } else {
+                    self.theme.layout.page_margin_left
+                };
 
-            render_comment_section(
-                ui,
-                &self.chunks,
-                &self.selection,
-                &mut self.comment_text,
-                &mut self.comments,
-                &self.theme,
-            );
+                ui.add_space(self.theme.layout.page_margin_top);
+
+                ui.horizontal(|ui| {
+                    ui.add_space(left_margin);
+                    ui.vertical(|ui| {
+                        ui.set_width(content_width);
+
+                        ui.heading("Markdown Review - Toy 2 (Bare Metal)");
+
+                        render_content(
+                            ui,
+                            ctx,
+                            &mut self.chunks,
+                            &mut self.selection,
+                            &mut self.loaded_images,
+                            &self.highlighter,
+                            &self.theme,
+                        );
+
+                        render_comment_section(
+                            ui,
+                            &self.chunks,
+                            &self.selection,
+                            &mut self.comment_text,
+                            &mut self.comments,
+                            &self.theme,
+                        );
+                    });
+                });
+
+                ui.add_space(self.theme.layout.page_margin_bottom);
+            });
         });
     }
 }

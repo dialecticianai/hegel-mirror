@@ -1,4 +1,4 @@
-use super::{Colors, Spacing, Theme, Typography};
+use super::{Colors, Layout, Spacing, Theme, Typography};
 use eframe::egui;
 
 /// Default theme - clean, readable, professional
@@ -29,5 +29,12 @@ pub const THEME: Theme = Theme {
         table_border: egui::Color32::from_rgb(200, 200, 200),
         table_header_bg: egui::Color32::from_rgb(240, 240, 240),
         table_row_alt_bg: egui::Color32::from_rgb(250, 250, 250),
+    },
+    layout: Layout {
+        page_margin_left: 40.0,
+        page_margin_right: 40.0,
+        page_margin_top: 20.0,
+        page_margin_bottom: 20.0,
+        max_content_width: Some(900.0), // Readable line length
     },
 };

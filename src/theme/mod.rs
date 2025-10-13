@@ -8,6 +8,7 @@ pub struct Theme {
     pub typography: Typography,
     pub spacing: Spacing,
     pub colors: Colors,
+    pub layout: Layout,
 }
 
 /// Typography settings (font sizes, line heights, etc.)
@@ -63,6 +64,21 @@ pub struct Colors {
     pub table_header_bg: egui::Color32,
     /// Alternate row background color
     pub table_row_alt_bg: egui::Color32,
+}
+
+/// Page-level layout settings
+#[derive(Clone, Debug)]
+pub struct Layout {
+    /// Left margin (padding from window edge)
+    pub page_margin_left: f32,
+    /// Right margin (padding from window edge)
+    pub page_margin_right: f32,
+    /// Top margin (padding from window edge)
+    pub page_margin_top: f32,
+    /// Bottom margin (padding from window edge)
+    pub page_margin_bottom: f32,
+    /// Maximum content width (None = no limit, Some(px) = fixed max)
+    pub max_content_width: Option<f32>,
 }
 
 impl Theme {

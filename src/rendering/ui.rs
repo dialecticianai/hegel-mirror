@@ -21,88 +21,86 @@ pub fn render_content(
     highlighter: &SyntaxHighlighter,
     theme: &Theme,
 ) {
-    egui::ScrollArea::vertical().show(ui, |ui| {
-        for (idx, chunk) in chunks.iter_mut().enumerate() {
-            let start_pos = ui.cursor().min;
+    for (idx, chunk) in chunks.iter_mut().enumerate() {
+        let start_pos = ui.cursor().min;
 
-            if let Some(image_path) = &chunk.image_path {
-                // Check if in viewport using cached height
-                let estimated_height = chunk.cached_height.unwrap_or(300.0);
-                let approx_rect =
-                    egui::Rect::from_min_size(start_pos, egui::vec2(400.0, estimated_height));
+        if let Some(image_path) = &chunk.image_path {
+            // Check if in viewport using cached height
+            let estimated_height = chunk.cached_height.unwrap_or(300.0);
+            let approx_rect =
+                egui::Rect::from_min_size(start_pos, egui::vec2(400.0, estimated_height));
 
-                if is_in_viewport(ui, approx_rect) {
-                    // Load and render, cache actual height
-                    image::load_image_texture(ctx, image_path, loaded_images);
-                    if let Some(response) = image::render_image(ui, image_path, loaded_images) {
-                        chunk.cached_height = Some(response.rect.height());
-                        if response.clicked() {
-                            selection.set_single_chunk(idx, chunk.text.len());
-                        }
+            if is_in_viewport(ui, approx_rect) {
+                // Load and render, cache actual height
+                image::load_image_texture(ctx, image_path, loaded_images);
+                if let Some(response) = image::render_image(ui, image_path, loaded_images) {
+                    chunk.cached_height = Some(response.rect.height());
+                    if response.clicked() {
+                        selection.set_single_chunk(idx, chunk.text.len());
                     }
-                } else {
-                    // Use cached height for stable placeholder
-                    ui.add_space(estimated_height);
-                }
-                if chunk.newline_after {
-                    ui.add_space(theme.spacing.paragraph);
-                }
-            } else if let Some(lang) = &chunk.code_block_lang {
-                // Check if in viewport using cached height
-                let line_count = chunk.text.lines().count().max(1);
-                let estimated_height = chunk.cached_height.unwrap_or(
-                    (line_count as f32 * theme.spacing.min_line_height)
-                        + theme.spacing.code_block_padding * 2.0,
-                );
-                let approx_rect =
-                    egui::Rect::from_min_size(start_pos, egui::vec2(600.0, estimated_height));
-
-                if is_in_viewport(ui, approx_rect) {
-                    // Render and cache actual height
-                    let before_y = ui.cursor().min.y;
-                    code::render_code_block(ui, &chunk.text, lang, highlighter, theme);
-                    let after_y = ui.cursor().min.y;
-                    chunk.cached_height = Some(after_y - before_y);
-                } else {
-                    // Use cached height for stable placeholder
-                    ui.add_space(estimated_height);
-                }
-                if chunk.newline_after {
-                    ui.add_space(theme.spacing.paragraph);
-                }
-            } else if let Some(table_data) = &chunk.table {
-                // Check if in viewport using cached height
-                let estimated_height = chunk.cached_height.unwrap_or(
-                    (table_data.rows.len() as f32 + 1.0) * theme.spacing.min_line_height,
-                );
-                let approx_rect =
-                    egui::Rect::from_min_size(start_pos, egui::vec2(600.0, estimated_height));
-
-                if is_in_viewport(ui, approx_rect) {
-                    // Render and cache actual height
-                    let before_y = ui.cursor().min.y;
-                    table::render_table(ui, table_data, theme, idx);
-                    let after_y = ui.cursor().min.y;
-                    chunk.cached_height = Some(after_y - before_y);
-                } else {
-                    // Use cached height for stable placeholder
-                    ui.add_space(estimated_height);
-                }
-                if chunk.newline_after {
-                    ui.add_space(theme.spacing.paragraph);
                 }
             } else {
-                // Text is cheap, always render
-                let response = text::render_text_chunk(ui, chunk, theme);
-                if response.clicked() {
-                    selection.set_single_chunk(idx, chunk.text.len());
-                }
-                if chunk.newline_after {
-                    ui.add_space(theme.spacing.paragraph);
-                }
+                // Use cached height for stable placeholder
+                ui.add_space(estimated_height);
+            }
+            if chunk.newline_after {
+                ui.add_space(theme.spacing.paragraph);
+            }
+        } else if let Some(lang) = &chunk.code_block_lang {
+            // Check if in viewport using cached height
+            let line_count = chunk.text.lines().count().max(1);
+            let estimated_height = chunk.cached_height.unwrap_or(
+                (line_count as f32 * theme.spacing.min_line_height)
+                    + theme.spacing.code_block_padding * 2.0,
+            );
+            let approx_rect =
+                egui::Rect::from_min_size(start_pos, egui::vec2(600.0, estimated_height));
+
+            if is_in_viewport(ui, approx_rect) {
+                // Render and cache actual height
+                let before_y = ui.cursor().min.y;
+                code::render_code_block(ui, &chunk.text, lang, highlighter, theme);
+                let after_y = ui.cursor().min.y;
+                chunk.cached_height = Some(after_y - before_y);
+            } else {
+                // Use cached height for stable placeholder
+                ui.add_space(estimated_height);
+            }
+            if chunk.newline_after {
+                ui.add_space(theme.spacing.paragraph);
+            }
+        } else if let Some(table_data) = &chunk.table {
+            // Check if in viewport using cached height
+            let estimated_height = chunk
+                .cached_height
+                .unwrap_or((table_data.rows.len() as f32 + 1.0) * theme.spacing.min_line_height);
+            let approx_rect =
+                egui::Rect::from_min_size(start_pos, egui::vec2(600.0, estimated_height));
+
+            if is_in_viewport(ui, approx_rect) {
+                // Render and cache actual height
+                let before_y = ui.cursor().min.y;
+                table::render_table(ui, table_data, theme, idx);
+                let after_y = ui.cursor().min.y;
+                chunk.cached_height = Some(after_y - before_y);
+            } else {
+                // Use cached height for stable placeholder
+                ui.add_space(estimated_height);
+            }
+            if chunk.newline_after {
+                ui.add_space(theme.spacing.paragraph);
+            }
+        } else {
+            // Text is cheap, always render
+            let response = text::render_text_chunk(ui, chunk, theme);
+            if response.clicked() {
+                selection.set_single_chunk(idx, chunk.text.len());
+            }
+            if chunk.newline_after {
+                ui.add_space(theme.spacing.paragraph);
             }
         }
-    });
+    }
 }
 
 /// Render the comment UI section
