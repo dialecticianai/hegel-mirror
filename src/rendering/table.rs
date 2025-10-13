@@ -62,22 +62,23 @@ fn render_cell(
 
     let label = egui::RichText::new(text).color(text_color).font(font_id);
 
+    // Disable built-in text selection in table cells
     match alignment {
         Alignment::Center => {
             ui.with_layout(
                 egui::Layout::centered_and_justified(egui::Direction::LeftToRight),
                 |ui| {
-                    ui.label(label);
+                    ui.add(egui::Label::new(label).selectable(false));
                 },
             );
         }
         Alignment::Right => {
             ui.with_layout(egui::Layout::right_to_left(egui::Align::Center), |ui| {
-                ui.label(label);
+                ui.add(egui::Label::new(label).selectable(false));
             });
         }
         Alignment::Left | Alignment::None => {
-            ui.label(label);
+            ui.add(egui::Label::new(label).selectable(false));
         }
     }
 }

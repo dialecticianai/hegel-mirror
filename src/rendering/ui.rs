@@ -1,4 +1,4 @@
-use crate::models::{Comment, Selection, TextChunk};
+use crate::models::{Comment, LayoutMap, Selection, TextChunk};
 use crate::rendering::{code, image, table, text};
 use crate::syntax::SyntaxHighlighter;
 use crate::theme::Theme;
@@ -20,24 +20,27 @@ pub fn render_content(
     loaded_images: &mut HashMap<String, egui::TextureHandle>,
     highlighter: &SyntaxHighlighter,
     theme: &Theme,
+    layout_map: &mut LayoutMap,
 ) {
     // Handle drag release
     if !ui.input(|i| i.pointer.any_down()) && selection.is_dragging {
         selection.end_drag();
     }
 
+    // Check if we're currently dragging and need to update selection based on hover
+    let is_dragging = selection.is_dragging;
+    let hover_pos = ui.input(|i| i.pointer.hover_pos());
+
     for (idx, chunk) in chunks.iter_mut().enumerate() {
         let start_pos = ui.cursor().min;
-
-        // Check if this chunk's lines are in the selected range
-        let chunk_selected =
-            (chunk.line_start..=chunk.line_end).any(|line| selection.contains_line(line));
 
         if let Some(image_path) = &chunk.image_path {
             // Check if in viewport using cached height
             let estimated_height = chunk.cached_height.unwrap_or(300.0);
             let approx_rect =
                 egui::Rect::from_min_size(start_pos, egui::vec2(400.0, estimated_height));
+
+            let before_y = ui.cursor().min.y;
 
             if is_in_viewport(ui, approx_rect) {
                 // Load and render, cache actual height
@@ -54,6 +57,11 @@ pub fn render_content(
                 // Use cached height for stable placeholder
                 ui.add_space(estimated_height);
             }
+
+            let after_y = ui.cursor().min.y;
+            // Record position in layout map
+            layout_map.record_chunk(chunk.line_start, chunk.line_end, before_y, after_y);
+
             if chunk.newline_after {
                 ui.add_space(theme.spacing.paragraph);
             }
@@ -67,9 +75,10 @@ pub fn render_content(
             let approx_rect =
                 egui::Rect::from_min_size(start_pos, egui::vec2(600.0, estimated_height));
 
+            let before_y = ui.cursor().min.y;
+
             if is_in_viewport(ui, approx_rect) {
                 // Render and cache actual height
-                let before_y = ui.cursor().min.y;
                 code::render_code_block(ui, &chunk.text, lang, highlighter, theme);
                 let after_y = ui.cursor().min.y;
                 chunk.cached_height = Some(after_y - before_y);
@@ -77,6 +86,11 @@ pub fn render_content(
                 // Use cached height for stable placeholder
                 ui.add_space(estimated_height);
             }
+
+            let after_y = ui.cursor().min.y;
+            // Record position in layout map
+            layout_map.record_chunk(chunk.line_start, chunk.line_end, before_y, after_y);
+
             if chunk.newline_after {
                 ui.add_space(theme.spacing.paragraph);
             }
@@ -88,16 +102,53 @@ pub fn render_content(
             let approx_rect =
                 egui::Rect::from_min_size(start_pos, egui::vec2(600.0, estimated_height));
 
+            let before_y = ui.cursor().min.y;
+
             if is_in_viewport(ui, approx_rect) {
                 // Render and cache actual height
-                let before_y = ui.cursor().min.y;
                 table::render_table(ui, table_data, theme, idx);
                 let after_y = ui.cursor().min.y;
                 chunk.cached_height = Some(after_y - before_y);
+
+                // Sense drag on the table area for selection
+                let table_rect = egui::Rect::from_min_size(
+                    start_pos,
+                    egui::vec2(ui.available_width(), after_y - before_y),
+                );
+                let table_response = ui.interact(
+                    table_rect,
+                    ui.id().with(("table_sense", idx)),
+                    egui::Sense::click_and_drag(),
+                );
+
+                if table_response.drag_started() {
+                    selection.start_drag(chunk.line_start);
+                } else if table_response.dragged() {
+                    selection.update_drag(chunk.line_start);
+                }
+
+                // If we're dragging and mouse is hovering over this table, update selection
+                if is_dragging && !table_response.dragged() {
+                    if let Some(pos) = hover_pos {
+                        let after_y = ui.cursor().min.y;
+                        let table_rect = egui::Rect::from_min_max(
+                            egui::pos2(start_pos.x, before_y),
+                            egui::pos2(start_pos.x + ui.available_width(), after_y),
+                        );
+                        if table_rect.contains(pos) {
+                            selection.update_drag(chunk.line_start);
+                        }
+                    }
+                }
             } else {
                 // Use cached height for stable placeholder
                 ui.add_space(estimated_height);
             }
+
+            let after_y = ui.cursor().min.y;
+            // Record position in layout map
+            layout_map.record_chunk(chunk.line_start, chunk.line_end, before_y, after_y);
+
             if chunk.newline_after {
                 ui.add_space(theme.spacing.paragraph);
             }
@@ -105,21 +156,13 @@ pub fn render_content(
             // Text chunks: render with selection support
             let before_y = ui.cursor().min.y;
 
-            // Paint selection highlight if this chunk is selected
-            if chunk_selected {
-                let estimated_height = chunk.cached_height.unwrap_or(theme.spacing.min_line_height);
-                let highlight_rect = egui::Rect::from_min_size(
-                    start_pos,
-                    egui::vec2(ui.available_width(), estimated_height),
-                );
-                ui.painter()
-                    .rect_filled(highlight_rect, 0.0, theme.colors.selection_highlight);
-            }
-
             // Render the text chunk
             let response = text::render_text_chunk(ui, chunk, theme);
             let after_y = ui.cursor().min.y;
             chunk.cached_height = Some(after_y - before_y);
+
+            // Record position in layout map
+            layout_map.record_chunk(chunk.line_start, chunk.line_end, before_y, after_y);
 
             // Handle selection via drag
             if response.drag_started() {
@@ -128,9 +171,42 @@ pub fn render_content(
                 selection.update_drag(chunk.line_start);
             }
 
+            // If we're dragging and mouse is hovering over this chunk, update selection
+            if is_dragging && !response.dragged() {
+                if let Some(pos) = hover_pos {
+                    let chunk_rect = egui::Rect::from_min_max(
+                        egui::pos2(start_pos.x, before_y),
+                        egui::pos2(start_pos.x + ui.available_width(), after_y),
+                    );
+                    if chunk_rect.contains(pos) {
+                        selection.update_drag(chunk.line_start);
+                    }
+                }
+            }
+
             if chunk.newline_after {
                 ui.add_space(theme.spacing.paragraph);
             }
+        }
+    }
+
+    // Draw selection bar using layout map
+    if let (Some(start_line), Some(end_line)) = (selection.start_line, selection.end_line) {
+        let (min_line, max_line) = if start_line <= end_line {
+            (start_line, end_line)
+        } else {
+            (end_line, start_line)
+        };
+
+        if let Some((start_y, end_y)) = layout_map.get_y_range(min_line, max_line) {
+            let bar_width = 4.0;
+            let bar_x = ui.max_rect().right() - bar_width - 10.0; // 10px from right edge
+            let bar_rect = egui::Rect::from_min_max(
+                egui::pos2(bar_x, start_y),
+                egui::pos2(bar_x + bar_width, end_y),
+            );
+            ui.painter()
+                .rect_filled(bar_rect, 2.0, theme.colors.selection_highlight);
         }
     }
 }

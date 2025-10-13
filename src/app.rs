@@ -1,4 +1,4 @@
-use crate::models::{Comment, Selection, TextChunk};
+use crate::models::{Comment, LayoutMap, Selection, TextChunk};
 use crate::parsing::parse_markdown;
 use crate::rendering::{render_comment_section, render_content};
 use crate::syntax::SyntaxHighlighter;
@@ -17,6 +17,7 @@ pub struct MarkdownReviewApp {
     loaded_images: HashMap<String, egui::TextureHandle>,
     highlighter: SyntaxHighlighter,
     theme: Theme,
+    layout_map: LayoutMap,
 }
 
 impl MarkdownReviewApp {
@@ -34,6 +35,7 @@ impl MarkdownReviewApp {
             loaded_images: HashMap::new(),
             highlighter,
             theme: Theme::default_theme(),
+            layout_map: LayoutMap::new(),
         }
     }
 }
@@ -72,7 +74,26 @@ impl eframe::App for MarkdownReviewApp {
                     ui.vertical(|ui| {
                         ui.set_width(content_width);
 
-                        ui.heading("Markdown Review - Toy 2 (Bare Metal)");
+                        // Show selection state in title
+                        let title = if let (Some(start), Some(end)) =
+                            (self.selection.start_line, self.selection.end_line)
+                        {
+                            let (min, max) = if start <= end {
+                                (start, end)
+                            } else {
+                                (end, start)
+                            };
+                            format!(
+                                "Markdown Review - Toy 2 (Bare Metal) | Selection: Lines {}-{}",
+                                min, max
+                            )
+                        } else {
+                            "Markdown Review - Toy 2 (Bare Metal)".to_string()
+                        };
+                        ui.heading(title);
+
+                        // Clear layout map at start of frame
+                        self.layout_map.clear();
 
                         render_content(
                             ui,
@@ -82,6 +103,7 @@ impl eframe::App for MarkdownReviewApp {
                             &mut self.loaded_images,
                             &self.highlighter,
                             &self.theme,
+                            &mut self.layout_map,
                         );
 
                         render_comment_section(

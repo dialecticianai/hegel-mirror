@@ -2,7 +2,7 @@ use crate::models::TextChunk;
 use crate::theme::Theme;
 use eframe::egui;
 
-/// Render a plain text chunk with styling
+/// Render a plain text chunk with styling and drag sensing
 pub fn render_text_chunk(ui: &mut egui::Ui, chunk: &TextChunk, theme: &Theme) -> egui::Response {
     let mut text = egui::RichText::new(&chunk.text);
 
@@ -27,6 +27,7 @@ pub fn render_text_chunk(ui: &mut egui::Ui, chunk: &TextChunk, theme: &Theme) ->
             .color(theme.colors.text);
     }
 
-    // Make label sense drags for selection
-    ui.label(text).interact(egui::Sense::click_and_drag())
+    // Render label with selection disabled, then sense drags on the rect
+    let label = ui.add(egui::Label::new(text).selectable(false));
+    ui.interact(label.rect, label.id, egui::Sense::click_and_drag())
 }
