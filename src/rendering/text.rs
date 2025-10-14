@@ -6,6 +6,9 @@ use eframe::egui;
 pub fn render_text_chunk(ui: &mut egui::Ui, chunk: &TextChunk, theme: &Theme) -> egui::Response {
     let mut text = egui::RichText::new(&chunk.text);
 
+    // Apply bold styling - egui's strong() makes text use stronger/brighter color
+    // Note: egui doesn't have native font-weight support for true bold rendering
+    // To get actual bold fonts, we'd need to load and use a bold font family
     if chunk.bold {
         text = text.strong();
     }

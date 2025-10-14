@@ -1,6 +1,6 @@
 # Lines of Code Report
 
-**Last Updated**: 2025-10-14 00:02
+**Last Updated**: 2025-10-14 00:09
 **Tool**: [cloc](https://github.com/AlDanial/cloc) + wc
 
 ---
@@ -9,13 +9,13 @@
 
 | Metric | Rust Code | Documentation (.md) | Total |
 |--------|-----------|---------------------|-------|
-| **Lines** | 2,232 | 1,808 | 4,040 |
-| **Comments** | 239 | - | 239 |
-| **Blank Lines** | 262 | - | 262 |
-| **Total Lines** | 2,733 | 1,808 | 4,541 |
-| **Files** | 30 | 14 | 44 |
+| **Lines** | 2,276 | 1,821 | 4,097 |
+| **Comments** | 246 | - | 246 |
+| **Blank Lines** | 268 | - | 268 |
+| **Total Lines** | 2,790 | 1,821 | 4,611 |
+| **Files** | 30 | 15 | 45 |
 
-**Documentation Ratio**: 0.81 lines of docs per line of code
+**Documentation Ratio**: 0.80 lines of docs per line of code
 
 ---
 
@@ -24,9 +24,9 @@
 ```
 Language                     files          blank        comment           code
 -------------------------------------------------------------------------------
-Rust                            30            262            239           2232
+Rust                            30            268            246           2276
 -------------------------------------------------------------------------------
-SUM:                            30            262            239           2232
+SUM:                            30            268            246           2276
 -------------------------------------------------------------------------------
 ```
 
@@ -59,8 +59,8 @@ SUM:                            30            262            239           2232
 | `rendering/image.rs` | 80 | 80 | 0 | 0.0% | ✅ |
 | `rendering/mod.rs` | 12 | 12 | 0 | 0.0% | ✅ |
 | `rendering/table.rs` | 84 | 84 | 0 | 0.0% | ✅ |
-| `rendering/text.rs` | 33 | 33 | 0 | 0.0% | ✅ |
-| `rendering/ui.rs` | 115 | 115 | 0 | 0.0% | ✅ |
+| `rendering/text.rs` | 36 | 36 | 0 | 0.0% | ✅ |
+| `rendering/ui.rs` | 169 | 169 | 0 | 0.0% | ✅ |
 | `storage.rs` | 191 | 191 | 0 | 0.0% | ✅ |
 | `syntax/highlighter.rs` | 51 | 51 | 0 | 0.0% | ✅ |
 | `syntax/mod.rs` | 3 | 3 | 0 | 0.0% | ✅ |
@@ -81,8 +81,9 @@ SUM:                            30            262            239           2232
 | `EMOJIS.md` | 139 |
 | `LEXICON.md` | 84 |
 | `LOC_REPORT.md` | 115 |
-| `README.md` | 115 |
+| `README.md` | 117 |
 | `ROADMAP.md` | 416 |
+| `test_bold.md` | 11 |
 | `test_centered_image.md` | 7 |
 | `test_review.md` | 20 |
 | `test_review2.md` | 20 |
@@ -96,7 +97,7 @@ SUM:                            30            262            239           2232
 
 | Metric | Target | Current | Status |
 |--------|--------|---------|--------|
-| Docs/Code Ratio | ≥0.3 | 0.81 | ✅ Excellent |
+| Docs/Code Ratio | ≥0.3 | 0.80 | ✅ Excellent |
 | README exists | Yes | ✅ | Met |
 | ARCHITECTURE.md | Optional | ❌ | Optional |
 

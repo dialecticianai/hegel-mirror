@@ -32,8 +32,10 @@ pub fn render_content(
     let viewport = ui.clip_rect();
     let mut past_viewport = false;
 
-    for (idx, chunk) in chunks.iter_mut().enumerate() {
+    let mut idx = 0;
+    while idx < chunks.len() {
         let start_pos = ui.cursor().min;
+        let chunk = &mut chunks[idx];
 
         // Early exit if we're well past the viewport and have cached heights
         // This is safe because we maintain Y positions via add_space
@@ -44,25 +46,77 @@ pub fn render_content(
             if chunk.newline_after {
                 ui.add_space(theme.spacing.paragraph);
             }
+            idx += 1;
             continue;
         }
 
-        // Render the chunk using unified rendering logic
-        let was_clicked = chunk::render_chunk(
-            ui,
-            ctx,
-            chunk,
-            idx,
-            selection,
-            loaded_images,
-            highlighter,
-            theme,
-            layout_map,
-            need_layout_map,
-        );
+        // Check if this is an inline text chunk (part of a paragraph)
+        // Inline chunks are: text, not image, not code block, not table, not ending with newline
+        let is_inline_text = !chunk.image_path.is_some()
+            && !chunk.code_block_lang.is_some()
+            && !chunk.table.is_some()
+            && !chunk.newline_after;
 
-        if was_clicked {
-            chunk_was_clicked = true;
+        if is_inline_text {
+            // Batch consecutive inline text chunks into a horizontal_wrapped layout
+            ui.horizontal_wrapped(|ui| {
+                let mut local_idx = idx;
+                while local_idx < chunks.len() {
+                    let chunk = &mut chunks[local_idx];
+                    let still_inline = !chunk.image_path.is_some()
+                        && !chunk.code_block_lang.is_some()
+                        && !chunk.table.is_some();
+
+                    if !still_inline {
+                        break;
+                    }
+
+                    let was_clicked = chunk::render_chunk(
+                        ui,
+                        ctx,
+                        chunk,
+                        local_idx,
+                        selection,
+                        loaded_images,
+                        highlighter,
+                        theme,
+                        layout_map,
+                        need_layout_map,
+                    );
+
+                    if was_clicked {
+                        chunk_was_clicked = true;
+                    }
+
+                    // If this chunk ends with newline, stop batching
+                    if chunk.newline_after {
+                        local_idx += 1;
+                        break;
+                    }
+
+                    local_idx += 1;
+                }
+                idx = local_idx;
+            });
+        } else {
+            // Render non-inline chunks normally (images, code blocks, tables)
+            let was_clicked = chunk::render_chunk(
+                ui,
+                ctx,
+                chunk,
+                idx,
+                selection,
+                loaded_images,
+                highlighter,
+                theme,
+                layout_map,
+                need_layout_map,
+            );
+
+            if was_clicked {
+                chunk_was_clicked = true;
+            }
+            idx += 1;
         }
 
         // Check if we've moved past the viewport bottom
