@@ -1,7 +1,0 @@
-[package]
-name = "toy3_floem"
-version = "0.1.0"
-edition = "2024"
-
-[dependencies]
-floem = "0.2.0"
