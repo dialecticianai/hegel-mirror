@@ -18,25 +18,36 @@ Mirror is a zero-friction GUI for reviewing Markdown documents in human-AI colla
 
 ---
 
-## Status
+## Features
 
-**Phase:** 1 (MVP) - Core Markdown review implemented
+### Markdown Rendering
+- Full Markdown support: text, headers, lists, blockquotes
+- Syntax-highlighted code blocks (via `syntect`)
+- Tables with proper grid layout
+- Images (local file paths)
+- Lazy rendering with viewport culling (60fps on 11K+ line documents)
 
-**Completed:**
-- ✅ M1: Single-file Markdown review
-  - Markdown parsing and rendering (text, code blocks, tables, images)
-  - Line-precise text selection with visual highlighting
-  - Floating comment UI with scroll indicators
-  - Syntax highlighting for code blocks
-  - Lazy rendering with cached heights (60fps on 11K+ line documents)
-  - Theme system for typography and styling
-  - CLI argument parsing (`--out-dir`, `--json`, `--headless`)
+### Review Workflow
+- **Line-precise text selection** - Click and drag to select text
+- **Floating comment UI** - Smart positioning with scroll indicators
+- **Multi-file tabs** - Review multiple documents simultaneously
+- **Independent comment queues** - Each file has its own review state
+- **Dual review modes**:
+  - **Immediate mode** (default) - Each comment saves instantly
+  - **Batched mode** - Queue comments, submit atomically
 
-**In Progress:**
-- M2: Multi-file tabs
-- M3: Comment persistence (write to `.ddd/<filename>.review.N`)
+### Review Persistence
+- JSONL format (`.ddd/<filename>.review.N`)
+- Monotonic sequence numbers (never overwrites previous reviews)
+- Full metadata: timestamp, session ID, file, selection range, text snippet
+- Separate review files per document
 
-See [ROADMAP.md](ROADMAP.md) for full development plan.
+### Integration
+- CLI: `--out-dir`, `--json`, `--headless`
+- Environment: `HEGEL_SESSION_ID` passthrough
+- Exit codes: 0 (success), 1 (error), 2 (cancelled)
+
+See [ROADMAP.md](ROADMAP.md) for future enhancements.
 
 ---
 
@@ -46,12 +57,17 @@ See [ROADMAP.md](ROADMAP.md) for full development plan.
 # Build
 cargo build --release
 
-# Run
+# Review single file
 ./target/release/mirror SPEC.md
 
-# Select text by clicking and dragging
-# Add comments in the floating UI
-# (Comment persistence coming soon)
+# Review multiple files
+./target/release/mirror SPEC.md PLAN.md
+
+# With session tracking
+export HEGEL_SESSION_ID="session-123"
+./target/release/mirror SPEC.md --out-dir .reviews/
+
+# Reviews written to .ddd/SPEC.review.1
 ```
 
 ---
