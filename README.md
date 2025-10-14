@@ -16,6 +16,8 @@ Mirror is a zero-friction GUI for reviewing Markdown documents in human-AI colla
 
 **Core concept:** Launch → review → comment → exit. No persistent state, no configuration, just pure review flow.
 
+**Part of the Hegel ecosystem:** Mirror is the review UI companion to [Hegel CLI](https://github.com/dialecticianai/hegel-cli), providing human-in-the-loop approval for AI-generated artifacts in Dialectic-Driven Development workflows.
+
 ---
 
 ## Features
