@@ -13,6 +13,7 @@ use eframe::egui;
 use models::Document;
 use std::fs;
 use std::path::Path;
+use std::sync::Arc;
 
 /// Ephemeral Markdown review UI for Dialectic-Driven Development
 #[derive(Parser, Debug)]
@@ -88,7 +89,62 @@ fn main() -> Result<()> {
         "Hegel Mirror",
         options,
         Box::new(move |cc| {
+            // Set light mode visuals
             cc.egui_ctx.set_visuals(egui::Visuals::light());
+
+            // Install image loaders for emoji support
+            egui_extras::install_image_loaders(&cc.egui_ctx);
+
+            // Load custom fonts (Inter with bold/italic variants)
+            let mut fonts = egui::FontDefinitions::default();
+
+            // Load font data from embedded files
+            fonts.font_data.insert(
+                "Inter-Regular".to_owned(),
+                Arc::new(egui::FontData::from_static(include_bytes!(
+                    "../fonts/Inter-Regular.ttf"
+                ))),
+            );
+            fonts.font_data.insert(
+                "Inter-Bold".to_owned(),
+                Arc::new(egui::FontData::from_static(include_bytes!(
+                    "../fonts/Inter-Bold.ttf"
+                ))),
+            );
+            fonts.font_data.insert(
+                "Inter-Italic".to_owned(),
+                Arc::new(egui::FontData::from_static(include_bytes!(
+                    "../fonts/Inter-Italic.ttf"
+                ))),
+            );
+            fonts.font_data.insert(
+                "Inter-BoldItalic".to_owned(),
+                Arc::new(egui::FontData::from_static(include_bytes!(
+                    "../fonts/Inter-BoldItalic.ttf"
+                ))),
+            );
+
+            // Set up font families
+            fonts.families.insert(
+                egui::FontFamily::Proportional,
+                vec!["Inter-Regular".to_owned()],
+            );
+            fonts.families.insert(
+                egui::FontFamily::Name("Bold".into()),
+                vec!["Inter-Bold".to_owned()],
+            );
+            fonts.families.insert(
+                egui::FontFamily::Name("Italic".into()),
+                vec!["Inter-Italic".to_owned()],
+            );
+            fonts.families.insert(
+                egui::FontFamily::Name("BoldItalic".into()),
+                vec!["Inter-BoldItalic".to_owned()],
+            );
+
+            // Apply font definitions
+            cc.egui_ctx.set_fonts(fonts);
+
             Ok(Box::new(MarkdownReviewApp::new(documents)))
         }),
     )

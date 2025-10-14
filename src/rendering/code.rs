@@ -21,11 +21,16 @@ pub fn render_code_block(
                 ui.horizontal(|ui| {
                     ui.spacing_mut().item_spacing.x = 0.0;
                     for (style, text) in line_ranges {
+                        // Use syntax highlighter's color (not theme colors)
                         let color = egui::Color32::from_rgb(
                             style.foreground.r,
                             style.foreground.g,
                             style.foreground.b,
                         );
+
+                        // Build text with monospace font and theme sizing
+                        // Note: We don't use build_styled_text here because syntax
+                        // highlighting provides its own colors
                         ui.label(
                             egui::RichText::new(text)
                                 .color(color)

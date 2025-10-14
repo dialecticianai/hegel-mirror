@@ -1,36 +1,33 @@
 use crate::models::TextChunk;
+use crate::rendering::text_builder::{render_styled_text, TextContext};
 use crate::theme::Theme;
 use eframe::egui;
 
 /// Render a plain text chunk with styling and drag sensing
 pub fn render_text_chunk(ui: &mut egui::Ui, chunk: &TextChunk, theme: &Theme) -> egui::Response {
-    let mut text = egui::RichText::new(&chunk.text);
-
-    // Apply bold styling - egui's strong() makes text use stronger/brighter color
-    // Note: egui doesn't have native font-weight support for true bold rendering
-    // To get actual bold fonts, we'd need to load and use a bold font family
-    if chunk.bold {
-        text = text.strong();
-    }
-    if chunk.italic {
-        text = text.italics();
-    }
-    if chunk.code {
-        text = text
-            .code()
-            .size(theme.typography.code_size)
-            .color(theme.colors.inline_code);
-    }
-    if let Some(level) = chunk.heading_level {
-        let size = theme.typography.heading_sizes[(level - 1).min(5) as usize];
-        text = text.heading().size(size).color(theme.colors.heading);
+    // Determine rendering context
+    let context = if let Some(level) = chunk.heading_level {
+        TextContext::Heading(level)
     } else {
-        text = text
-            .size(theme.typography.body_size)
-            .color(theme.colors.text);
-    }
+        TextContext::Body
+    };
 
-    // Render label with selection disabled, then sense drags on the rect
-    let label = ui.add(egui::Label::new(text).selectable(false));
-    ui.interact(label.rect, label.id, egui::Sense::click_and_drag())
+    // Render using centralized builder with emoji support
+    // Note: EmojiLabel doesn't support .selectable(false), but that's OK
+    // We handle selection via interact() below
+    // Use line_start and byte_range as unique ID to avoid widget ID collisions
+    let unique_id = ui.id().with((chunk.line_start, chunk.byte_range.start));
+    let label = render_styled_text(
+        ui,
+        &chunk.text,
+        chunk.bold,
+        chunk.italic,
+        chunk.code,
+        context,
+        theme,
+        (chunk.line_start, chunk.byte_range.start),
+    );
+
+    // Sense drags on the rect for selection using our unique ID, not the label's ID
+    ui.interact(label.rect, unique_id, egui::Sense::click_and_drag())
 }

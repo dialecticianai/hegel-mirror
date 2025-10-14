@@ -28,6 +28,8 @@ chrono = { version = "0.4", features = ["serde"] }
 # UI (egui/eframe)
 egui = "0.33"
 eframe = "0.33"
+egui_extras = { version = "0.33", features = ["image", "svg"] }
+egui-twemoji = { path = "vendor/egui-twemoji" }
 
 # Markdown parsing
 pulldown-cmark = "0.13"
