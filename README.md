@@ -112,4 +112,4 @@ See [CLAUDE.md](CLAUDE.md) for full philosophy.
 
 ## License
 
-MIT
+Server Side Public License v1 (SSPL)

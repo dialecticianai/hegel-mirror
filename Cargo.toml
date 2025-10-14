@@ -4,7 +4,7 @@ version = "0.0.1"
 edition = "2021"
 authors = ["Eric Adum <eric.adum@gmail.com>"]
 description = "Ephemeral Markdown review UI for Dialectic-Driven Development"
-license = "MIT"
+license = "SSPL-1.0"
 repository = "https://github.com/dialecticianai/hegel-mirror"
 
 [lib]
