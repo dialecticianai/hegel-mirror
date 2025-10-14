@@ -213,13 +213,13 @@ nodes:
 
 ---
 
-## Maximal Vision (Future)
+## Future Enhancements (Maybe)
 
-**Multi-format support**: Not just Markdown - XML, YAML, TOML, structured data with schema-aware selection.
+**Enhanced rendering**: Table of contents, in-document search, improved image handling.
 
-**AST integration**: Deep integration with `astq` (jq-for-AST) - select code nodes, not just text ranges.
+**Diff view**: Side-by-side comparison for Markdown revisions.
 
-**Theming**: Light/dark mode, customizable fonts, accessibility options.
+**Theming**: Dark mode, customizable fonts, accessibility options.
 
 **Keyboard shortcuts**: Power-user navigation (j/k, vim-style, Emacs bindings).
 
@@ -227,7 +227,7 @@ nodes:
 
 **Export formats**: HTML, PDF, annotated Markdown with inline comments.
 
-**Plugin system**: Extensible comment handlers (run linters, check constraints, invoke external tools).
+**Plugin system**: WASM-based extensible comment handlers (spell check, link validation).
 
 ---
 

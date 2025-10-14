@@ -1,12 +1,12 @@
 # Doc-Driven Development for Mirror
 
-**Mirror-adapted DDD methodology**: Emphasizes toy models for validating complex GUI, AST, and transform features before production integration.
+**Mirror-adapted DDD methodology**: Emphasizes toy models for validating complex GUI patterns before production integration.
 
 ---
 
 ## Purpose
 
-This document defines how Dialectic-Driven Development (DDD) applies to Mirror development. Mirror's roadmap spans from simple Markdown review (Phase 1 MVP) to complex AST substrates and transformation pipelines (Phases 4-5). **Toy models are the primary risk-reduction mechanism** for validating uncertain techniques before production.
+This document defines how Dialectic-Driven Development (DDD) applies to Mirror development. Mirror is a Markdown preview and review UI - launch, read, comment, submit. **Toy models are the primary risk-reduction mechanism** for validating uncertain GUI techniques before production.
 
 For general DDD philosophy and economic foundations, see: https://github.com/dialecticianai/ddd-book/
 
@@ -18,22 +18,21 @@ AI generation makes artifacts cheap; clarity and validated patterns are valuable
 
 **Mirror-specific implications:**
 - UI widgets are cheap to regenerate → focus on UX clarity and interaction patterns
-- AST parsers are cheap to write → focus on node selection semantics and stability
-- Transforms are cheap to implement → focus on correctness guarantees and composition rules
+- Rendering code is cheap to write → focus on performance characteristics and edge cases
+- Comment flows are cheap to implement → focus on user experience and data persistence
 
-**Result:** Toy models validate complex patterns (egui widgets, Tree-sitter integration, XSLT transforms) in isolation before building production features.
+**Result:** Toy models validate complex patterns (egui widgets, selection tracking, lazy rendering) in isolation before building production features.
 
 ---
 
 ## Operational Modes
 
-### Discovery Mode (Primary for Phases 2-5)
+### Discovery Mode (Primary for Phase 2-3)
 
 **When to use:**
-- Novel GUI patterns (foldable AST trees, diff views, selection anchoring)
-- AST integration uncertainty (Tree-sitter, `syn`, node ID stability)
-- Transform pipelines (XSLT, astq integration, preview mechanisms)
-- Cross-language patterns (polyglot AST selection)
+- Novel GUI patterns (floating comment UI, selection anchoring, lazy rendering)
+- Performance uncertainty (large file handling, viewport culling, frame rates)
+- Integration patterns (Markdown parsing, syntax highlighting, image alignment)
 
 **Artifacts:**
 - SPEC.md, PLAN.md, LEARNINGS.md per toy
@@ -71,58 +70,48 @@ AI generation makes artifacts cheap; clarity and validated patterns are valuable
 
 ## Toy Models: Mirror-Specific Patterns
 
-Mirror's roadmap requires validating complex patterns before production. Toys de-risk:
+Mirror's roadmap requires validating GUI patterns before production. Toys de-risk:
 
 ### GUI Patterns (egui/eframe)
 
 **Examples:**
 - `toy1_egui_selection` - Text selection with mouse, anchor tracking
-- `toy2_markdown_render` - pulldown-cmark → egui_markdown rendering
-- `toy3_comment_dialog` - Modal dialog, keyboard shortcuts, focus management
+- `toy2_markdown_render` - pulldown-cmark → egui rendering with lazy loading
+- `toy3_comment_dialog` - Floating dialog, positioning, scroll indicators
 - `toy4_tabs` - Multi-file tab bar, active state, comment counts
+- `toy5_syntax_highlighting` - Code block highlighting with syntect
+- `toy6_image_alignment` - HTML parsing, centered images, width constraints
 
 **Testing:**
-- Unit tests: Selection logic (char offsets, line/col mapping)
+- Unit tests: Selection logic (char offsets, line/col mapping), parsing correctness
 - Manual validation: Render in egui, observe interactions
 - Document in LEARNINGS.md: UX observations, performance (frames/sec, memory)
 
-### AST Integration
+### Performance Patterns
 
 **Examples:**
-- `toy5_syn_parsing` - Rust AST via `syn`, node ID generation
-- `toy6_tree_sitter` - Python/TypeScript parsing, unified node addressing
-- `toy7_ast_selection` - Click node → highlight in UI, anchor to node ID
-- `toy8_xml_serialization` - AST → XML → XPath queries
+- `toy7_large_files` - 10k+ line documents, frame rate testing
+- `toy8_viewport_culling` - Lazy rendering, cached heights
+- `toy9_image_loading` - Texture caching, memory management
+- `toy10_selection_perf` - Multi-chunk selection, layout mapping
+
+**Testing:**
+- Performance tests: Frame rate benchmarks, memory profiling
+- Edge cases: Very long lines, many images, rapid scrolling
+- Manual: Use egui profiler, measure frame times
+
+### Data Patterns
+
+**Examples:**
+- `toy11_review_format` - JSONL persistence, monotonic sequences
+- `toy12_comment_state` - Immediate vs batched modes
+- `toy13_session_tracking` - Environment variable integration
+- `toy14_file_io` - Atomic writes, error handling
 
 **Testing:**
 - Unit tests: Parse → serialize → parse round-trip (lossless)
-- Golden tests: Known source → expected AST structure
-- Manual: Render AST tree in egui, test node selection
-
-### Transform Pipelines
-
-**Examples:**
-- `toy9_xslt_preview` - Load XSLT, apply to XML AST, show before/after
-- `toy10_astq_integration` - Shell to `astq` binary, parse output
-- `toy11_transform_chain` - Sequential transforms, intermediate results
-- `toy12_node_stability` - Node IDs stable across edits (insert/delete/move)
-
-**Testing:**
-- Unit tests: Transform correctness, idempotency
-- Integration tests: Chain multiple transforms, verify composition
-- Manual: Preview in UI, compare before/after diffs
-
-### Structured Data Formats
-
-**Examples:**
-- `toy13_xml_render` - XML tree view, collapsible nodes
-- `toy14_yaml_parse` - YAML → structured display, selection anchoring
-- `toy15_json_tree` - JSON → egui tree widget, expand/collapse
-- `toy16_schema_validation` - JSON Schema validation, error highlighting
-
-**Testing:**
-- Unit tests: Parse valid/invalid documents, schema validation
-- Manual: Render in UI, test selection and comment anchoring
+- Integration tests: File writes, JSON output, CLI flags
+- Manual: Test failure modes, verify data integrity
 
 ---
 
@@ -132,9 +121,8 @@ Mirror's roadmap requires validating complex patterns before production. Toys de
 
 Before implementation, document questions:
 - **GUI questions**: "Can egui track text selection across frame redraws?" (docs unclear, test it)
-- **AST questions**: "Are Tree-sitter node IDs stable after edits?" (critical for comment anchoring)
-- **Transform questions**: "Can XSLT handle Rust AST → modified AST round-trip?" (core assumption)
-- **Performance questions**: "Frame rate with 10k-line AST rendered?" (UX threshold)
+- **Performance questions**: "Frame rate with 10k-line Markdown?" (UX threshold)
+- **Integration questions**: "How to parse HTML in Markdown for image alignment?" (library support)
 
 **Success criteria:** What measurements prove the pattern works for production?
 
@@ -153,12 +141,11 @@ mod tests {
     use super::*;
 
     #[test]
-    fn parse_rust_ast_round_trip() {
-        let source = "fn main() {}";
-        let ast = parse(source).unwrap();
-        let xml = ast_to_xml(&ast);
-        let ast2 = xml_to_ast(&xml).unwrap();
-        assert_eq!(ast, ast2); // Lossless round-trip
+    fn parse_markdown_with_html_images() {
+        let markdown = "<p align=\"center\"><img src=\"logo.png\" width=\"200\"></p>";
+        let chunks = parse_markdown(markdown);
+        assert_eq!(chunks[0].alignment, Some(Alignment::Center));
+        assert_eq!(chunks[0].image_width, Some(200.0));
     }
 }
 ```
@@ -186,7 +173,7 @@ mod tests {
 
 Finalize with findings:
 - Performance measurements (frame rate, memory, latency)
-- Constraints discovered (egui limitations, Tree-sitter quirks)
+- Constraints discovered (egui limitations, rendering quirks)
 - Working patterns ready for `src/` reuse
 - Open questions answered or spawned
 
@@ -194,18 +181,19 @@ Finalize with findings:
 ```markdown
 ## Validated
 - egui tracks selection across frames: ✅ (stores in App state)
-- 60fps with 5k-line Markdown: ✅ (egui_markdown efficient)
+- 60fps with 11k-line Markdown: ✅ (lazy rendering + viewport culling)
 
 ## Challenged
-- Tree-sitter node IDs NOT stable after edits ⚠️
-  - Node IDs are byte offsets, change on insert/delete
-  - **Production impact**: Must use line/col anchoring, not node IDs
-  - **Mitigation**: Store node path (e.g., `fn::init::block::stmt[3]`)
+- HTML parsing needs custom logic ⚠️
+  - pulldown-cmark emits HTML as opaque text blocks
+  - **Production impact**: Must parse HTML manually for image alignment
+  - **Mitigation**: Simple string parsing for <p align> and <img> tags
 
 ## Patterns for Production
 - Selection state: Store in App struct, not widget-local
-- Text anchoring: Use (line, col, text_snippet) triple for stability
-- Performance: Lazy rendering (only visible lines), not full document
+- Text anchoring: Use (line_start, line_end) for stable selection
+- Performance: Lazy rendering (only visible chunks), cached heights
+- HTML handling: Custom parser for specific patterns we care about
 ```
 
 ---
@@ -236,35 +224,6 @@ A toy is complete when:
 - Prevents rabbit holes (timeboxing protects productivity)
 - Unblocks other work (don't wait for perfection)
 
-### Document in LEARNINGS.md
-
-```markdown
-**Duration**: 60 min | **Status**: Complete (partial) ✅ | **Result**: 3/5 tests passing
-
-### ⚠️ Challenged
-
-**Timeboxed after 3 debugging attempts:**
-- Attempt 1: Fixed egui state initialization bug
-- Attempt 2: Investigated selection coordinate mapping (found off-by-one)
-- Attempt 3: Tried alternative approach (egui built-in text edit widget)
-- **Decision**: Document findings, use egui built-in for MVP
-
-**What works (3/5 tests):**
-- Single-line selection: ✅
-- Multi-line selection: ✅
-- Copy to clipboard: ✅
-
-**What fails (2/5 tests):**
-- Selection across wrapped lines: Returns wrong char offsets
-- Right-to-left selection: Doesn't highlight correctly
-
-**Value delivered:**
-- ✅ Validated core selection logic
-- ✅ Found egui built-in text edit widget (better UX, less code)
-- ✅ Partial validation > 0% validation
-- ✅ Decision: Use egui::TextEdit for MVP, defer custom selection to Phase 2
-```
-
 ---
 
 ## Axis Principle (Mirror Adaptation)
@@ -273,15 +232,15 @@ From DDD book: "A base toy isolates exactly one axis of complexity."
 
 **For Mirror:**
 - **GUI toys**: One widget pattern (selection, tabs, dialog)
-- **AST toys**: One parser or one operation (parse, serialize, query)
-- **Transform toys**: One transform type or one composition rule
+- **Rendering toys**: One rendering challenge (lazy loading, syntax highlighting, alignment)
+- **Data toys**: One persistence pattern (JSONL writes, atomic updates)
 - **Integration toys**: Exactly two validated base toys (interaction is the axis)
 
 **Examples:**
 - ✅ `toy1_egui_selection` - Just text selection logic (one axis)
-- ✅ `toy5_syn_parsing` - Just Rust AST parsing (one axis)
-- ✅ `toy17_selection_ast` - Integration of toy1 + toy5 (GUI selection over AST nodes)
-- ❌ `toy_bad` - Full review UI with tabs, selection, AST, themes (four axes - split into separate toys)
+- ✅ `toy2_markdown_render` - Just Markdown rendering (one axis)
+- ✅ `toy17_selection_comments` - Integration of toy1 + toy3 (selection → comment flow)
+- ❌ `toy_bad` - Full review UI with tabs, selection, themes, persistence (four axes - split!)
 
 ---
 
@@ -311,14 +270,14 @@ From DDD book: "A base toy isolates exactly one axis of complexity."
 
 ## Testing Strategy (Mirror)
 
-### Unit Tests (Parsers, Logic, Storage)
+### Unit Tests (Parsing, Logic, Data)
 
-- Parse/serialize round-trips (AST → XML → AST, lossless)
+- Markdown parsing correctness (chunks, positions, metadata)
 - JSONL review file reading/writing (correct schema, monotonic sequence)
-- Node ID generation (stable, unique, deterministic)
-- Transform correctness (same input → same output, idempotent)
+- HTML parsing (image alignment, width extraction)
+- Selection logic (line ranges, coordinate mapping)
 
-**Tools:** `cargo test`, snapshot tests (`insta` crate) for AST structures
+**Tools:** `cargo test`, snapshot tests (`insta` crate) for parsed structures
 
 ### Manual Validation (GUI, UX, Performance)
 
@@ -329,14 +288,13 @@ From DDD book: "A base toy isolates exactly one axis of complexity."
 
 **Tools:** Run binary, observe behavior, measure with egui profiler
 
-### Integration Tests (CLI, File I/O, Subprocesses)
+### Integration Tests (CLI, File I/O)
 
 - CLI argument parsing (`--json`, `--out-dir`, flags)
 - Review file writing (atomic writes, correct paths, JSON output)
 - Environment variable passthrough (`HEGEL_SESSION_ID`)
-- Subprocess invocation (shell to `astq` binary, parse output)
 
-**Tools:** `cargo test --test integration_tests`, shell script tests (Perl if complex)
+**Tools:** `cargo test --test integration_tests`
 
 ---
 
@@ -347,7 +305,7 @@ Not optional. Core discipline after every feature integration.
 **Why this works for Mirror:**
 - Economic inversion: Code regeneration is cheap (AI), clarity is valuable
 - egui benefits from clean widget extraction (reusable components)
-- AST code benefits from helper functions (reduce token waste in prompts)
+- Rendering code benefits from helper functions (reduce duplication)
 
 **Triggers:**
 - After toy → production integration (extract patterns, eliminate duplication)
@@ -376,9 +334,9 @@ Not optional. Core discipline after every feature integration.
 
 **Must contain:**
 - Input/output formats (JSON schemas, GUI interactions)
-- Invariants (node ID stability, selection anchoring semantics)
+- Invariants (selection stability, comment ordering)
 - Operations (parse, render, select, comment, submit)
-- Validation rules (schema checks, error handling)
+- Validation rules (file format checks, error handling)
 - Success criteria (frame rate thresholds, memory limits)
 
 ### PLAN.md (per toy/feature)
@@ -412,7 +370,7 @@ Not optional. Core discipline after every feature integration.
 
 **Must contain:**
 - File descriptions (current directory only, non-recursive)
-- Logical grouping (UI widgets, AST parsers, storage, CLI)
+- Logical grouping (UI widgets, parsers, storage, CLI)
 - Integration points (which modules depend on which)
 
 **Update trigger:** Before structural commits (add/remove/rename files)
@@ -437,15 +395,22 @@ toys/
 ```
 src/
   main.rs
-  ui/
+  app.rs
+  parsing/
     CODE_MAP.md
-    mod.rs, tabs.rs, selection.rs, comment.rs
-  ast/
+    mod.rs, parser.rs, chunks.rs, position.rs
+  rendering/
     CODE_MAP.md
-    mod.rs, rust.rs, tree_sitter.rs, xml.rs
-  storage.rs
-  review.rs
-  cli.rs
+    mod.rs, chunk.rs, text.rs, code.rs, image.rs, table.rs, comments.rs
+  models/
+    CODE_MAP.md
+    mod.rs, chunk.rs, selection.rs, comment.rs, layout.rs, table.rs
+  syntax/
+    CODE_MAP.md
+    mod.rs, highlighter.rs
+  theme/
+    CODE_MAP.md
+    mod.rs, default.rs
 
 CODE_MAP.md  (top-level src/ structure)
 ```
@@ -483,46 +448,31 @@ Use before SPEC/PLAN to encourage parsimony.
 
 ## Roadmap-Specific Toy Guidance
 
-### Phase 1 (MVP - Markdown Review)
+### Phase 1 (MVP - Markdown Review) ✅ COMPLETE
 
 **Low uncertainty, mostly execution mode:**
 - Few toys needed (egui selection, markdown rendering)
 - Focus on production quality and refactoring
 - CODE_MAP.md central artifact
 
-### Phase 2 (Structured Data)
+**Key toys built:**
+- `toy1_egui_selection` - Text selection with line precision
+- `toy2_markdown_render` - Lazy rendering with cached heights
+- `toy3_comment_ui` - Floating comment dialog
+
+### Phase 2 (Polish and Usability)
 
 **Medium uncertainty, mixed mode:**
-- Toys for XML/YAML/JSON rendering widgets
-- Schema validation toys (JSON Schema, XSD)
-- Diff view integration toys
+- Toys for enhanced Markdown features (TOC, search, image preview)
+- Diff view toys (side-by-side comparison)
+- Performance optimization toys (very large documents)
 
-### Phase 3 (AST Integration)
-
-**High uncertainty, primarily Discovery mode:**
-- AST parsing toys (`syn`, Tree-sitter)
-- Node ID stability toys (edit operations)
-- XML serialization toys (AST → XML → XPath)
-- astq integration toys (shell invocation, output parsing)
-- GUI integration toys (AST tree rendering, node selection)
-
-### Phase 4 (Advanced Features)
+### Phase 3 (Advanced Features)
 
 **Medium uncertainty, focused toys:**
 - Review template toys (structured metadata)
 - Export format toys (HTML, PDF generation)
 - Plugin system toys (WASM runtime, plugin API)
-
-### Phase 5 (Persistent Substrate)
-
-**Extreme uncertainty, extensive Discovery mode:**
-- Memory-mapped graph toys (`lmdb`, `sled`)
-- Incremental parsing toys (file watcher → partial reparse)
-- Daemon IPC toys (Unix socket, JSON-RPC)
-- Transform registry toys (XSLT chaining, parameterization)
-- AST-level VCS toys (Git hook integration, provenance metadata)
-
-**Expect 10-20 toys for Phase 5 alone.** Many will be partial validation (timeboxed). This is expected and valuable.
 
 ---
 
@@ -530,14 +480,14 @@ Use before SPEC/PLAN to encourage parsimony.
 
 **Toys are reconnaissance, not construction.**
 
-Scout uncertain patterns without production constraints. Focus: understanding constraints and discovering viable approaches. Result: validated patterns applied to `src/`, toys kept as reference artifacts.
+Scout uncertain GUI patterns without production constraints. Focus: understanding rendering performance and discovering viable UX approaches. Result: validated patterns applied to `src/`, toys kept as reference artifacts.
 
-When theory meets egui's retained mode rendering or Tree-sitter's node IDs, update the theory.
+When theory meets egui's immediate mode rendering or pulldown-cmark's event stream, update the theory.
 
 ---
 
 ## References
 
 - **DDD.md**: Core methodology (https://github.com/dialecticianai/ddd-book/)
-- **ROADMAP.md**: Mirror's 5-phase development plan
+- **ROADMAP.md**: Mirror's 3-phase development plan
 - **CLAUDE.md**: Mirror-specific development context and philosophy
