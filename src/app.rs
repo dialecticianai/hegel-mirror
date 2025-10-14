@@ -1,12 +1,9 @@
-use crate::models::{Comment, LayoutMap, ReviewMode, Selection, TextChunk};
+use crate::models::{Document, ReviewMode};
 use crate::parsing::parse_markdown;
 use crate::rendering::{render_comment_section, render_content};
-use crate::storage::ReviewStorage;
 use crate::syntax::SyntaxHighlighter;
 use crate::theme::Theme;
 use eframe::egui;
-use std::collections::HashMap;
-use std::path::PathBuf;
 
 /// Extract text snippet from source for the given line range
 fn extract_text_snippet(source: &str, start_line: usize, end_line: usize) -> String {
@@ -18,94 +15,116 @@ fn extract_text_snippet(source: &str, start_line: usize, end_line: usize) -> Str
 }
 
 pub struct MarkdownReviewApp {
-    source: String,
-    filename: String,
-    base_path: PathBuf,
-    chunks: Option<Vec<TextChunk>>,
-    selection: Selection,
-    comment_text: String,
-    comments: Vec<Comment>,
-    loaded_images: HashMap<String, egui::TextureHandle>,
+    documents: Vec<Document>,
+    active_document_index: usize,
     highlighter: SyntaxHighlighter,
     theme: Theme,
-    layout_map: LayoutMap,
     review_mode: ReviewMode,
-    storage: ReviewStorage,
 }
 
 impl MarkdownReviewApp {
-    pub fn new(
-        markdown: String,
-        filename: String,
-        base_path: PathBuf,
-        out_dir: PathBuf,
-        session_id: Option<String>,
-    ) -> Self {
+    pub fn new(documents: Vec<Document>) -> Self {
         let highlighter = SyntaxHighlighter::new();
-        let storage = ReviewStorage::new(out_dir, filename.clone(), session_id);
 
         Self {
-            source: markdown,
-            filename,
-            base_path,
-            chunks: None, // Parse lazily on first frame
-            selection: Selection::default(),
-            comment_text: String::new(),
-            comments: Vec::new(),
-            loaded_images: HashMap::new(),
+            documents,
+            active_document_index: 0,
             highlighter,
             theme: Theme::default_theme(),
-            layout_map: LayoutMap::new(),
             review_mode: ReviewMode::default(),
-            storage,
         }
+    }
+
+    fn active_document(&mut self) -> &mut Document {
+        &mut self.documents[self.active_document_index]
     }
 }
 
 impl eframe::App for MarkdownReviewApp {
     fn update(&mut self, ctx: &egui::Context, _frame: &mut eframe::Frame) {
-        // Parse markdown on first frame (lazy initialization)
-        if self.chunks.is_none() {
-            self.chunks = Some(parse_markdown(&self.source, &self.base_path));
+        // Parse markdown on first frame for active document (lazy initialization)
+        {
+            let doc = self.active_document();
+            if doc.chunks.is_none() {
+                doc.chunks = Some(parse_markdown(&doc.source, &doc.base_path));
+            }
+        }
+
+        // Tab bar (if multiple documents)
+        if self.documents.len() > 1 {
+            egui::TopBottomPanel::top("tabs").show(ctx, |ui| {
+                ui.horizontal(|ui| {
+                    for (i, doc) in self.documents.iter().enumerate() {
+                        let label = if doc.comment_count() > 0 {
+                            format!("{} ({})", doc.filename, doc.comment_count())
+                        } else {
+                            doc.filename.clone()
+                        };
+
+                        if ui
+                            .selectable_label(i == self.active_document_index, label)
+                            .clicked()
+                        {
+                            self.active_document_index = i;
+                        }
+                    }
+                });
+            });
         }
 
         // Top menu bar for Submit Review button (batched mode)
-        if self.review_mode == ReviewMode::Batched && !self.comments.is_empty() {
+        let total_comments: usize = self.documents.iter().map(|d| d.comment_count()).sum();
+        if self.review_mode == ReviewMode::Batched && total_comments > 0 {
             egui::TopBottomPanel::top("review_actions").show(ctx, |ui| {
                 ui.horizontal(|ui| {
                     ui.heading("Review Mode");
-                    ui.label(format!("({} comments queued)", self.comments.len()));
+                    ui.label(format!("({} comments queued)", total_comments));
                     ui.with_layout(egui::Layout::right_to_left(egui::Align::Center), |ui| {
                         if ui.button("Submit Review").clicked() {
-                            // Build comment tuples for batched write
-                            let comment_data: Vec<_> = self
-                                .comments
-                                .iter()
-                                .map(|c| {
-                                    let text = extract_text_snippet(
-                                        &self.source,
-                                        c.line_start,
-                                        c.line_end,
-                                    );
-                                    (
-                                        text,
-                                        c.text.clone(),
-                                        c.line_start,
-                                        c.col_start,
-                                        c.line_end,
-                                        c.col_end,
-                                    )
-                                })
-                                .collect();
+                            // Write reviews for all documents with comments
+                            let mut all_successful = true;
+                            for doc in &self.documents {
+                                if doc.comments.is_empty() {
+                                    continue;
+                                }
 
-                            match self.storage.write_review(comment_data) {
-                                Ok(path) => {
-                                    println!("Review written to: {:?}", path);
-                                    ctx.send_viewport_cmd(egui::ViewportCommand::Close);
+                                // Build comment tuples for batched write
+                                let comment_data: Vec<_> = doc
+                                    .comments
+                                    .iter()
+                                    .map(|c| {
+                                        let text = extract_text_snippet(
+                                            &doc.source,
+                                            c.line_start,
+                                            c.line_end,
+                                        );
+                                        (
+                                            text,
+                                            c.text.clone(),
+                                            c.line_start,
+                                            c.col_start,
+                                            c.line_end,
+                                            c.col_end,
+                                        )
+                                    })
+                                    .collect();
+
+                                match doc.storage.write_review(comment_data) {
+                                    Ok(path) => {
+                                        println!("Review written to: {:?}", path);
+                                    }
+                                    Err(e) => {
+                                        eprintln!(
+                                            "Failed to write review for {}: {}",
+                                            doc.filename, e
+                                        );
+                                        all_successful = false;
+                                    }
                                 }
-                                Err(e) => {
-                                    eprintln!("Failed to write review: {}", e);
-                                }
+                            }
+
+                            if all_successful {
+                                ctx.send_viewport_cmd(egui::ViewportCommand::Close);
                             }
                         }
                     });
@@ -140,6 +159,11 @@ impl eframe::App for MarkdownReviewApp {
 
                 ui.add_space(self.theme.layout.page_margin_top);
 
+                // Split borrows - need to get immutable refs before mutable borrow
+                let highlighter = &self.highlighter;
+                let theme = &self.theme;
+                let doc = &mut self.documents[self.active_document_index];
+
                 ui.horizontal(|ui| {
                     ui.add_space(left_margin);
                     ui.vertical(|ui| {
@@ -147,36 +171,33 @@ impl eframe::App for MarkdownReviewApp {
 
                         // Show selection state in title
                         let title = if let (Some(start), Some(end)) =
-                            (self.selection.start_line, self.selection.end_line)
+                            (doc.selection.start_line, doc.selection.end_line)
                         {
                             let (min, max) = if start <= end {
                                 (start, end)
                             } else {
                                 (end, start)
                             };
-                            format!(
-                                "Markdown Review - Toy 2 (Bare Metal) | Selection: Lines {}-{}",
-                                min, max
-                            )
+                            format!("{} | Selection: Lines {}-{}", doc.filename, min, max)
                         } else {
-                            "Markdown Review - Toy 2 (Bare Metal)".to_string()
+                            doc.filename.clone()
                         };
                         ui.heading(title);
 
                         // Clear layout map at start of frame
-                        self.layout_map.clear();
+                        doc.layout_map.clear();
 
                         // Only render if chunks are loaded
-                        if let Some(chunks) = &mut self.chunks {
+                        if let Some(chunks) = &mut doc.chunks {
                             render_content(
                                 ui,
                                 ctx,
                                 chunks,
-                                &mut self.selection,
-                                &mut self.loaded_images,
-                                &self.highlighter,
-                                &self.theme,
-                                &mut self.layout_map,
+                                &mut doc.selection,
+                                &mut doc.loaded_images,
+                                highlighter,
+                                theme,
+                                &mut doc.layout_map,
                             );
                         } else {
                             ui.label("Loading...");
@@ -187,14 +208,14 @@ impl eframe::App for MarkdownReviewApp {
                 // Render comment UI as floating window (outside scroll area)
                 render_comment_section(
                     ctx,
-                    &self.layout_map,
-                    &mut self.selection,
-                    &mut self.comment_text,
-                    &mut self.comments,
-                    &self.theme,
+                    &doc.layout_map,
+                    &mut doc.selection,
+                    &mut doc.comment_text,
+                    &mut doc.comments,
+                    theme,
                     &mut self.review_mode,
-                    &self.storage,
-                    &self.source,
+                    &doc.storage,
+                    &doc.source,
                 );
 
                 ui.add_space(self.theme.layout.page_margin_bottom);

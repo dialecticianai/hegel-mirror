@@ -14,7 +14,7 @@ Mirror is the human-in-the-loop approval interface for DDD workflows. It bridges
 
 ## Current Status
 
-**Phase 1: MVP** - M1, M2, M4 complete! ✅
+**Phase 1: MVP** - M1, M2, M3, M4 complete! ✅
 
 We've built a fully functional Markdown review system with:
 - Complete Markdown rendering (text, code blocks with syntax highlighting, tables, images)
@@ -24,9 +24,10 @@ We've built a fully functional Markdown review system with:
 - Theme system for typography and layout
 - **Review file persistence** (JSONL format with monotonic sequence)
 - **Dual review modes** (immediate and batched)
-- ~1,800 lines of Rust across 26 modules
+- **Multi-file tabs** (independent state per document)
+- ~2,000 lines of Rust across 27 modules
 
-**Next:** M3 - Multi-file tabs, or M6 - Keyboard shortcuts
+**Next:** M6 - Keyboard shortcuts, or Phase 2 enhancements
 
 ---
 
@@ -116,30 +117,39 @@ We've built a fully functional Markdown review system with:
 
 ---
 
-### 1.3 Multi-file tabs (Milestone M3)
+### 1.3 Multi-file tabs (Milestone M3) ✅ **COMPLETED**
 
 **Goal:** Support multiple Markdown files as tabs, independent comment queues per file.
 
-**Features:**
-- Tab bar at top of window
-- Click tab to switch active document
-- Each tab shows comment count: `SPEC.md (3)`
-- Submit writes separate `.review.N` file per document
+**Implemented:**
+- ✅ Tab bar at top showing all documents
+- ✅ Click tab to switch active document
+- ✅ Each tab shows comment count: `SPEC.md (3)`
+- ✅ Independent state per document:
+  - source, chunks, selection, comment_text, comments
+  - filename, base_path, storage, loaded_images, layout_map
+- ✅ Separate `.review.N` file per document
+- ✅ Batched mode writes all documents with comments atomically
 
-**Implementation:**
-- `src/ui/tabs.rs` - Tab bar widget, tab switching logic
-- Refactor `app.rs` to hold `Vec<Document>` with active index
-- Each `Document` has independent comment queue and selection state
+**Architecture:**
+- `src/models/document.rs` - Document struct encapsulating per-file state
+- `src/app.rs` - Refactored to hold `Vec<Document>` with `active_document_index`
+- Tab bar UI in `update()` method (TopBottomPanel)
+- Rendering works with `documents[active_document_index]`
 
 **Testing:**
-- Integration test: `mirror file1.md file2.md`
-- Verify separate `.review.N` files created
+- Manual testing: `mirror file1.md file2.md`
+- Verified separate `.review.N` files created for each document
+- Tab switching preserves independent comment queues
+- Comment counts update in tab labels
 
-**Acceptance:**
+**Example:**
 ```bash
 mirror SPEC.md PLAN.md
-# User reviews both, adds comments to each
-# Submit → verify .ddd/SPEC.review.1 and .ddd/PLAN.review.1
+# Tab bar shows: [SPEC.md] [PLAN.md]
+# Add 2 comments to SPEC → tab shows: [SPEC.md (2)] [PLAN.md]
+# Switch to PLAN, add 1 comment → [SPEC.md (2)] [PLAN.md (1)]
+# Submit → writes .ddd/SPEC.review.1 and .ddd/PLAN.review.1
 ```
 
 ---
@@ -369,7 +379,7 @@ mirror SPEC.md --plugins .ddd/plugins/
 |-------|-----------|-------------|--------|
 | 1 | M1 | Single-file Markdown review | ✅ Complete |
 | 1 | M2 | Review persistence (`.review.N` files) | ✅ Complete |
-| 1 | M3 | Multi-file tabs | ⏳ Planned |
+| 1 | M3 | Multi-file tabs | ✅ Complete |
 | 1 | M4 | Immediate vs batched review | ✅ Complete |
 | 1 | M5 | JSON output, env integration | ✅ Partial (env vars done, JSON output pending) |
 | 1 | M6 | Keyboard shortcuts | ⏳ Planned |
@@ -379,7 +389,7 @@ mirror SPEC.md --plugins .ddd/plugins/
 | 3 | - | Export formats | ⏳ Planned |
 | 3 | - | Plugin system (stretch) | ⏳ Planned |
 
-**Current Focus:** M3 - Multi-file tabs or M6 - Keyboard shortcuts
+**Current Focus:** Phase 1 MVP complete! Next: M6 (keyboard shortcuts) or Phase 2 enhancements
 
 ---
 

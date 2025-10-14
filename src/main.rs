@@ -10,6 +10,7 @@ use anyhow::Result;
 use app::MarkdownReviewApp;
 use clap::Parser;
 use eframe::egui;
+use models::Document;
 use std::fs;
 use std::path::Path;
 
@@ -46,28 +47,37 @@ fn main() -> Result<()> {
         return Ok(());
     }
 
-    // For now, only support single file (multi-file tabs coming later)
-    let file_path = &args.files[0];
-    let markdown_content = fs::read_to_string(file_path)
-        .unwrap_or_else(|e| panic!("Failed to read {}: {}", file_path, e));
-
-    let base_path = Path::new(file_path)
-        .parent()
-        .unwrap_or(Path::new("."))
-        .to_path_buf();
-
-    // Extract filename for review file naming
-    let filename = Path::new(file_path)
-        .file_name()
-        .and_then(|s| s.to_str())
-        .unwrap_or("unknown.md")
-        .to_string();
-
     // Get session ID from environment
     let session_id = std::env::var("HEGEL_SESSION_ID").ok();
 
     // Parse out_dir as PathBuf
     let out_dir = Path::new(&args.out_dir).to_path_buf();
+
+    // Load all files into Document structs
+    let mut documents = Vec::new();
+    for file_path in &args.files {
+        let markdown_content = fs::read_to_string(file_path)
+            .unwrap_or_else(|e| panic!("Failed to read {}: {}", file_path, e));
+
+        let base_path = Path::new(file_path)
+            .parent()
+            .unwrap_or(Path::new("."))
+            .to_path_buf();
+
+        let filename = Path::new(file_path)
+            .file_name()
+            .and_then(|s| s.to_str())
+            .unwrap_or("unknown.md")
+            .to_string();
+
+        documents.push(Document::new(
+            filename,
+            markdown_content,
+            base_path,
+            out_dir.clone(),
+            session_id.clone(),
+        ));
+    }
 
     let options = eframe::NativeOptions {
         viewport: egui::ViewportBuilder::default().with_inner_size([1024.0, 768.0]),
@@ -79,13 +89,7 @@ fn main() -> Result<()> {
         options,
         Box::new(move |cc| {
             cc.egui_ctx.set_visuals(egui::Visuals::light());
-            Ok(Box::new(MarkdownReviewApp::new(
-                markdown_content,
-                filename,
-                base_path,
-                out_dir,
-                session_id,
-            )))
+            Ok(Box::new(MarkdownReviewApp::new(documents)))
         }),
     )
     .map_err(|e| anyhow::anyhow!("eframe error: {}", e))
