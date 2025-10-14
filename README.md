@@ -24,6 +24,8 @@ Mirror is a zero-friction GUI for reviewing Markdown documents in human-AI colla
 
 ### Markdown Rendering
 - Full Markdown support: text, headers, lists, blockquotes
+- **Bold and italic text** with proper font rendering (Inter font family)
+- **Colored emoji support** (via Twemoji assets)
 - Syntax-highlighted code blocks (via `syntect`)
 - Tables with proper grid layout
 - Images (local file paths)

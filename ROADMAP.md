@@ -18,14 +18,17 @@ Mirror is the human-in-the-loop approval interface for DDD workflows. It bridges
 
 We've built a fully functional Markdown review system with:
 - Complete Markdown rendering (text, code blocks with syntax highlighting, tables, images)
+- **Bold/italic text rendering** with proper font support (Inter font family)
+- **Colored emoji support** via Twemoji assets
 - Line-precise text selection with visual highlighting
 - Floating comment UI with smart positioning
 - Lazy rendering with viewport culling (60fps on 11K+ line documents)
+- **Refactored rendering layer** with trait-based abstractions (ViewportCuller, SelectionManager, ChunkRenderer)
 - Theme system for typography and layout
 - **Review file persistence** (JSONL format with monotonic sequence)
 - **Dual review modes** (immediate and batched)
 - **Multi-file tabs** (independent state per document)
-- ~2,000 lines of Rust across 27 modules
+- ~2,600 lines of Rust across 35 modules
 
 **Next:** M6 - Keyboard shortcuts, or Phase 2 enhancements
 
@@ -73,13 +76,19 @@ We've built a fully functional Markdown review system with:
 - ✅ CLI argument parsing (`--out-dir`, `--json`, `--headless`)
 
 **Architecture:**
-- `src/main.rs` - CLI entry point with `clap`
+- `src/main.rs` - CLI entry point with `clap`, font loading (Inter family)
 - `src/app.rs` - Main application struct and update loop
 - `src/parsing/` - Markdown parsing into chunks
-- `src/rendering/` - Rendering system (text, code, tables, images, comments)
+- `src/rendering/` - Refactored rendering system with trait-based abstractions:
+  - `chunk_renderer.rs` - ChunkRenderer trait (TextRenderer, CodeRenderer, TableRenderer, ImageRenderer)
+  - `viewport.rs` - ViewportCuller for lazy rendering optimization
+  - `selection_manager.rs` - Centralized selection logic
+  - `inline_batcher.rs` - Inline text batching for horizontal layout
+  - `text_builder.rs` - Styled text with emoji support (via egui-twemoji)
 - `src/models/` - Data structures (Chunk, Selection, Comment, LayoutMap)
 - `src/syntax/` - Syntax highlighting via `syntect`
 - `src/theme/` - Theme system
+- `vendor/egui-twemoji` - Vendored emoji rendering library
 
 **Testing:**
 - Manual testing with various Markdown files
