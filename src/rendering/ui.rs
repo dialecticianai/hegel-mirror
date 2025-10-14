@@ -1,5 +1,6 @@
 use crate::models::{LayoutMap, Selection, TextChunk};
 use crate::rendering::chunk;
+use crate::rendering::helpers::calculate_line_from_y;
 use crate::syntax::SyntaxHighlighter;
 use crate::theme::Theme;
 use eframe::egui;
@@ -83,13 +84,8 @@ pub fn render_content(
             // Use layout map to find which line we're hovering over
             for &(line_start, line_end, y_start, y_end) in &layout_map.chunks {
                 if hover_pos.y >= y_start && hover_pos.y <= y_end {
-                    let precise_line = chunk::calculate_line_from_y(
-                        line_start,
-                        line_end,
-                        y_start,
-                        y_end,
-                        hover_pos.y,
-                    );
+                    let precise_line =
+                        calculate_line_from_y(line_start, line_end, y_start, y_end, hover_pos.y);
                     selection.update_drag(precise_line);
                     break;
                 }

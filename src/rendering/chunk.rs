@@ -1,32 +1,13 @@
 use crate::models::{LayoutMap, Selection, TextChunk};
+use crate::rendering::helpers::{
+    calculate_line_from_y, create_approx_rect, estimate_code_height, estimate_table_height,
+    estimate_text_height, get_cached_or_estimated_height, is_in_viewport,
+};
 use crate::rendering::{code, image, table, text};
 use crate::syntax::SyntaxHighlighter;
 use crate::theme::Theme;
 use eframe::egui;
 use std::collections::HashMap;
-
-/// Check if a widget rect is within the visible viewport
-fn is_in_viewport(ui: &egui::Ui, widget_rect: egui::Rect) -> bool {
-    let viewport = ui.clip_rect();
-    widget_rect.intersects(viewport)
-}
-
-/// Calculate which line within a chunk corresponds to a given Y position
-/// Returns the precise line number based on interpolation within the chunk
-pub fn calculate_line_from_y(
-    line_start: usize,
-    line_end: usize,
-    chunk_y_start: f32,
-    chunk_y_end: f32,
-    y_pos: f32,
-) -> usize {
-    let chunk_height = chunk_y_end - chunk_y_start;
-    let line_count = (line_end - line_start + 1).max(1);
-    let y_offset = y_pos - chunk_y_start;
-    let line_height = chunk_height / line_count as f32;
-    let line_index = (y_offset / line_height).floor() as usize;
-    line_start + line_index.min(line_count - 1)
-}
 
 /// Handle common selection interactions (drag start, click) for any response
 /// Returns true if clicked (for click-to-clear detection)
@@ -151,8 +132,8 @@ fn render_image_chunk(
     need_layout_map: bool,
     start_pos: egui::Pos2,
 ) {
-    let estimated_height = chunk.cached_height.unwrap_or(300.0);
-    let approx_rect = egui::Rect::from_min_size(start_pos, egui::vec2(400.0, estimated_height));
+    let estimated_height = get_cached_or_estimated_height(chunk, 300.0);
+    let approx_rect = create_approx_rect(start_pos, 400.0, estimated_height);
 
     let before_y = ui.cursor().min.y;
 
@@ -195,12 +176,9 @@ fn render_code_chunk(
     need_layout_map: bool,
     start_pos: egui::Pos2,
 ) {
-    let line_count = chunk.text.lines().count().max(1);
-    let estimated_height = chunk.cached_height.unwrap_or(
-        (line_count as f32 * theme.spacing.min_line_height)
-            + theme.spacing.code_block_padding * 2.0,
-    );
-    let approx_rect = egui::Rect::from_min_size(start_pos, egui::vec2(600.0, estimated_height));
+    let estimated_height =
+        get_cached_or_estimated_height(chunk, estimate_code_height(chunk, theme));
+    let approx_rect = create_approx_rect(start_pos, 600.0, estimated_height);
 
     let before_y = ui.cursor().min.y;
 
@@ -232,10 +210,9 @@ fn render_table_chunk(
     need_layout_map: bool,
     start_pos: egui::Pos2,
 ) -> bool {
-    let estimated_height = chunk
-        .cached_height
-        .unwrap_or((table_data.rows.len() as f32 + 1.0) * theme.spacing.min_line_height);
-    let approx_rect = egui::Rect::from_min_size(start_pos, egui::vec2(600.0, estimated_height));
+    let estimated_height =
+        get_cached_or_estimated_height(chunk, estimate_table_height(table_data.rows.len(), theme));
+    let approx_rect = create_approx_rect(start_pos, 600.0, estimated_height);
 
     let before_y = ui.cursor().min.y;
     let mut chunk_was_clicked = false;
@@ -287,10 +264,8 @@ fn render_text_chunk(
     let before_y = ui.cursor().min.y;
     let mut chunk_was_clicked = false;
 
-    // Estimate height based on line count
-    let line_count = chunk.text.lines().count().max(1);
-    let estimated_height = line_count as f32 * theme.spacing.min_line_height;
-    let approx_rect = egui::Rect::from_min_size(start_pos, egui::vec2(600.0, estimated_height));
+    let estimated_height = estimate_text_height(chunk, theme);
+    let approx_rect = create_approx_rect(start_pos, 600.0, estimated_height);
 
     if is_in_viewport(ui, approx_rect) {
         // In viewport - render and cache actual height
@@ -309,7 +284,7 @@ fn render_text_chunk(
         }
     } else {
         // Outside viewport - use cached height if available, otherwise estimate
-        let height = chunk.cached_height.unwrap_or(estimated_height);
+        let height = get_cached_or_estimated_height(chunk, estimated_height);
         ui.add_space(height);
         let after_y = ui.cursor().min.y;
 

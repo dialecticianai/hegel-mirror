@@ -1,13 +1,13 @@
 # Test Coverage Report
 
-**Last Updated**: 2025-10-13 21:10
+**Last Updated**: 2025-10-13 22:13
 **Tool**: cargo-llvm-cov
-**Overall Coverage**: **1.89%** lines | **2.86%** regions | **4.82%** functions
+**Overall Coverage**: **49.83%** lines | **45.39%** regions | **56.86%** functions
 
 ## Summary
 
 ```
-TOTAL                            1749              1699     2.86%          83                79     4.82%        1325              1300     1.89%           0                 0         -
+TOTAL                            1952              1066    45.39%         102                44    56.86%        1463               734    49.83%           0                 0         -
 ```
 
 ## Coverage by Module
@@ -16,41 +16,47 @@ TOTAL                            1749              1699     2.86%          83   
 |--------|--------------|-----------------|-----------|--------|
 | `app.rs` | 0.00% | 0.00% | 0.00% | 🔴 Needs Work |
 | `main.rs` | 0.00% | 0.00% | 0.00% | 🔴 Needs Work |
-| `models/comment.rs` | 0.00% | 0.00% | 0.00% | 🔴 Needs Work |
-| `models/layout.rs` | 0.00% | 0.00% | 0.00% | 🔴 Needs Work |
-| `models/selection.rs` | 0.00% | 0.00% | 0.00% | 🔴 Needs Work |
-| `models/table.rs` | 0.00% | 0.00% | 0.00% | 🔴 Needs Work |
-| `parsing/chunks.rs` | 0.00% | 0.00% | 0.00% | 🔴 Needs Work |
-| `parsing/parser.rs` | 0.00% | 0.00% | 0.00% | 🔴 Needs Work |
-| `parsing/position.rs` | 96.15% | 94.34% | 100.00% | 🟢 Excellent |
+| `models/comment.rs` | 100.00% | 100.00% | 100.00% | 🟢 Excellent |
+| `models/layout.rs` | 93.02% | 95.18% | 100.00% | 🟢 Excellent |
+| `models/selection.rs` | 100.00% | 100.00% | 100.00% | 🟢 Excellent |
+| `models/table.rs` | 100.00% | 100.00% | 100.00% | 🟢 Excellent |
+| `parsing/chunks.rs` | 100.00% | 100.00% | 100.00% | 🟢 Excellent |
+| `parsing/html.rs` | 98.95% | 97.42% | 100.00% | 🟢 Excellent |
+| `parsing/parser.rs` | 97.64% | 92.92% | 100.00% | 🟢 Excellent |
+| `parsing/position.rs` | 100.00% | 98.11% | 100.00% | 🟢 Excellent |
 | `rendering/chunk.rs` | 0.00% | 0.00% | 0.00% | 🔴 Needs Work |
 | `rendering/code.rs` | 0.00% | 0.00% | 0.00% | 🔴 Needs Work |
 | `rendering/comments.rs` | 0.00% | 0.00% | 0.00% | 🔴 Needs Work |
+| `rendering/helpers.rs` | 87.61% | 79.17% | 66.67% | 🟡 Good |
 | `rendering/image.rs` | 0.00% | 0.00% | 0.00% | 🔴 Needs Work |
 | `rendering/table.rs` | 0.00% | 0.00% | 0.00% | 🔴 Needs Work |
 | `rendering/text.rs` | 0.00% | 0.00% | 0.00% | 🔴 Needs Work |
 | `rendering/ui.rs` | 0.00% | 0.00% | 0.00% | 🔴 Needs Work |
-| `syntax/highlighter.rs` | 0.00% | 0.00% | 0.00% | 🔴 Needs Work |
-| `theme/mod.rs` | 0.00% | 0.00% | 0.00% | 🔴 Needs Work |
+| `syntax/highlighter.rs` | 100.00% | 100.00% | 100.00% | 🟢 Excellent |
+| `theme/mod.rs` | 100.00% | 100.00% | 100.00% | 🟢 Excellent |
 
 ## Coverage Tiers
 
 ### 🟢 Excellent (≥90% lines)
-- `parsing/position.rs` - 96.15%
+- `models/comment.rs` - 100.00%
+- `models/layout.rs` - 93.02%
+- `models/selection.rs` - 100.00%
+- `models/table.rs` - 100.00%
+- `parsing/chunks.rs` - 100.00%
+- `parsing/html.rs` - 98.95%
+- `parsing/parser.rs` - 97.64%
+- `parsing/position.rs` - 100.00%
+- `syntax/highlighter.rs` - 100.00%
+- `theme/mod.rs` - 100.00%
 
 ### 🟡 Good (70-89% lines)
+- `rendering/helpers.rs` - 87.61%
 
 ### 🟠 Moderate (40-69% lines)
 
 ### 🔴 Needs Work (<40% lines)
 - `app.rs` - 0.00%
 - `main.rs` - 0.00%
-- `models/comment.rs` - 0.00%
-- `models/layout.rs` - 0.00%
-- `models/selection.rs` - 0.00%
-- `models/table.rs` - 0.00%
-- `parsing/chunks.rs` - 0.00%
-- `parsing/parser.rs` - 0.00%
 - `rendering/chunk.rs` - 0.00%
 - `rendering/code.rs` - 0.00%
 - `rendering/comments.rs` - 0.00%
@@ -58,14 +64,12 @@ TOTAL                            1749              1699     2.86%          83   
 - `rendering/table.rs` - 0.00%
 - `rendering/text.rs` - 0.00%
 - `rendering/ui.rs` - 0.00%
-- `syntax/highlighter.rs` - 0.00%
-- `theme/mod.rs` - 0.00%
 
 ## Coverage Targets
 
 | Tier | Target | Current | Status |
 |------|--------|---------|--------|
-| Overall | ≥80% | 1.89% | ⏳ In Progress |
+| Overall | ≥80% | 49.83% | ⏳ In Progress |
 | Critical Paths | ≥95% | Check modules above | Policy |
 | New Modules | ≥80% | - | Policy |
 

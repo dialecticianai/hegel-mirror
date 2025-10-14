@@ -1,8 +1,9 @@
-use crate::models::{Alignment, Table, TextChunk};
+use crate::models::{Table, TextChunk};
 use crate::parsing::chunks::{
     push_break_chunk, push_code_chunk, push_image_chunk, push_image_chunk_with_alignment,
     push_table_chunk, push_text_chunk,
 };
+use crate::parsing::html::parse_html_image;
 use crate::parsing::position::LineOffsets;
 use pulldown_cmark::{CodeBlockKind, CowStr, Event, Options, Parser, Tag, TagEnd};
 use std::ops::Range;
@@ -262,70 +263,4 @@ fn handle_end_tag(
     }
 }
 
-/// Parse HTML block to extract image with alignment and width
-/// Returns (image_src, alignment, width) if found
-fn parse_html_image(html: &str) -> Option<(String, Option<Alignment>, Option<f32>)> {
-    // Simple regex-free parser for <p align="..."><img src="..." width="..."></p>
-    let html = html.trim();
-
-    // Check if it starts with <p and contains align attribute
-    if !html.starts_with("<p") {
-        return None;
-    }
-
-    // Extract alignment from <p align="center|left|right">
-    let alignment = if html.contains("align=\"center\"") || html.contains("align='center'") {
-        Some(Alignment::Center)
-    } else if html.contains("align=\"right\"") || html.contains("align='right'") {
-        Some(Alignment::Right)
-    } else if html.contains("align=\"left\"") || html.contains("align='left'") {
-        Some(Alignment::Left)
-    } else {
-        None
-    };
-
-    // Extract src attribute from <img tag
-    if let Some(img_start) = html.find("<img") {
-        let img_section = &html[img_start..];
-        if let Some(src_start) = img_section
-            .find("src=\"")
-            .or_else(|| img_section.find("src='"))
-        {
-            let quote_char = if img_section[src_start..].starts_with("src=\"") {
-                '"'
-            } else {
-                '\''
-            };
-            let src_value_start = src_start + 5; // "src=\"" or "src='"
-            if let Some(src_end) = img_section[src_value_start..].find(quote_char) {
-                let src = &img_section[src_value_start..src_value_start + src_end];
-
-                // Extract width attribute if present
-                let width = if let Some(width_start) = img_section
-                    .find("width=\"")
-                    .or_else(|| img_section.find("width='"))
-                {
-                    let width_quote = if img_section[width_start..].starts_with("width=\"") {
-                        '"'
-                    } else {
-                        '\''
-                    };
-                    let width_value_start = width_start + 7; // "width=\"" or "width='"
-                    if let Some(width_end) = img_section[width_value_start..].find(width_quote) {
-                        let width_str =
-                            &img_section[width_value_start..width_value_start + width_end];
-                        width_str.parse::<f32>().ok()
-                    } else {
-                        None
-                    }
-                } else {
-                    None
-                };
-
-                return Some((src.to_string(), alignment, width));
-            }
-        }
-    }
-
-    None
-}
+// HTML image parsing extracted to parsing/html.rs

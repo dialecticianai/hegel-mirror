@@ -7,6 +7,10 @@ description = "Ephemeral Markdown review UI for Dialectic-Driven Development"
 license = "MIT"
 repository = "https://github.com/dialecticianai/hegel-mirror"
 
+[lib]
+name = "mirror"
+path = "src/lib.rs"
+
 [[bin]]
 name = "mirror"
 path = "src/main.rs"
@@ -39,3 +43,4 @@ syntect = "5"
 
 [dev-dependencies]
 tempfile = "3.8"
+egui_kittest = "0.33"

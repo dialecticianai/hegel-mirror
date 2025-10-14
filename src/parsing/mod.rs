@@ -1,4 +1,5 @@
 mod chunks;
+mod html;
 mod parser;
 mod position;
 
