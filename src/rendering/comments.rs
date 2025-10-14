@@ -6,7 +6,7 @@ use eframe::egui;
 pub fn render_comment_section(
     ctx: &egui::Context,
     layout_map: &LayoutMap,
-    selection: &Selection,
+    selection: &mut Selection,
     comment_text: &mut String,
     comments: &mut Vec<Comment>,
     theme: &Theme,
@@ -20,6 +20,7 @@ pub fn render_comment_section(
             end_line,
             comment_text,
             comments,
+            selection,
             theme,
         );
     }
@@ -37,6 +38,7 @@ fn render_comment_input(
     end_line: usize,
     comment_text: &mut String,
     comments: &mut Vec<Comment>,
+    selection: &mut Selection,
     theme: &Theme,
 ) {
     let (min_line, max_line) = if start_line <= end_line {
@@ -108,6 +110,8 @@ fn render_comment_input(
                         0, // col_end: 0 (simplified for MVP)
                     ));
                     comment_text.clear();
+                    // Clear the selection after adding comment
+                    selection.clear();
                 }
             });
     }

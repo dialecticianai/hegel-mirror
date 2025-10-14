@@ -121,7 +121,7 @@ impl eframe::App for MarkdownReviewApp {
                 render_comment_section(
                     ctx,
                     &self.layout_map,
-                    &self.selection,
+                    &mut self.selection,
                     &mut self.comment_text,
                     &mut self.comments,
                     &self.theme,
