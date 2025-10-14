@@ -8,7 +8,7 @@
 
 ## What is Mirror?
 
-Mirror is a zero-friction GUI for reviewing Markdown documents (and eventually other structured artifacts) in human-AI collaborative development workflows. Designed for programmatic invocation by agents and natural use by humans.
+Mirror is a zero-friction GUI for reviewing Markdown documents in human-AI collaborative development workflows. Designed for programmatic invocation by agents and natural use by humans.
 
 **Core concept:** Launch → review → comment → exit. No persistent state, no configuration, just pure review flow.
 
