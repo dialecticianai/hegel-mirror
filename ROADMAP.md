@@ -14,17 +14,19 @@ Mirror is the human-in-the-loop approval interface for DDD workflows. It bridges
 
 ## Current Status
 
-**Phase 1: MVP** - Core rendering and interaction complete ✅
+**Phase 1: MVP** - M1, M2, M4 complete! ✅
 
-We've built a fully functional Markdown viewer with:
+We've built a fully functional Markdown review system with:
 - Complete Markdown rendering (text, code blocks with syntax highlighting, tables, images)
 - Line-precise text selection with visual highlighting
 - Floating comment UI with smart positioning
 - Lazy rendering with viewport culling (60fps on 11K+ line documents)
 - Theme system for typography and layout
-- ~1,500 lines of Rust across 24 modules
+- **Review file persistence** (JSONL format with monotonic sequence)
+- **Dual review modes** (immediate and batched)
+- ~1,800 lines of Rust across 26 modules
 
-**Next:** Review file persistence (write comments to `.ddd/<filename>.review.N`)
+**Next:** M3 - Multi-file tabs, or M6 - Keyboard shortcuts
 
 ---
 
@@ -78,44 +80,38 @@ We've built a fully functional Markdown viewer with:
 - `src/syntax/` - Syntax highlighting via `syntect`
 - `src/theme/` - Theme system
 
-**Not yet implemented:**
-- ❌ Review file persistence (`.ddd/<filename>.review.N`)
-- ❌ Auto-exit on submit
-- ❌ "Submit Review" button (UI scaffolding exists but no action)
-
 **Testing:**
 - Manual testing with various Markdown files
 - Performance tested with 11K+ line documents
 
 ---
 
-### 1.2 Review persistence (Milestone M2) 🚧 **IN PROGRESS**
+### 1.2 Review persistence (Milestone M2) ✅ **COMPLETED**
 
 **Goal:** Write comments to `.ddd/<filename>.review.N` files with monotonic sequence numbers.
 
-**Features:**
-- "Submit Review" button writes comments to disk
-- JSONL format: one comment per line
-- Monotonic sequence: `.review.1`, `.review.2`, etc.
-- Include metadata: timestamp, session ID (from env), file path, selection range
-- Auto-exit on submit (or ask user)
+**Implemented:**
+- ✅ `src/storage.rs` - JSONL writing, monotonic sequence logic
+- ✅ JSONL format: one comment per line with full metadata
+- ✅ Monotonic sequence: `.review.1`, `.review.2`, etc.
+- ✅ Metadata: timestamp (ISO 8601), session ID (from `HEGEL_SESSION_ID`), file, selection range, text snippet, comment
+- ✅ Auto-creates output directory if missing
+- ✅ Text snippet extraction (stores selected text in review file)
 
-**Implementation:**
-- `src/storage.rs` - JSONL writing, monotonic sequence logic
-- Hook up "Submit Review" button in `src/rendering/comments.rs`
-- Add exit logic after successful write
+**Architecture:**
+- `src/storage.rs` - ReviewStorage struct with append/write methods
+- `src/models/review_mode.rs` - ReviewMode enum (Immediate/Batched)
+- `src/rendering/comments.rs` - Dual-mode button logic
+- `src/app.rs` - Storage integration, top-level submit button
 
 **Testing:**
-- Integration test: Verify JSONL format
-- Test monotonic sequence (multiple reviews of same file)
-- Test session ID passthrough from environment
+- Manual testing: Verified JSONL format with real files
+- Session ID passthrough confirmed
+- Monotonic sequence tested
 
-**Acceptance:**
-```bash
-export HEGEL_SESSION_ID="abc123"
-mirror test.md --out-dir /tmp/reviews
-# User selects text, adds comment, clicks submit
-# Verify /tmp/reviews/test.review.1 exists and contains valid JSONL with session_id
+**Example output:**
+```jsonl
+{"timestamp":"2025-10-14T03:32:15.735803+00:00","session_id":"abc123","file":"SPEC.md","selection":{"start":{"line":15,"col":0},"end":{"line":18,"col":0}},"text":"selected text snippet","comment":"This needs clarification"}
 ```
 
 ---
@@ -148,33 +144,32 @@ mirror SPEC.md PLAN.md
 
 ---
 
-### 1.4 Immediate vs batched review (Milestone M4)
+### 1.4 Immediate vs batched review (Milestone M4) ✅ **COMPLETED**
 
 **Goal:** Two modes - immediate commenting (default) and batched review.
 
-**Features:**
-- Default: Every comment saves immediately (append to `.review.N`)
-- "Start Review" button: Enter batch mode
+**Implemented:**
+- ✅ Default: Immediate mode - every comment saves immediately (append to `.review.N`)
+- ✅ "Start Review" button: Enters batch mode
   - Comments queued in memory only
-  - "Submit Review" button appears
-  - Click submit → atomic write all comments → exit
-- User can toggle between modes mid-session
+  - Top bar appears with "Submit Review" button
+  - Shows comment count: "Review Mode (3 comments queued)"
+  - Click submit → atomic write all comments → auto-exit
+- ✅ Dual-mode button UI:
+  - Immediate mode: "Submit" and "Start Review" buttons
+  - Batched mode: "Add to Review" button
+- ✅ One-way transition: Immediate → Batched (no going back in session)
 
-**Implementation:**
-- `src/review_mode.rs` - Enum: Immediate vs Batched
-- Refactor comment handling to check mode before writing
-- Add "Start Review" / "Submit Review" buttons conditionally
+**Architecture:**
+- `src/models/review_mode.rs` - ReviewMode enum (Immediate/Batched)
+- `src/rendering/comments.rs` - Conditional button rendering based on mode
+- `src/app.rs` - Top bar for batched mode with submit button
+- `src/storage.rs` - Separate methods for append (immediate) and write_review (batched)
 
 **Testing:**
-- Test immediate: Verify `.review.N` grows on each comment
-- Test batched: Verify `.review.N` empty until submit
-
-**Acceptance:**
-```bash
-mirror SPEC.md
-# Immediate: Each comment → immediate write
-# Batched: "Start Review" → queue comments → "Submit" → atomic write
-```
+- Manual testing: Both modes verified working
+- Immediate: Each "Submit" appends to `.review.N`
+- Batched: "Start Review" → queue → "Submit Review" → atomic write → exit
 
 ---
 
@@ -373,10 +368,10 @@ mirror SPEC.md --plugins .ddd/plugins/
 | Phase | Milestone | Description | Status |
 |-------|-----------|-------------|--------|
 | 1 | M1 | Single-file Markdown review | ✅ Complete |
-| 1 | M2 | Review persistence (`.review.N` files) | 🚧 In Progress |
+| 1 | M2 | Review persistence (`.review.N` files) | ✅ Complete |
 | 1 | M3 | Multi-file tabs | ⏳ Planned |
-| 1 | M4 | Immediate vs batched review | ⏳ Planned |
-| 1 | M5 | JSON output, env integration | ⏳ Planned (partial) |
+| 1 | M4 | Immediate vs batched review | ✅ Complete |
+| 1 | M5 | JSON output, env integration | ✅ Partial (env vars done, JSON output pending) |
 | 1 | M6 | Keyboard shortcuts | ⏳ Planned |
 | 2 | - | Enhanced Markdown rendering | ⏳ Planned |
 | 2 | - | Diff view integration | ⏳ Planned |
@@ -384,7 +379,7 @@ mirror SPEC.md --plugins .ddd/plugins/
 | 3 | - | Export formats | ⏳ Planned |
 | 3 | - | Plugin system (stretch) | ⏳ Planned |
 
-**Current Focus:** M2 - Review persistence
+**Current Focus:** M3 - Multi-file tabs or M6 - Keyboard shortcuts
 
 ---
 

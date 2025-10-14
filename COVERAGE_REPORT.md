@@ -1,13 +1,13 @@
 # Test Coverage Report
 
-**Last Updated**: 2025-10-13 22:13
+**Last Updated**: 2025-10-13 23:34
 **Tool**: cargo-llvm-cov
-**Overall Coverage**: **49.83%** lines | **45.39%** regions | **56.86%** functions
+**Overall Coverage**: **42.71%** lines | **38.81%** regions | **48.74%** functions
 
 ## Summary
 
 ```
-TOTAL                            1952              1066    45.39%         102                44    56.86%        1463               734    49.83%           0                 0         -
+TOTAL                            2283              1397    38.81%         119                61    48.74%        1707               978    42.71%           0                 0         -
 ```
 
 ## Coverage by Module
@@ -18,6 +18,7 @@ TOTAL                            1952              1066    45.39%         102   
 | `main.rs` | 0.00% | 0.00% | 0.00% | 🔴 Needs Work |
 | `models/comment.rs` | 100.00% | 100.00% | 100.00% | 🟢 Excellent |
 | `models/layout.rs` | 93.02% | 95.18% | 100.00% | 🟢 Excellent |
+| `models/review_mode.rs` | 0.00% | 0.00% | 0.00% | 🔴 Needs Work |
 | `models/selection.rs` | 100.00% | 100.00% | 100.00% | 🟢 Excellent |
 | `models/table.rs` | 100.00% | 100.00% | 100.00% | 🟢 Excellent |
 | `parsing/chunks.rs` | 100.00% | 100.00% | 100.00% | 🟢 Excellent |
@@ -32,6 +33,7 @@ TOTAL                            1952              1066    45.39%         102   
 | `rendering/table.rs` | 0.00% | 0.00% | 0.00% | 🔴 Needs Work |
 | `rendering/text.rs` | 0.00% | 0.00% | 0.00% | 🔴 Needs Work |
 | `rendering/ui.rs` | 0.00% | 0.00% | 0.00% | 🔴 Needs Work |
+| `storage.rs` | 0.00% | 0.00% | 0.00% | 🔴 Needs Work |
 | `syntax/highlighter.rs` | 100.00% | 100.00% | 100.00% | 🟢 Excellent |
 | `theme/mod.rs` | 100.00% | 100.00% | 100.00% | 🟢 Excellent |
 
@@ -57,6 +59,7 @@ TOTAL                            1952              1066    45.39%         102   
 ### 🔴 Needs Work (<40% lines)
 - `app.rs` - 0.00%
 - `main.rs` - 0.00%
+- `models/review_mode.rs` - 0.00%
 - `rendering/chunk.rs` - 0.00%
 - `rendering/code.rs` - 0.00%
 - `rendering/comments.rs` - 0.00%
@@ -64,12 +67,13 @@ TOTAL                            1952              1066    45.39%         102   
 - `rendering/table.rs` - 0.00%
 - `rendering/text.rs` - 0.00%
 - `rendering/ui.rs` - 0.00%
+- `storage.rs` - 0.00%
 
 ## Coverage Targets
 
 | Tier | Target | Current | Status |
 |------|--------|---------|--------|
-| Overall | ≥80% | 49.83% | ⏳ In Progress |
+| Overall | ≥80% | 42.71% | ⏳ In Progress |
 | Critical Paths | ≥95% | Check modules above | Policy |
 | New Modules | ≥80% | - | Policy |
 

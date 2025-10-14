@@ -1,4 +1,5 @@
-use crate::models::{Comment, LayoutMap, Selection};
+use crate::models::{Comment, LayoutMap, ReviewMode, Selection};
+use crate::storage::ReviewStorage;
 use crate::theme::Theme;
 use eframe::egui;
 
@@ -10,6 +11,9 @@ pub fn render_comment_section(
     comment_text: &mut String,
     comments: &mut Vec<Comment>,
     theme: &Theme,
+    review_mode: &mut ReviewMode,
+    storage: &ReviewStorage,
+    source: &str,
 ) {
     // Only show if there's an active selection
     if let (Some(start_line), Some(end_line)) = (selection.start_line, selection.end_line) {
@@ -22,6 +26,9 @@ pub fn render_comment_section(
             comments,
             selection,
             theme,
+            review_mode,
+            storage,
+            source,
         );
     }
 
@@ -40,6 +47,9 @@ fn render_comment_input(
     comments: &mut Vec<Comment>,
     selection: &mut Selection,
     theme: &Theme,
+    review_mode: &mut ReviewMode,
+    storage: &ReviewStorage,
+    source: &str,
 ) {
     let (min_line, max_line) = if start_line <= end_line {
         (start_line, end_line)
@@ -101,17 +111,58 @@ fn render_comment_input(
                 ui.text_edit_multiline(comment_text);
                 ui.add_space(5.0);
 
-                if ui.button("Add Comment").clicked() && !comment_text.is_empty() {
-                    comments.push(Comment::new(
-                        comment_text.clone(),
-                        min_line,
-                        0, // col_start: 0 (beginning of line)
-                        max_line,
-                        0, // col_end: 0 (simplified for MVP)
-                    ));
-                    comment_text.clear();
-                    // Clear the selection after adding comment
-                    selection.clear();
+                // Extract selected text snippet from source
+                let selected_text = extract_text_snippet(source, min_line, max_line);
+
+                // Show different buttons based on review mode
+                match *review_mode {
+                    ReviewMode::Immediate => {
+                        ui.horizontal(|ui| {
+                            if ui.button("Submit").clicked() && !comment_text.is_empty() {
+                                // Immediate mode: write to disk immediately
+                                if let Err(e) = storage.append_comment(
+                                    selected_text.clone(),
+                                    comment_text.clone(),
+                                    min_line,
+                                    0,
+                                    max_line,
+                                    0,
+                                ) {
+                                    eprintln!("Failed to write comment: {}", e);
+                                }
+                                comment_text.clear();
+                                selection.clear();
+                            }
+
+                            if ui.button("Start Review").clicked() && !comment_text.is_empty() {
+                                // Enter batched mode: queue comment in memory
+                                *review_mode = ReviewMode::Batched;
+                                comments.push(Comment::new(
+                                    comment_text.clone(),
+                                    min_line,
+                                    0,
+                                    max_line,
+                                    0,
+                                ));
+                                comment_text.clear();
+                                selection.clear();
+                            }
+                        });
+                    }
+                    ReviewMode::Batched => {
+                        if ui.button("Add to Review").clicked() && !comment_text.is_empty() {
+                            // Batched mode: queue comment in memory
+                            comments.push(Comment::new(
+                                comment_text.clone(),
+                                min_line,
+                                0,
+                                max_line,
+                                0,
+                            ));
+                            comment_text.clear();
+                            selection.clear();
+                        }
+                    }
                 }
             });
     }
@@ -138,4 +189,13 @@ fn render_comments_list(ctx: &egui::Context, comments: &[Comment], theme: &Theme
                 }
             });
         });
+}
+
+/// Extract text snippet from source for the given line range
+fn extract_text_snippet(source: &str, start_line: usize, end_line: usize) -> String {
+    let lines: Vec<&str> = source.lines().collect();
+    let start_idx = start_line.saturating_sub(1); // Lines are 1-indexed
+    let end_idx = end_line.min(lines.len());
+
+    lines[start_idx..end_idx].join("\n")
 }

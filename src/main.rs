@@ -2,6 +2,7 @@ mod app;
 mod models;
 mod parsing;
 mod rendering;
+mod storage;
 mod syntax;
 mod theme;
 
@@ -55,6 +56,19 @@ fn main() -> Result<()> {
         .unwrap_or(Path::new("."))
         .to_path_buf();
 
+    // Extract filename for review file naming
+    let filename = Path::new(file_path)
+        .file_name()
+        .and_then(|s| s.to_str())
+        .unwrap_or("unknown.md")
+        .to_string();
+
+    // Get session ID from environment
+    let session_id = std::env::var("HEGEL_SESSION_ID").ok();
+
+    // Parse out_dir as PathBuf
+    let out_dir = Path::new(&args.out_dir).to_path_buf();
+
     let options = eframe::NativeOptions {
         viewport: egui::ViewportBuilder::default().with_inner_size([1024.0, 768.0]),
         ..Default::default()
@@ -67,7 +81,10 @@ fn main() -> Result<()> {
             cc.egui_ctx.set_visuals(egui::Visuals::light());
             Ok(Box::new(MarkdownReviewApp::new(
                 markdown_content,
+                filename,
                 base_path,
+                out_dir,
+                session_id,
             )))
         }),
     )
