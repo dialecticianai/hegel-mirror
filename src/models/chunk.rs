@@ -1,6 +1,14 @@
 use super::Table;
 use std::ops::Range;
 
+/// Alignment for images and other block elements
+#[derive(Clone, Debug, PartialEq)]
+pub enum Alignment {
+    Left,
+    Center,
+    Right,
+}
+
 /// A rendered chunk of text with its source position
 #[derive(Clone, Debug)]
 pub struct TextChunk {
@@ -26,6 +34,10 @@ pub struct TextChunk {
     pub newline_after: bool,
     /// Image path (if this is an image)
     pub image_path: Option<String>,
+    /// Image alignment (for images)
+    pub alignment: Option<Alignment>,
+    /// Image width constraint (for images)
+    pub image_width: Option<f32>,
     /// Code block language (if this is a code block)
     pub code_block_lang: Option<String>,
     /// Table data (if this is a table)

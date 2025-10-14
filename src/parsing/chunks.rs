@@ -1,4 +1,4 @@
-use crate::models::{Table, TextChunk};
+use crate::models::{Alignment, Table, TextChunk};
 use crate::parsing::position::LineOffsets;
 use std::ops::Range;
 use std::path::Path;
@@ -32,6 +32,8 @@ pub fn push_text_chunk(
         heading_level,
         newline_after: false,
         image_path: None,
+        alignment: None,
+        image_width: None,
         code_block_lang: if in_code_block {
             code_block_lang.clone()
         } else {
@@ -69,6 +71,8 @@ pub fn push_code_chunk(
         heading_level,
         newline_after: false,
         image_path: None,
+        alignment: None,
+        image_width: None,
         code_block_lang: None,
         table: None,
         cached_height: None,
@@ -95,6 +99,8 @@ pub fn push_break_chunk(
         heading_level: None,
         newline_after: newline,
         image_path: None,
+        alignment: None,
+        image_width: None,
         code_block_lang: None,
         table: None,
         cached_height: None,
@@ -109,6 +115,29 @@ pub fn push_image_chunk(
     base_path: &Path,
     line_offsets: &LineOffsets,
     range: &Range<usize>,
+) {
+    push_image_chunk_with_alignment(
+        chunks,
+        url,
+        source,
+        base_path,
+        line_offsets,
+        range,
+        None,
+        None,
+    );
+}
+
+/// Push an image chunk with specific alignment and width
+pub fn push_image_chunk_with_alignment(
+    chunks: &mut Vec<TextChunk>,
+    url: &str,
+    source: &str,
+    base_path: &Path,
+    line_offsets: &LineOffsets,
+    range: &Range<usize>,
+    alignment: Option<Alignment>,
+    width: Option<f32>,
 ) {
     let (line_start, col_start) = line_offsets.byte_to_line_col(source, range.start);
     let (line_end, col_end) = line_offsets.byte_to_line_col(source, range.end);
@@ -127,6 +156,8 @@ pub fn push_image_chunk(
         heading_level: None,
         newline_after: true,
         image_path: Some(image_path),
+        alignment,
+        image_width: width,
         code_block_lang: None,
         table: None,
         cached_height: None,
@@ -157,6 +188,8 @@ pub fn push_table_chunk(
         heading_level: None,
         newline_after: true,
         image_path: None,
+        alignment: None,
+        image_width: None,
         code_block_lang: None,
         table: Some(table),
         cached_height: None,

@@ -1,6 +1,7 @@
-use crate::models::{Table, TextChunk};
+use crate::models::{Alignment, Table, TextChunk};
 use crate::parsing::chunks::{
-    push_break_chunk, push_code_chunk, push_image_chunk, push_table_chunk, push_text_chunk,
+    push_break_chunk, push_code_chunk, push_image_chunk, push_image_chunk_with_alignment,
+    push_table_chunk, push_text_chunk,
 };
 use crate::parsing::position::LineOffsets;
 use pulldown_cmark::{CodeBlockKind, CowStr, Event, Options, Parser, Tag, TagEnd};
@@ -35,8 +36,39 @@ pub fn parse_markdown(source: &str, base_path: &Path) -> Vec<TextChunk> {
     let mut current_cell: String = String::new();
     let mut table_start_range: Option<Range<usize>> = None;
 
+    // Track HTML block state (for centered images)
+    let mut in_html_block = false;
+    let mut html_block_content = String::new();
+    let mut html_block_range: Option<Range<usize>> = None;
+
     for (event, range) in parser.into_offset_iter() {
         match event {
+            Event::Start(Tag::HtmlBlock) => {
+                in_html_block = true;
+                html_block_content.clear();
+                html_block_range = Some(range.clone());
+            }
+            Event::Html(html) | Event::InlineHtml(html) if in_html_block => {
+                html_block_content.push_str(&html);
+            }
+            Event::End(TagEnd::HtmlBlock) => {
+                in_html_block = false;
+                // Try to parse centered image from HTML
+                if let Some((img_src, alignment, width)) = parse_html_image(&html_block_content) {
+                    let html_range = html_block_range.take().unwrap_or(range.clone());
+                    push_image_chunk_with_alignment(
+                        &mut chunks,
+                        &img_src,
+                        source,
+                        base_path,
+                        &line_offsets,
+                        &html_range,
+                        alignment,
+                        width,
+                    );
+                }
+                html_block_content.clear();
+            }
             Event::Start(Tag::Table(alignments)) => {
                 in_table = true;
                 current_table = Some(Table::new(alignments));
@@ -228,4 +260,72 @@ fn handle_end_tag(
         }
         _ => {}
     }
+}
+
+/// Parse HTML block to extract image with alignment and width
+/// Returns (image_src, alignment, width) if found
+fn parse_html_image(html: &str) -> Option<(String, Option<Alignment>, Option<f32>)> {
+    // Simple regex-free parser for <p align="..."><img src="..." width="..."></p>
+    let html = html.trim();
+
+    // Check if it starts with <p and contains align attribute
+    if !html.starts_with("<p") {
+        return None;
+    }
+
+    // Extract alignment from <p align="center|left|right">
+    let alignment = if html.contains("align=\"center\"") || html.contains("align='center'") {
+        Some(Alignment::Center)
+    } else if html.contains("align=\"right\"") || html.contains("align='right'") {
+        Some(Alignment::Right)
+    } else if html.contains("align=\"left\"") || html.contains("align='left'") {
+        Some(Alignment::Left)
+    } else {
+        None
+    };
+
+    // Extract src attribute from <img tag
+    if let Some(img_start) = html.find("<img") {
+        let img_section = &html[img_start..];
+        if let Some(src_start) = img_section
+            .find("src=\"")
+            .or_else(|| img_section.find("src='"))
+        {
+            let quote_char = if img_section[src_start..].starts_with("src=\"") {
+                '"'
+            } else {
+                '\''
+            };
+            let src_value_start = src_start + 5; // "src=\"" or "src='"
+            if let Some(src_end) = img_section[src_value_start..].find(quote_char) {
+                let src = &img_section[src_value_start..src_value_start + src_end];
+
+                // Extract width attribute if present
+                let width = if let Some(width_start) = img_section
+                    .find("width=\"")
+                    .or_else(|| img_section.find("width='"))
+                {
+                    let width_quote = if img_section[width_start..].starts_with("width=\"") {
+                        '"'
+                    } else {
+                        '\''
+                    };
+                    let width_value_start = width_start + 7; // "width=\"" or "width='"
+                    if let Some(width_end) = img_section[width_value_start..].find(width_quote) {
+                        let width_str =
+                            &img_section[width_value_start..width_value_start + width_end];
+                        width_str.parse::<f32>().ok()
+                    } else {
+                        None
+                    }
+                } else {
+                    None
+                };
+
+                return Some((src.to_string(), alignment, width));
+            }
+        }
+    }
+
+    None
 }

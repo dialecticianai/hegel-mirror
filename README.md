@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="logo.png" alt="Mirror Logo" width="200">
+</p>
+
 # Mirror
 
 **Ephemeral Markdown review UI for Dialectic-Driven Development**
@@ -16,20 +20,38 @@ Mirror is a zero-friction GUI for reviewing Markdown documents in human-AI colla
 
 ## Status
 
-**Phase:** 0 (Scaffolding) - MVP not yet implemented
+**Phase:** 1 (MVP) - Core Markdown review implemented
 
-See [ROADMAP.md](ROADMAP.md) for development plan.
+**Completed:**
+- ✅ M1: Single-file Markdown review
+  - Markdown parsing and rendering (text, code blocks, tables, images)
+  - Line-precise text selection with visual highlighting
+  - Floating comment UI with scroll indicators
+  - Syntax highlighting for code blocks
+  - Lazy rendering with cached heights (60fps on 11K+ line documents)
+  - Theme system for typography and styling
+  - CLI argument parsing (`--out-dir`, `--json`, `--headless`)
+
+**In Progress:**
+- M2: Multi-file tabs
+- M3: Comment persistence (write to `.ddd/<filename>.review.N`)
+
+See [ROADMAP.md](ROADMAP.md) for full development plan.
 
 ---
 
-## Quick Start (Placeholder)
+## Quick Start
 
 ```bash
-# Install
-cargo install --path .
+# Build
+cargo build --release
 
-# Run (placeholder - not yet functional)
-mirror SPEC.md PLAN.md
+# Run
+./target/release/mirror SPEC.md
+
+# Select text by clicking and dragging
+# Add comments in the floating UI
+# (Comment persistence coming soon)
 ```
 
 ---
@@ -54,11 +76,9 @@ cargo test
 
 ## Documentation
 
-- [ROADMAP.md](ROADMAP.md) - 5-phase development plan (MVP → maximal vision)
+- [ROADMAP.md](ROADMAP.md) - 3-phase development plan (MVP → advanced features)
 - [CLAUDE.md](CLAUDE.md) - Development context and patterns
 - [DDD.md](DDD.md) - Dialectic-Driven Development methodology (toy-focused)
-- [COVERAGE_REPORT.md](COVERAGE_REPORT.md) - Test coverage metrics
-- [LOC_REPORT.md](LOC_REPORT.md) - Lines of code breakdown
 
 ---
 

@@ -159,7 +159,13 @@ fn render_image_chunk(
     if is_in_viewport(ui, approx_rect) {
         // Load and render, cache actual height
         image::load_image_texture(ctx, image_path, loaded_images);
-        if let Some(response) = image::render_image(ui, image_path, loaded_images) {
+        if let Some(response) = image::render_image(
+            ui,
+            image_path,
+            loaded_images,
+            chunk.alignment.clone(),
+            chunk.image_width,
+        ) {
             chunk.cached_height = Some(response.rect.height());
             // Images can be selected by clicking (single line selection)
             if response.clicked() {
