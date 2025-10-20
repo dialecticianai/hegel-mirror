@@ -50,11 +50,20 @@ impl eframe::App for MarkdownReviewApp {
             }
         }
 
-        // Tab bar (if multiple documents)
-        if self.documents.len() > 1 {
+        // Tab bar (if multiple documents, showing only non-approved docs)
+        let unapproved_docs: Vec<usize> = self
+            .documents
+            .iter()
+            .enumerate()
+            .filter(|(_, doc)| !doc.approved)
+            .map(|(i, _)| i)
+            .collect();
+
+        if unapproved_docs.len() > 1 {
             egui::TopBottomPanel::top("tabs").show(ctx, |ui| {
                 ui.horizontal(|ui| {
-                    for (i, doc) in self.documents.iter().enumerate() {
+                    for &i in &unapproved_docs {
+                        let doc = &self.documents[i];
                         let label = if doc.comment_count() > 0 {
                             format!("{} ({})", doc.filename, doc.comment_count())
                         } else {
@@ -72,23 +81,64 @@ impl eframe::App for MarkdownReviewApp {
             });
         }
 
-        // Top menu bar for Submit Review button (batched mode)
-        let total_comments: usize = self.documents.iter().map(|d| d.comment_count()).sum();
-        if self.review_mode == ReviewMode::Batched && total_comments > 0 {
+        // Top menu bar for LGTM and Submit Review buttons (per-document)
+        let active_has_comments = self.documents[self.active_document_index].comment_count() > 0;
+        let active_approved = self.documents[self.active_document_index].approved;
+        let show_top_bar =
+            self.review_mode == ReviewMode::Batched && active_has_comments || !active_has_comments;
+
+        if show_top_bar && !active_approved {
             egui::TopBottomPanel::top("review_actions").show(ctx, |ui| {
                 ui.horizontal(|ui| {
-                    ui.heading("Review Mode");
-                    ui.label(format!("({} comments queued)", total_comments));
-                    ui.with_layout(egui::Layout::right_to_left(egui::Align::Center), |ui| {
-                        if ui.button("Submit Review").clicked() {
-                            // Write reviews for all documents with comments
-                            let mut all_successful = true;
-                            for doc in &self.documents {
-                                if doc.comments.is_empty() {
-                                    continue;
-                                }
+                    if self.review_mode == ReviewMode::Batched && active_has_comments {
+                        ui.heading("Review Mode");
+                        ui.label(format!(
+                            "({} comments queued)",
+                            self.documents[self.active_document_index].comment_count()
+                        ));
+                    }
 
-                                // Build comment tuples for batched write
+                    ui.with_layout(egui::Layout::right_to_left(egui::Align::Center), |ui| {
+                        // LGTM button - only show if current document has no comments
+                        if !active_has_comments {
+                            if ui.button("Approve (LGTM)").clicked() {
+                                // Write approval for current document
+                                match self.documents[self.active_document_index]
+                                    .storage
+                                    .write_approval()
+                                {
+                                    Ok(path) => {
+                                        println!("Approval written to: {:?}", path);
+                                        // Mark document as approved
+                                        let doc = &mut self.documents[self.active_document_index];
+                                        doc.approved = true;
+
+                                        // Check if all documents are done (all approved)
+                                        let all_done = self.documents.iter().all(|d| d.approved);
+                                        if all_done {
+                                            ctx.send_viewport_cmd(egui::ViewportCommand::Close);
+                                        } else {
+                                            // Switch to next unapproved document
+                                            if let Some(&next_idx) = unapproved_docs
+                                                .iter()
+                                                .find(|&&i| i != self.active_document_index)
+                                            {
+                                                self.active_document_index = next_idx;
+                                            }
+                                        }
+                                    }
+                                    Err(e) => {
+                                        eprintln!("Failed to write approval: {}", e);
+                                    }
+                                }
+                            }
+                        }
+
+                        // Submit Review button - only show in batched mode with comments
+                        if self.review_mode == ReviewMode::Batched && active_has_comments {
+                            if ui.button("Submit Review").clicked() {
+                                // Build comment tuples for current document
+                                let doc = &self.documents[self.active_document_index];
                                 let comment_data: Vec<_> = doc
                                     .comments
                                     .iter()
@@ -112,19 +162,28 @@ impl eframe::App for MarkdownReviewApp {
                                 match doc.storage.write_review(comment_data) {
                                     Ok(path) => {
                                         println!("Review written to: {:?}", path);
+                                        // Mark document as approved (review submitted)
+                                        let doc = &mut self.documents[self.active_document_index];
+                                        doc.approved = true;
+
+                                        // Check if all documents are done
+                                        let all_done = self.documents.iter().all(|d| d.approved);
+                                        if all_done {
+                                            ctx.send_viewport_cmd(egui::ViewportCommand::Close);
+                                        } else {
+                                            // Switch to next unapproved document
+                                            if let Some(&next_idx) = unapproved_docs
+                                                .iter()
+                                                .find(|&&i| i != self.active_document_index)
+                                            {
+                                                self.active_document_index = next_idx;
+                                            }
+                                        }
                                     }
                                     Err(e) => {
-                                        eprintln!(
-                                            "Failed to write review for {}: {}",
-                                            doc.filename, e
-                                        );
-                                        all_successful = false;
+                                        eprintln!("Failed to write review: {}", e);
                                     }
                                 }
-                            }
-
-                            if all_successful {
-                                ctx.send_viewport_cmd(egui::ViewportCommand::Close);
                             }
                         }
                     });

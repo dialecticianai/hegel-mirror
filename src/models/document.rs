@@ -16,6 +16,7 @@ pub struct Document {
     pub loaded_images: HashMap<String, egui::TextureHandle>,
     pub layout_map: LayoutMap,
     pub storage: ReviewStorage,
+    pub approved: bool,
 }
 
 impl Document {
@@ -39,6 +40,7 @@ impl Document {
             loaded_images: HashMap::new(),
             layout_map: LayoutMap::new(),
             storage,
+            approved: false,
         }
     }
 

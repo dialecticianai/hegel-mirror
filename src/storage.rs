@@ -188,4 +188,23 @@ impl ReviewStorage {
 
         Ok(review_path)
     }
+
+    /// Write approval (LGTM) to a new review file
+    pub fn write_approval(&self) -> Result<PathBuf> {
+        let review_path = self.review_file_path()?;
+        let mut file = File::create(&review_path)
+            .context(format!("Failed to create review file: {:?}", review_path))?;
+
+        let timestamp = chrono::Utc::now().to_rfc3339();
+        let message = if let Some(sid) = &self.session_id {
+            format!("LGTM - {} (session: {})", timestamp, sid)
+        } else {
+            format!("LGTM - {}", timestamp)
+        };
+
+        writeln!(file, "{}", message)
+            .context(format!("Failed to write to review file: {:?}", review_path))?;
+
+        Ok(review_path)
+    }
 }
