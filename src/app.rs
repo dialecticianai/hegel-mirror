@@ -46,7 +46,11 @@ impl eframe::App for MarkdownReviewApp {
         {
             let doc = self.active_document();
             if doc.chunks.is_none() {
-                doc.chunks = Some(parse_markdown(&doc.source, &doc.base_path));
+                doc.chunks = Some(parse_markdown(
+                    &doc.source,
+                    &doc.base_path,
+                    &mut doc.image_manager,
+                ));
             }
         }
 
@@ -275,7 +279,7 @@ impl eframe::App for MarkdownReviewApp {
                                 ctx,
                                 chunks,
                                 &mut doc.selection,
-                                &mut doc.loaded_images,
+                                &mut doc.image_manager,
                                 highlighter,
                                 theme,
                                 &mut doc.layout_map,

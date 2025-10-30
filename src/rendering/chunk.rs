@@ -1,3 +1,4 @@
+use crate::image_manager::ImageManager;
 use crate::models::{LayoutMap, Selection, TextChunk};
 use crate::rendering::chunk_renderer::{
     ChunkRenderer, CodeRenderer, ImageRenderer, RenderContext, TableRenderer, TextRenderer,
@@ -6,7 +7,6 @@ use crate::rendering::viewport::ViewportCuller;
 use crate::syntax::SyntaxHighlighter;
 use crate::theme::Theme;
 use eframe::egui;
-use std::collections::HashMap;
 
 /// Render a single chunk (image, code, table, or text) with viewport culling
 /// Returns true if the chunk was clicked
@@ -16,7 +16,7 @@ pub fn render_chunk(
     chunk: &mut TextChunk,
     idx: usize,
     selection: &mut Selection,
-    loaded_images: &mut HashMap<String, egui::TextureHandle>,
+    image_manager: &mut ImageManager,
     highlighter: &SyntaxHighlighter,
     theme: &Theme,
     layout_map: &mut LayoutMap,
@@ -30,7 +30,7 @@ pub fn render_chunk(
         chunk,
         idx,
         selection,
-        loaded_images,
+        image_manager,
         highlighter,
         theme,
         layout_map,

@@ -1,4 +1,5 @@
 mod app;
+mod image_manager;
 mod models;
 mod parsing;
 mod rendering;

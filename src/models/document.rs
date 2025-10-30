@@ -1,7 +1,6 @@
+use crate::image_manager::ImageManager;
 use crate::models::{Comment, LayoutMap, Selection, TextChunk};
 use crate::storage::ReviewStorage;
-use eframe::egui;
-use std::collections::HashMap;
 use std::path::PathBuf;
 
 /// A single document being reviewed
@@ -13,7 +12,7 @@ pub struct Document {
     pub selection: Selection,
     pub comment_text: String,
     pub comments: Vec<Comment>,
-    pub loaded_images: HashMap<String, egui::TextureHandle>,
+    pub image_manager: ImageManager,
     pub layout_map: LayoutMap,
     pub storage: ReviewStorage,
     pub approved: bool,
@@ -28,6 +27,7 @@ impl Document {
         session_id: Option<String>,
     ) -> Self {
         let storage = ReviewStorage::new(out_dir, filename.clone(), session_id);
+        let image_manager = ImageManager::new(&base_path);
 
         Self {
             filename,
@@ -37,7 +37,7 @@ impl Document {
             selection: Selection::default(),
             comment_text: String::new(),
             comments: Vec::new(),
-            loaded_images: HashMap::new(),
+            image_manager,
             layout_map: LayoutMap::new(),
             storage,
             approved: false,

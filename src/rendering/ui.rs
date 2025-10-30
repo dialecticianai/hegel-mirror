@@ -1,3 +1,4 @@
+use crate::image_manager::ImageManager;
 use crate::models::{LayoutMap, Selection, TextChunk};
 use crate::rendering::chunk;
 use crate::rendering::inline_batcher::InlineTextBatcher;
@@ -6,7 +7,6 @@ use crate::rendering::viewport::ViewportCuller;
 use crate::syntax::SyntaxHighlighter;
 use crate::theme::Theme;
 use eframe::egui;
-use std::collections::HashMap;
 
 /// Render the main UI with markdown content (with stable lazy loading)
 pub fn render_content(
@@ -14,7 +14,7 @@ pub fn render_content(
     ctx: &egui::Context,
     chunks: &mut [TextChunk],
     selection: &mut Selection,
-    loaded_images: &mut HashMap<String, egui::TextureHandle>,
+    image_manager: &mut ImageManager,
     highlighter: &SyntaxHighlighter,
     theme: &Theme,
     layout_map: &mut LayoutMap,
@@ -61,7 +61,7 @@ pub fn render_content(
                             &mut chunks[local_idx],
                             local_idx,
                             selection,
-                            loaded_images,
+                            image_manager,
                             highlighter,
                             theme,
                             layout_map,
@@ -88,7 +88,7 @@ pub fn render_content(
             &mut chunks[idx],
             idx,
             selection,
-            loaded_images,
+            image_manager,
             highlighter,
             theme,
             layout_map,

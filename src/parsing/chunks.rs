@@ -1,17 +1,8 @@
+use crate::image_manager::ImageManager;
 use crate::models::{Alignment, Table, TextChunk};
 use crate::parsing::position::LineOffsets;
 use std::ops::Range;
 use std::path::Path;
-
-/// Load image dimensions from file (width, height)
-fn load_image_dimensions(image_path: &str) -> Option<(u32, u32)> {
-    if let Ok(image_data) = std::fs::read(image_path) {
-        if let Ok(image) = image::load_from_memory(&image_data) {
-            return Some((image.width(), image.height()));
-        }
-    }
-    None
-}
 
 /// Push a text chunk to the chunks vector
 pub fn push_text_chunk(
@@ -128,6 +119,7 @@ pub fn push_image_chunk(
     base_path: &Path,
     line_offsets: &LineOffsets,
     range: &Range<usize>,
+    image_manager: &mut ImageManager,
 ) {
     push_image_chunk_with_alignment(
         chunks,
@@ -138,6 +130,7 @@ pub fn push_image_chunk(
         range,
         None,
         None,
+        image_manager,
     );
 }
 
@@ -151,13 +144,14 @@ pub fn push_image_chunk_with_alignment(
     range: &Range<usize>,
     alignment: Option<Alignment>,
     width: Option<f32>,
+    image_manager: &mut ImageManager,
 ) {
     let (line_start, col_start) = line_offsets.byte_to_line_col(source, range.start);
     let (line_end, col_end) = line_offsets.byte_to_line_col(source, range.end);
     let image_path = base_path.join(url).to_string_lossy().to_string();
 
-    // Load image dimensions to get actual height
-    let image_height = if let Some((img_width, img_height)) = load_image_dimensions(&image_path) {
+    // Load image metadata to get dimensions (fast, no texture loading)
+    let image_height = if let Some((img_width, img_height)) = image_manager.load_metadata(url) {
         // Calculate display height based on width constraint (maintaining aspect ratio)
         if let Some(desired_width) = width {
             let aspect_ratio = img_height as f32 / img_width as f32;

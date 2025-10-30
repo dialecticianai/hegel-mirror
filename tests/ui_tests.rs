@@ -1,13 +1,15 @@
 use egui_kittest::kittest::Queryable;
 /// UI integration tests using egui_kittest
 use egui_kittest::Harness;
+use mirror::image_manager::ImageManager;
 use mirror::parse_markdown;
 use std::path::Path;
 
 #[test]
 fn test_render_simple_text() {
     let markdown = "Hello, world!";
-    let chunks = parse_markdown(markdown, Path::new("."));
+    let mut image_manager = ImageManager::new(Path::new("."));
+    let chunks = parse_markdown(markdown, Path::new("."), &mut image_manager);
 
     let mut harness = Harness::new_ui(|ui| {
         for chunk in &chunks {
@@ -24,7 +26,8 @@ fn test_render_simple_text() {
 #[test]
 fn test_render_heading() {
     let markdown = "# Main Heading";
-    let chunks = parse_markdown(markdown, Path::new("."));
+    let mut image_manager = ImageManager::new(Path::new("."));
+    let chunks = parse_markdown(markdown, Path::new("."), &mut image_manager);
 
     let mut harness = Harness::new_ui(|ui| {
         for chunk in &chunks {
@@ -46,7 +49,8 @@ fn test_render_code_block() {
     let markdown = r#"```rust
 fn main() {}
 ```"#;
-    let chunks = parse_markdown(markdown, Path::new("."));
+    let mut image_manager = ImageManager::new(Path::new("."));
+    let chunks = parse_markdown(markdown, Path::new("."), &mut image_manager);
 
     let mut harness = Harness::new_ui(|ui| {
         for chunk in &chunks {
@@ -66,7 +70,8 @@ fn main() {}
 #[test]
 fn test_render_multiple_paragraphs() {
     let markdown = "Paragraph 1\n\nParagraph 2\n\nParagraph 3";
-    let chunks = parse_markdown(markdown, Path::new("."));
+    let mut image_manager = ImageManager::new(Path::new("."));
+    let chunks = parse_markdown(markdown, Path::new("."), &mut image_manager);
 
     let mut harness = Harness::new_ui(|ui| {
         for chunk in &chunks {
@@ -92,7 +97,8 @@ fn test_render_with_selection_state() {
     use mirror::models::Selection;
 
     let markdown = "Line 1\nLine 2\nLine 3";
-    let chunks = parse_markdown(markdown, Path::new("."));
+    let mut image_manager = ImageManager::new(Path::new("."));
+    let chunks = parse_markdown(markdown, Path::new("."), &mut image_manager);
     let mut selection = Selection::default();
 
     // Start a selection
@@ -122,7 +128,8 @@ fn test_render_with_selection_state() {
 #[test]
 fn test_render_styled_text() {
     let markdown = "This is **bold** and *italic* text";
-    let chunks = parse_markdown(markdown, Path::new("."));
+    let mut image_manager = ImageManager::new(Path::new("."));
+    let chunks = parse_markdown(markdown, Path::new("."), &mut image_manager);
 
     let mut harness = Harness::new_ui(|ui| {
         ui.horizontal(|ui| {
@@ -153,7 +160,8 @@ fn test_render_styled_text() {
 #[test]
 fn test_clickable_line() {
     let markdown = "Click me";
-    let chunks = parse_markdown(markdown, Path::new("."));
+    let mut image_manager = ImageManager::new(Path::new("."));
+    let chunks = parse_markdown(markdown, Path::new("."), &mut image_manager);
     let mut clicked = false;
 
     let mut harness = Harness::new_state(
@@ -180,7 +188,8 @@ fn test_clickable_line() {
 #[test]
 fn test_layout_with_margins() {
     let markdown = "Test content";
-    let chunks = parse_markdown(markdown, Path::new("."));
+    let mut image_manager = ImageManager::new(Path::new("."));
+    let chunks = parse_markdown(markdown, Path::new("."), &mut image_manager);
 
     let mut harness = Harness::new_ui(|ui| {
         // Add margins
@@ -205,7 +214,8 @@ fn test_layout_with_margins() {
 #[test]
 fn test_multiline_document_rendering() {
     let markdown = include_str!("fixtures/basic.md");
-    let chunks = parse_markdown(markdown, Path::new("."));
+    let mut image_manager = ImageManager::new(Path::new("."));
+    let chunks = parse_markdown(markdown, Path::new("."), &mut image_manager);
 
     let mut harness = Harness::new_ui(|ui| {
         egui::ScrollArea::vertical().show(ui, |ui| {
@@ -270,7 +280,8 @@ fn test_comment_input_dialog() {
 #[test]
 fn test_table_rendering_structure() {
     let markdown = include_str!("fixtures/tables.md");
-    let chunks = parse_markdown(markdown, Path::new("."));
+    let mut image_manager = ImageManager::new(Path::new("."));
+    let chunks = parse_markdown(markdown, Path::new("."), &mut image_manager);
 
     // Find table chunks
     let table_chunks: Vec<_> = chunks.iter().filter(|c| c.table.is_some()).collect();
@@ -315,7 +326,8 @@ fn test_scroll_area_with_long_content() {
     for i in 1..=50 {
         long_markdown.push_str(&format!("Line {}\n", i));
     }
-    let chunks = parse_markdown(&long_markdown, Path::new("."));
+    let mut image_manager = ImageManager::new(Path::new("."));
+    let chunks = parse_markdown(&long_markdown, Path::new("."), &mut image_manager);
 
     let mut harness = Harness::builder()
         .with_size(egui::vec2(400.0, 300.0))
@@ -336,7 +348,8 @@ fn test_scroll_area_with_long_content() {
 #[test]
 fn test_responsive_layout() {
     let markdown = "Test content for responsive layout";
-    let chunks = parse_markdown(markdown, Path::new("."));
+    let mut image_manager = ImageManager::new(Path::new("."));
+    let chunks = parse_markdown(markdown, Path::new("."), &mut image_manager);
 
     // Test with small window
     let mut harness_small = Harness::builder()

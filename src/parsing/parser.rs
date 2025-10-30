@@ -1,3 +1,4 @@
+use crate::image_manager::ImageManager;
 use crate::models::{Table, TextChunk};
 use crate::parsing::chunks::{
     push_break_chunk, push_code_chunk, push_image_chunk, push_image_chunk_with_alignment,
@@ -10,7 +11,11 @@ use std::ops::Range;
 use std::path::Path;
 
 /// Parse markdown into chunks with position tracking
-pub fn parse_markdown(source: &str, base_path: &Path) -> Vec<TextChunk> {
+pub fn parse_markdown(
+    source: &str,
+    base_path: &Path,
+    image_manager: &mut ImageManager,
+) -> Vec<TextChunk> {
     let mut chunks: Vec<TextChunk> = Vec::new();
 
     // Build line offset table once for O(log n) lookups
@@ -66,6 +71,7 @@ pub fn parse_markdown(source: &str, base_path: &Path) -> Vec<TextChunk> {
                         &html_range,
                         alignment,
                         width,
+                        image_manager,
                     );
                 }
                 html_block_content.clear();
@@ -178,6 +184,7 @@ pub fn parse_markdown(source: &str, base_path: &Path) -> Vec<TextChunk> {
                         base_path,
                         &line_offsets,
                         &range,
+                        image_manager,
                     );
                 }
             }
@@ -228,6 +235,7 @@ fn handle_end_tag(
     base_path: &Path,
     line_offsets: &LineOffsets,
     range: &Range<usize>,
+    image_manager: &mut ImageManager,
 ) {
     match tag {
         TagEnd::Strong => *bold = false,
@@ -261,6 +269,7 @@ fn handle_end_tag(
                     base_path,
                     &line_offsets,
                     range,
+                    image_manager,
                 );
             }
         }

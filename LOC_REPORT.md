@@ -1,6 +1,6 @@
 # Lines of Code Report
 
-**Last Updated**: 2025-10-29 21:14
+**Last Updated**: 2025-10-29 21:29
 **Tool**: [cloc](https://github.com/AlDanial/cloc) + wc
 
 ---
@@ -9,13 +9,13 @@
 
 | Metric | Rust Code | Documentation (.md) | Total |
 |--------|-----------|---------------------|-------|
-| **Lines** | 2,803 | 5,001 | 7,804 |
-| **Comments** | 356 | - | 356 |
-| **Blank Lines** | 386 | - | 386 |
-| **Total Lines** | 3,545 | 5,001 | 8,546 |
+| **Lines** | 2,793 | 5,005 | 7,798 |
+| **Comments** | 354 | - | 354 |
+| **Blank Lines** | 383 | - | 383 |
+| **Total Lines** | 3,530 | 5,005 | 8,535 |
 | **Files** | 36 | 37 | 73 |
 
-**Documentation Ratio**: 1.78 lines of docs per line of code
+**Documentation Ratio**: 1.79 lines of docs per line of code
 
 ---
 
@@ -24,10 +24,10 @@
 ```
 Language                     files          blank        comment           code
 -------------------------------------------------------------------------------
-Rust                            36            386            356           2803
+Rust                            36            383            354           2793
 Markdown                         6             64              0            109
 -------------------------------------------------------------------------------
-SUM:                            42            450            356           2912
+SUM:                            42            447            354           2902
 -------------------------------------------------------------------------------
 ```
 
@@ -37,10 +37,10 @@ SUM:                            42            450            356           2912
 
 | File | Total Lines | Impl Lines | Test Lines | Test % | Status |
 |------|-------------|------------|------------|--------|--------|
-| `app.rs` | 306 | 306 | 0 | 0.0% | ⚠️ Large |
+| `app.rs` | 310 | 310 | 0 | 0.0% | ⚠️ Large |
 | `image_manager.rs` | 207 | 105 | 102 | 49.3% | ✅ |
 | `lib.rs` | 14 | 14 | 0 | 0.0% | ✅ |
-| `main.rs` | 152 | 152 | 0 | 0.0% | ✅ |
+| `main.rs` | 153 | 153 | 0 | 0.0% | ✅ |
 | `models/chunk.rs` | 49 | 49 | 0 | 0.0% | ✅ |
 | `models/comment.rs` | 34 | 34 | 0 | 0.0% | ✅ |
 | `models/document.rs` | 51 | 51 | 0 | 0.0% | ✅ |
@@ -49,17 +49,17 @@ SUM:                            42            450            356           2912
 | `models/review_mode.rs` | 14 | 14 | 0 | 0.0% | ✅ |
 | `models/selection.rs` | 50 | 50 | 0 | 0.0% | ✅ |
 | `models/table.rs` | 22 | 22 | 0 | 0.0% | ✅ |
-| `parsing/chunks.rs` | 225 | 225 | 0 | 0.0% | ⚠️ Large |
+| `parsing/chunks.rs` | 219 | 219 | 0 | 0.0% | ⚠️ Large |
 | `parsing/html.rs` | 162 | 79 | 83 | 51.2% | ✅ |
 | `parsing/mod.rs` | 6 | 6 | 0 | 0.0% | ✅ |
-| `parsing/parser.rs` | 271 | 271 | 0 | 0.0% | ⚠️ Large |
+| `parsing/parser.rs` | 280 | 280 | 0 | 0.0% | ⚠️ Large |
 | `parsing/position.rs` | 52 | 40 | 12 | 23.1% | ✅ |
 | `rendering/chunk_renderer.rs` | 218 | 218 | 0 | 0.0% | ⚠️ Large |
 | `rendering/chunk.rs` | 50 | 50 | 0 | 0.0% | ✅ |
 | `rendering/code.rs` | 44 | 44 | 0 | 0.0% | ✅ |
 | `rendering/comments.rs` | 181 | 181 | 0 | 0.0% | ✅ |
 | `rendering/helpers.rs` | 45 | 19 | 26 | 57.8% | ✅ |
-| `rendering/image.rs` | 80 | 80 | 0 | 0.0% | ✅ |
+| `rendering/image.rs` | 57 | 57 | 0 | 0.0% | ✅ |
 | `rendering/inline_batcher.rs` | 190 | 75 | 115 | 60.5% | ✅ |
 | `rendering/mod.rs` | 16 | 16 | 0 | 0.0% | ✅ |
 | `rendering/selection_manager.rs` | 117 | 117 | 0 | 0.0% | ✅ |
@@ -95,7 +95,7 @@ SUM:                            42            450            356           2912
 | `learnings/.ddd/1_open_questions.md` | 216 |
 | `learnings/markdown_features.md` | 277 |
 | `LEXICON.md` | 84 |
-| `LOC_REPORT.md` | 141 |
+| `LOC_REPORT.md` | 145 |
 | `README.md` | 119 |
 | `RESEARCH_PLAN.md` | 139 |
 | `ROADMAP.md` | 427 |
@@ -126,7 +126,7 @@ SUM:                            42            450            356           2912
 
 | Metric | Target | Current | Status |
 |--------|--------|---------|--------|
-| Docs/Code Ratio | ≥0.3 | 1.78 | ✅ Excellent |
+| Docs/Code Ratio | ≥0.3 | 1.79 | ✅ Excellent |
 | README exists | Yes | ✅ | Met |
 | ARCHITECTURE.md | Optional | ✅ | Optional |
 

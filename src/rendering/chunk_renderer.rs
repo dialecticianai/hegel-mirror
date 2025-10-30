@@ -1,11 +1,11 @@
 /// Trait-based chunk rendering system to eliminate duplication
+use crate::image_manager::ImageManager;
 use crate::models::{LayoutMap, Selection, TextChunk};
 use crate::rendering::selection_manager::SelectionManager;
 use crate::rendering::viewport::ViewportCuller;
 use crate::syntax::SyntaxHighlighter;
 use crate::theme::Theme;
 use eframe::egui;
-use std::collections::HashMap;
 
 /// Shared context for rendering chunks
 pub struct RenderContext<'a> {
@@ -14,7 +14,7 @@ pub struct RenderContext<'a> {
     pub chunk: &'a mut TextChunk,
     pub idx: usize,
     pub selection: &'a mut Selection,
-    pub loaded_images: &'a mut HashMap<String, egui::TextureHandle>,
+    pub image_manager: &'a mut ImageManager,
     pub highlighter: &'a SyntaxHighlighter,
     pub theme: &'a Theme,
     pub layout_map: &'a mut LayoutMap,
@@ -193,12 +193,12 @@ impl ChunkRenderer for ImageRenderer {
         let before_y = ctx.ui.cursor().min.y;
 
         if let Some(ref image_path) = ctx.chunk.image_path {
-            // Load and render
-            crate::rendering::image::load_image_texture(ctx.ctx, image_path, ctx.loaded_images);
+            // Load and render using ImageManager
             if let Some(response) = crate::rendering::image::render_image(
                 ctx.ui,
+                ctx.ctx,
                 image_path,
-                ctx.loaded_images,
+                ctx.image_manager,
                 ctx.chunk.alignment.clone(),
                 ctx.chunk.image_width,
             ) {
