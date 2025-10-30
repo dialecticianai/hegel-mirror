@@ -48,8 +48,8 @@ fn render_comment_input(
     selection: &mut Selection,
     theme: &Theme,
     review_mode: &mut ReviewMode,
-    storage: &ReviewStorage,
-    source: &str,
+    _storage: &ReviewStorage,
+    _source: &str,
 ) {
     let (min_line, max_line) = if start_line <= end_line {
         (start_line, end_line)
@@ -111,9 +111,6 @@ fn render_comment_input(
                 ui.text_edit_multiline(comment_text);
                 ui.add_space(5.0);
 
-                // Extract selected text snippet from source
-                let selected_text = extract_text_snippet(source, min_line, max_line);
-
                 // Show different buttons based on review mode
                 match *review_mode {
                     ReviewMode::Immediate => {
@@ -174,6 +171,7 @@ fn render_comments_list(ctx: &egui::Context, comments: &[Comment], theme: &Theme
 }
 
 /// Extract text snippet from source for the given line range
+#[allow(dead_code)]
 fn extract_text_snippet(source: &str, start_line: usize, end_line: usize) -> String {
     let lines: Vec<&str> = source.lines().collect();
     let start_idx = start_line.saturating_sub(1); // Lines are 1-indexed

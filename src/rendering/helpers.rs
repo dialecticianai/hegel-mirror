@@ -1,5 +1,4 @@
 /// Helper utilities for selection line calculation
-use eframe::egui;
 
 /// Calculate which line within a chunk corresponds to a given Y position
 /// Returns the precise line number based on interpolation within the chunk

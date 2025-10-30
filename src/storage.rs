@@ -1,6 +1,6 @@
 use anyhow::{Context, Result};
 use serde::Serialize;
-use std::fs::{self, File, OpenOptions};
+use std::fs::{self, File};
 use std::io::Write as IoWrite;
 use std::path::{Path, PathBuf};
 
@@ -121,42 +121,6 @@ impl ReviewStorage {
         let seq = self.next_sequence_number()?;
         let base = self.base_name();
         Ok(self.out_dir.join(format!("{}.review.{}", base, seq)))
-    }
-
-    /// Append a single comment to the review file (immediate mode)
-    pub fn append_comment(
-        &self,
-        text: String,
-        comment: String,
-        line_start: usize,
-        col_start: usize,
-        line_end: usize,
-        col_end: usize,
-    ) -> Result<()> {
-        let review_comment = ReviewComment::new(
-            self.filename.clone(),
-            self.session_id.clone(),
-            text,
-            comment,
-            line_start,
-            col_start,
-            line_end,
-            col_end,
-        );
-
-        let review_path = self.review_file_path()?;
-        let mut file = OpenOptions::new()
-            .create(true)
-            .append(true)
-            .open(&review_path)
-            .context(format!("Failed to open review file: {:?}", review_path))?;
-
-        let json_line = serde_json::to_string(&review_comment)
-            .context("Failed to serialize comment to JSON")?;
-        writeln!(file, "{}", json_line)
-            .context(format!("Failed to write to review file: {:?}", review_path))?;
-
-        Ok(())
     }
 
     /// Write all comments atomically to a new review file (batched mode)
