@@ -116,6 +116,7 @@ mod tests {
             image_path: None,
             alignment: None,
             image_width: None,
+            image_height: None,
             code_block_lang: None,
             table: None,
             cached_height: None,

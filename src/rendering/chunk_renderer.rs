@@ -180,8 +180,9 @@ impl ChunkRenderer for TableRenderer {
 pub struct ImageRenderer;
 
 impl ChunkRenderer for ImageRenderer {
-    fn estimate_height(&self, _chunk: &TextChunk, _theme: &Theme) -> f32 {
-        300.0 // Default image height estimate
+    fn estimate_height(&self, chunk: &TextChunk, _theme: &Theme) -> f32 {
+        // Use actual image height if available (loaded during parsing)
+        chunk.image_height.unwrap_or(300.0)
     }
 
     fn estimated_width(&self) -> f32 {

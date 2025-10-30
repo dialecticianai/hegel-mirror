@@ -1,5 +1,6 @@
 // Library exports for testing
 
+pub mod image_manager;
 pub mod models;
 pub mod parsing;
 pub mod rendering;

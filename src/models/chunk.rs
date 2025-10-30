@@ -38,6 +38,8 @@ pub struct TextChunk {
     pub alignment: Option<Alignment>,
     /// Image width constraint (for images)
     pub image_width: Option<f32>,
+    /// Actual image height (loaded during parsing)
+    pub image_height: Option<f32>,
     /// Code block language (if this is a code block)
     pub code_block_lang: Option<String>,
     /// Table data (if this is a table)

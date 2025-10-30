@@ -3,6 +3,16 @@ use crate::parsing::position::LineOffsets;
 use std::ops::Range;
 use std::path::Path;
 
+/// Load image dimensions from file (width, height)
+fn load_image_dimensions(image_path: &str) -> Option<(u32, u32)> {
+    if let Ok(image_data) = std::fs::read(image_path) {
+        if let Ok(image) = image::load_from_memory(&image_data) {
+            return Some((image.width(), image.height()));
+        }
+    }
+    None
+}
+
 /// Push a text chunk to the chunks vector
 pub fn push_text_chunk(
     chunks: &mut Vec<TextChunk>,
@@ -34,6 +44,7 @@ pub fn push_text_chunk(
         image_path: None,
         alignment: None,
         image_width: None,
+        image_height: None,
         code_block_lang: if in_code_block {
             code_block_lang.clone()
         } else {
@@ -73,6 +84,7 @@ pub fn push_code_chunk(
         image_path: None,
         alignment: None,
         image_width: None,
+        image_height: None,
         code_block_lang: None,
         table: None,
         cached_height: None,
@@ -101,6 +113,7 @@ pub fn push_break_chunk(
         image_path: None,
         alignment: None,
         image_width: None,
+        image_height: None,
         code_block_lang: None,
         table: None,
         cached_height: None,
@@ -143,6 +156,19 @@ pub fn push_image_chunk_with_alignment(
     let (line_end, col_end) = line_offsets.byte_to_line_col(source, range.end);
     let image_path = base_path.join(url).to_string_lossy().to_string();
 
+    // Load image dimensions to get actual height
+    let image_height = if let Some((img_width, img_height)) = load_image_dimensions(&image_path) {
+        // Calculate display height based on width constraint (maintaining aspect ratio)
+        if let Some(desired_width) = width {
+            let aspect_ratio = img_height as f32 / img_width as f32;
+            Some(desired_width * aspect_ratio)
+        } else {
+            Some(img_height as f32)
+        }
+    } else {
+        None // Image not found or failed to load, will use fallback estimate
+    };
+
     chunks.push(TextChunk {
         text: format!("[Image: {}]", url),
         byte_range: range.clone(),
@@ -158,6 +184,7 @@ pub fn push_image_chunk_with_alignment(
         image_path: Some(image_path),
         alignment,
         image_width: width,
+        image_height,
         code_block_lang: None,
         table: None,
         cached_height: None,
@@ -190,6 +217,7 @@ pub fn push_table_chunk(
         image_path: None,
         alignment: None,
         image_width: None,
+        image_height: None,
         code_block_lang: None,
         table: Some(table),
         cached_height: None,
