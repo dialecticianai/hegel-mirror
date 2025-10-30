@@ -15,11 +15,12 @@ Cargo.lock
 .DS_Store
 Thumbs.db
 
-# Review files (output, not source)
-.ddd/
+# Review files (output, not source) - root level only
+/.ddd/
 
 # Session handoff (ephemeral)
 HANDOFF.md
 
 # Hegel CLI artifacts
 .hegel/
+.claude/
