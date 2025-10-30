@@ -2,7 +2,6 @@ use crate::image_manager::ImageManager;
 use crate::models::{Alignment, Table, TextChunk};
 use crate::parsing::position::LineOffsets;
 use std::ops::Range;
-use std::path::Path;
 
 /// Push a text chunk to the chunks vector
 pub fn push_text_chunk(
@@ -116,7 +115,6 @@ pub fn push_image_chunk(
     chunks: &mut Vec<TextChunk>,
     url: &str,
     source: &str,
-    base_path: &Path,
     line_offsets: &LineOffsets,
     range: &Range<usize>,
     image_manager: &mut ImageManager,
@@ -125,7 +123,6 @@ pub fn push_image_chunk(
         chunks,
         url,
         source,
-        base_path,
         line_offsets,
         range,
         None,
@@ -139,7 +136,6 @@ pub fn push_image_chunk_with_alignment(
     chunks: &mut Vec<TextChunk>,
     url: &str,
     source: &str,
-    base_path: &Path,
     line_offsets: &LineOffsets,
     range: &Range<usize>,
     alignment: Option<Alignment>,

@@ -66,6 +66,7 @@ impl ImageManager {
 
     /// Get dimensions for a previously loaded image
     /// Returns None if image metadata not loaded
+    #[allow(dead_code)] // Public API - may be useful for future features
     pub fn get_dimensions(&self, path: &str) -> Option<(u32, u32)> {
         self.metadata.get(path).map(|m| (m.width, m.height))
     }

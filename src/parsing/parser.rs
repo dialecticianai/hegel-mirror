@@ -13,7 +13,7 @@ use std::path::Path;
 /// Parse markdown into chunks with position tracking
 pub fn parse_markdown(
     source: &str,
-    base_path: &Path,
+    _base_path: &Path,
     image_manager: &mut ImageManager,
 ) -> Vec<TextChunk> {
     let mut chunks: Vec<TextChunk> = Vec::new();
@@ -66,7 +66,6 @@ pub fn parse_markdown(
                         &mut chunks,
                         &img_src,
                         source,
-                        base_path,
                         &line_offsets,
                         &html_range,
                         alignment,
@@ -181,7 +180,6 @@ pub fn parse_markdown(
                         &mut code_block_lang,
                         &mut chunks,
                         source,
-                        base_path,
                         &line_offsets,
                         &range,
                         image_manager,
@@ -232,7 +230,6 @@ fn handle_end_tag(
     code_block_lang: &mut Option<String>,
     chunks: &mut Vec<TextChunk>,
     source: &str,
-    base_path: &Path,
     line_offsets: &LineOffsets,
     range: &Range<usize>,
     image_manager: &mut ImageManager,
@@ -266,7 +263,6 @@ fn handle_end_tag(
                     chunks,
                     url.as_ref(),
                     source,
-                    base_path,
                     &line_offsets,
                     range,
                     image_manager,
