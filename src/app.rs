@@ -159,9 +159,31 @@ impl eframe::App for MarkdownReviewApp {
                                     })
                                     .collect();
 
-                                match doc.storage.write_review(comment_data) {
+                                match doc.storage.write_review(comment_data.clone()) {
                                     Ok(path) => {
                                         println!("Review written to: {:?}", path);
+                                        println!();
+                                        // Print the full review content
+                                        for (
+                                            text,
+                                            comment,
+                                            line_start,
+                                            _col_start,
+                                            line_end,
+                                            _col_end,
+                                        ) in &comment_data
+                                        {
+                                            println!("Lines {}-{}:", line_start, line_end);
+                                            println!(
+                                                "  Selected: {}",
+                                                text.lines().next().unwrap_or("")
+                                            );
+                                            if text.lines().count() > 1 {
+                                                println!("  ...");
+                                            }
+                                            println!("  Comment: {}", comment);
+                                            println!();
+                                        }
                                         // Mark document as approved (review submitted)
                                         let doc = &mut self.documents[self.active_document_index];
                                         doc.approved = true;
