@@ -1,6 +1,6 @@
 # Lines of Code Report
 
-**Last Updated**: 2025-10-20 19:46
+**Last Updated**: 2025-10-29 20:39
 **Tool**: [cloc](https://github.com/AlDanial/cloc) + wc
 
 ---
@@ -9,13 +9,13 @@
 
 | Metric | Rust Code | Documentation (.md) | Total |
 |--------|-----------|---------------------|-------|
-| **Lines** | 2,657 | 1,837 | 4,494 |
+| **Lines** | 2,662 | 3,914 | 6,576 |
 | **Comments** | 331 | - | 331 |
 | **Blank Lines** | 346 | - | 346 |
-| **Total Lines** | 3,334 | 1,837 | 5,171 |
-| **Files** | 35 | 16 | 51 |
+| **Total Lines** | 3,339 | 3,914 | 7,253 |
+| **Files** | 35 | 34 | 69 |
 
-**Documentation Ratio**: 0.69 lines of docs per line of code
+**Documentation Ratio**: 1.47 lines of docs per line of code
 
 ---
 
@@ -24,9 +24,10 @@
 ```
 Language                     files          blank        comment           code
 -------------------------------------------------------------------------------
-Rust                            35            346            331           2657
+Rust                            35            346            331           2662
+Markdown                         6             64              0            109
 -------------------------------------------------------------------------------
-SUM:                            35            346            331           2657
+SUM:                            41            410            331           2771
 -------------------------------------------------------------------------------
 ```
 
@@ -50,7 +51,7 @@ SUM:                            35            346            331           2657
 | `parsing/chunks.rs` | 197 | 197 | 0 | 0.0% | ✅ |
 | `parsing/html.rs` | 162 | 79 | 83 | 51.2% | ✅ |
 | `parsing/mod.rs` | 6 | 6 | 0 | 0.0% | ✅ |
-| `parsing/parser.rs` | 266 | 266 | 0 | 0.0% | ⚠️ Large |
+| `parsing/parser.rs` | 271 | 271 | 0 | 0.0% | ⚠️ Large |
 | `parsing/position.rs` | 52 | 40 | 12 | 23.1% | ✅ |
 | `rendering/chunk_renderer.rs` | 217 | 217 | 0 | 0.0% | ⚠️ Large |
 | `rendering/chunk.rs` | 50 | 50 | 0 | 0.0% | ✅ |
@@ -80,19 +81,37 @@ SUM:                            35            346            331           2657
 
 | File | Lines |
 |------|-------|
-| `CLAUDE.md` | 259 |
+| `ARCHITECTURE.md` | 367 |
+| `CLAUDE.md` | 277 |
 | `COVERAGE_REPORT.md` | 56 |
 | `DDD.md` | 493 |
 | `EMOJIS.md` | 139 |
+| `HEGEL.md` | 287 |
+| `learnings/.ddd/0_markdown_features_research.md` | 214 |
+| `learnings/.ddd/1_open_questions.md` | 216 |
+| `learnings/markdown_features.md` | 277 |
 | `LEXICON.md` | 84 |
-| `LOC_REPORT.md` | 124 |
+| `LOC_REPORT.md` | 122 |
 | `README.md` | 119 |
-| `ROADMAP.md` | 425 |
+| `RESEARCH_PLAN.md` | 139 |
+| `ROADMAP.md` | 427 |
+| `src/CODE_MAP.md` | 34 |
+| `src/models/CODE_MAP.md` | 31 |
+| `src/parsing/CODE_MAP.md` | 26 |
+| `src/rendering/CODE_MAP.md` | 56 |
+| `src/syntax/CODE_MAP.md` | 13 |
+| `src/theme/CODE_MAP.md` | 13 |
 | `test_bold.md` | 11 |
 | `test_centered_image.md` | 7 |
 | `test_review.md` | 20 |
 | `test_review2.md` | 20 |
 | `tests/fixtures/basic.md` | 17 |
+| `tests/fixtures/blockquotes.md` | 58 |
+| `tests/fixtures/edge_cases.md` | 109 |
+| `tests/fixtures/headings.md` | 50 |
+| `tests/fixtures/images.md` | 59 |
+| `tests/fixtures/inline_code.md` | 39 |
+| `tests/fixtures/lists.md` | 71 |
 | `tests/fixtures/tables.md` | 12 |
 | `tests/fixtures/unicode.md` | 9 |
 | `vendor/egui-twemoji/README.md` | 42 |
@@ -103,9 +122,9 @@ SUM:                            35            346            331           2657
 
 | Metric | Target | Current | Status |
 |--------|--------|---------|--------|
-| Docs/Code Ratio | ≥0.3 | 0.69 | ✅ Excellent |
+| Docs/Code Ratio | ≥0.3 | 1.47 | ✅ Excellent |
 | README exists | Yes | ✅ | Met |
-| ARCHITECTURE.md | Optional | ❌ | Optional |
+| ARCHITECTURE.md | Optional | ✅ | Optional |
 
 ---
 

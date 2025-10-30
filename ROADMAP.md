@@ -225,8 +225,10 @@ mirror SPEC.md
 **Goal:** Better rendering quality and navigation for large documents.
 
 **Features:**
-- Syntax highlighting for code blocks
-- Image preview support
+- Syntax highlighting for code blocks ✅ (already implemented)
+- Image preview support ✅ (already implemented)
+- **Text wrapping for long lines** - Currently long lines extend offscreen without wrapping or horizontal scrollbar
+- **Blockquote visual styling** - Currently renders as plain text; should add indentation/border/background
 - Table of contents navigation
 - Anchor links for headers
 - Search within document

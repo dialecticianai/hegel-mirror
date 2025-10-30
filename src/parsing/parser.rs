@@ -247,6 +247,11 @@ fn handle_end_tag(
                 last.newline_after = true;
             }
         }
+        TagEnd::Item => {
+            if let Some(last) = chunks.last_mut() {
+                last.newline_after = true;
+            }
+        }
         TagEnd::Image => {
             if let Some(url) = current_image_url.take() {
                 push_image_chunk(
