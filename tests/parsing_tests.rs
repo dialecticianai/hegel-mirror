@@ -1,4 +1,7 @@
 /// Unit tests for parsing layer
+mod common;
+
+use common::parse_test_markdown;
 use mirror::image_manager::ImageManager;
 use mirror::parsing::parse_markdown;
 use std::path::Path;
@@ -6,16 +9,14 @@ use std::path::Path;
 #[test]
 fn test_parse_empty_string() {
     let markdown = "";
-    let mut image_manager = ImageManager::new(Path::new("."));
-    let chunks = parse_markdown(markdown, Path::new("."), &mut image_manager);
+    let chunks = parse_test_markdown(markdown);
     assert_eq!(chunks.len(), 0);
 }
 
 #[test]
 fn test_parse_plain_text() {
     let markdown = "Hello world";
-    let mut image_manager = ImageManager::new(Path::new("."));
-    let chunks = parse_markdown(markdown, Path::new("."), &mut image_manager);
+    let chunks = parse_test_markdown(markdown);
 
     assert_eq!(chunks.len(), 1);
     assert_eq!(chunks[0].text, "Hello world");
@@ -28,8 +29,7 @@ fn test_parse_plain_text() {
 #[test]
 fn test_parse_heading() {
     let markdown = "# Heading 1";
-    let mut image_manager = ImageManager::new(Path::new("."));
-    let chunks = parse_markdown(markdown, Path::new("."), &mut image_manager);
+    let chunks = parse_test_markdown(markdown);
 
     assert!(!chunks.is_empty());
     let heading_chunk = chunks.iter().find(|c| c.text == "Heading 1").unwrap();
@@ -40,8 +40,7 @@ fn test_parse_heading() {
 #[test]
 fn test_parse_bold_text() {
     let markdown = "This is **bold** text";
-    let mut image_manager = ImageManager::new(Path::new("."));
-    let chunks = parse_markdown(markdown, Path::new("."), &mut image_manager);
+    let chunks = parse_test_markdown(markdown);
 
     let bold_chunk = chunks.iter().find(|c| c.text == "bold").unwrap();
     assert!(bold_chunk.bold);
@@ -51,8 +50,7 @@ fn test_parse_bold_text() {
 #[test]
 fn test_parse_italic_text() {
     let markdown = "This is *italic* text";
-    let mut image_manager = ImageManager::new(Path::new("."));
-    let chunks = parse_markdown(markdown, Path::new("."), &mut image_manager);
+    let chunks = parse_test_markdown(markdown);
 
     let italic_chunk = chunks.iter().find(|c| c.text == "italic").unwrap();
     assert!(italic_chunk.italic);
@@ -62,8 +60,7 @@ fn test_parse_italic_text() {
 #[test]
 fn test_parse_inline_code() {
     let markdown = "Use `println!()` to print";
-    let mut image_manager = ImageManager::new(Path::new("."));
-    let chunks = parse_markdown(markdown, Path::new("."), &mut image_manager);
+    let chunks = parse_test_markdown(markdown);
 
     let code_chunk = chunks.iter().find(|c| c.text == "println!()").unwrap();
     assert!(code_chunk.code);
@@ -75,8 +72,7 @@ fn test_parse_code_block() {
     let markdown = r#"```rust
 fn main() {}
 ```"#;
-    let mut image_manager = ImageManager::new(Path::new("."));
-    let chunks = parse_markdown(markdown, Path::new("."), &mut image_manager);
+    let chunks = parse_test_markdown(markdown);
 
     let code_chunk = chunks.iter().find(|c| c.text.contains("fn main")).unwrap();
     assert!(code_chunk.code);
@@ -88,8 +84,7 @@ fn test_parse_code_block_no_language() {
     let markdown = r#"```
 plain code
 ```"#;
-    let mut image_manager = ImageManager::new(Path::new("."));
-    let chunks = parse_markdown(markdown, Path::new("."), &mut image_manager);
+    let chunks = parse_test_markdown(markdown);
 
     let code_chunk = chunks
         .iter()
@@ -103,8 +98,7 @@ plain code
 #[test]
 fn test_parse_multiline_document() {
     let markdown = include_str!("fixtures/basic.md");
-    let mut image_manager = ImageManager::new(Path::new("."));
-    let chunks = parse_markdown(markdown, Path::new("."), &mut image_manager);
+    let chunks = parse_test_markdown(markdown);
 
     // Should have multiple chunks
     assert!(chunks.len() > 5);
@@ -137,8 +131,7 @@ fn test_parse_multiline_document() {
 #[test]
 fn test_parse_table() {
     let markdown = include_str!("fixtures/tables.md");
-    let mut image_manager = ImageManager::new(Path::new("."));
-    let chunks = parse_markdown(markdown, Path::new("."), &mut image_manager);
+    let chunks = parse_test_markdown(markdown);
 
     // Should find table chunks
     let table_chunks: Vec<_> = chunks.iter().filter(|c| c.table.is_some()).collect();
@@ -155,8 +148,7 @@ fn test_parse_table() {
 #[test]
 fn test_parse_unicode() {
     let markdown = include_str!("fixtures/unicode.md");
-    let mut image_manager = ImageManager::new(Path::new("."));
-    let chunks = parse_markdown(markdown, Path::new("."), &mut image_manager);
+    let chunks = parse_test_markdown(markdown);
 
     // Should parse without panicking
     assert!(chunks.len() > 0);
@@ -173,8 +165,7 @@ fn test_parse_unicode() {
 #[test]
 fn test_position_tracking_single_line() {
     let markdown = "Hello world";
-    let mut image_manager = ImageManager::new(Path::new("."));
-    let chunks = parse_markdown(markdown, Path::new("."), &mut image_manager);
+    let chunks = parse_test_markdown(markdown);
 
     assert_eq!(chunks[0].line_start, 1);
     assert_eq!(chunks[0].line_end, 1);
@@ -184,8 +175,7 @@ fn test_position_tracking_single_line() {
 #[test]
 fn test_position_tracking_multiple_lines() {
     let markdown = "Line 1\nLine 2\nLine 3";
-    let mut image_manager = ImageManager::new(Path::new("."));
-    let chunks = parse_markdown(markdown, Path::new("."), &mut image_manager);
+    let chunks = parse_test_markdown(markdown);
 
     // Find chunks on different lines
     let line1 = chunks.iter().find(|c| c.line_start == 1);
@@ -200,8 +190,7 @@ fn test_position_tracking_multiple_lines() {
 #[test]
 fn test_newline_after_paragraph() {
     let markdown = "Paragraph 1\n\nParagraph 2";
-    let mut image_manager = ImageManager::new(Path::new("."));
-    let chunks = parse_markdown(markdown, Path::new("."), &mut image_manager);
+    let chunks = parse_test_markdown(markdown);
 
     // Check that paragraph chunks have newline_after set
     let para_chunks: Vec<_> = chunks.iter().filter(|c| !c.text.is_empty()).collect();
@@ -217,10 +206,8 @@ fn test_soft_break_vs_hard_break() {
     let markdown_soft = "Line 1\nLine 2";
     let markdown_hard = "Line 1  \nLine 2"; // Two spaces before newline = hard break
 
-    let mut image_manager_soft = ImageManager::new(Path::new("."));
-    let chunks_soft = parse_markdown(markdown_soft, Path::new("."), &mut image_manager_soft);
-    let mut image_manager_hard = ImageManager::new(Path::new("."));
-    let chunks_hard = parse_markdown(markdown_hard, Path::new("."), &mut image_manager_hard);
+    let chunks_soft = parse_test_markdown(markdown_soft);
+    let chunks_hard = parse_test_markdown(markdown_hard);
 
     // Both should parse successfully
     assert!(chunks_soft.len() > 0);
@@ -246,8 +233,7 @@ fn test_html_centered_image() {
     let markdown = r#"<p align="center">
 <img src="test.png" width="400">
 </p>"#;
-    let mut image_manager = ImageManager::new(Path::new("."));
-    let chunks = parse_markdown(markdown, Path::new("."), &mut image_manager);
+    let chunks = parse_test_markdown(markdown);
 
     let image_chunk = chunks.iter().find(|c| c.image_path.is_some());
     assert!(image_chunk.is_some(), "Should parse HTML image");
@@ -260,8 +246,7 @@ fn test_html_centered_image() {
 #[test]
 fn test_mixed_formatting() {
     let markdown = "This has ***bold and italic*** text";
-    let mut image_manager = ImageManager::new(Path::new("."));
-    let chunks = parse_markdown(markdown, Path::new("."), &mut image_manager);
+    let chunks = parse_test_markdown(markdown);
 
     // Should parse the bold+italic chunk
     let formatted = chunks.iter().find(|c| c.bold && c.italic);
