@@ -101,6 +101,37 @@ pub trait ChunkRenderer {
 
 **Performance**: Tested with 11K-line Markdown, maintains 60fps
 
+### Decision: Centralized Image Management (ImageManager)
+
+**Choice**: Single ImageManager per Document handles all image loading (metadata + textures)
+
+**Rationale**:
+- **Two-phase loading**: Metadata during parsing (fast header decode), textures on render (lazy)
+- **Cached dimensions**: Accurate viewport culling eliminates scroll flicker with large images
+- **Lazy texture loading**: GPU memory only for rendered images, not entire document
+- **Clean separation**: Parser handles dimensions, renderer handles textures
+
+**Architecture**:
+```rust
+pub struct ImageManager {
+    metadata: HashMap<String, ImageMetadata>,     // Dimensions (loaded during parse)
+    textures: HashMap<String, TextureHandle>,     // GPU textures (lazy-loaded)
+    base_path: PathBuf,                           // For relative path resolution
+}
+```
+
+**Performance**:
+- Metadata load: ~1-5ms per image (header decode only)
+- Texture load: ~10-50ms per image (first render only)
+- Subsequent access: ~0ms (cached)
+
+**Tradeoffs**:
+- Images with 50+ large files show choppy scrolling (acceptable for MVP, deferred optimization)
+- No cross-document caching (new document = new ImageManager)
+- Relative paths only (absolute paths would bypass base_path resolution)
+
+**Introduced**: October 2025 (ImageManager feature, commits f0b6ce1, 25002ea)
+
 ### Decision: File-Based Review Persistence
 
 **Choice**: JSONL files in `.ddd/<filename>.review.N` with monotonic sequence
