@@ -117,37 +117,19 @@ fn render_comment_input(
                 // Show different buttons based on review mode
                 match *review_mode {
                     ReviewMode::Immediate => {
-                        ui.horizontal(|ui| {
-                            if ui.button("Submit").clicked() && !comment_text.is_empty() {
-                                // Immediate mode: write to disk immediately
-                                if let Err(e) = storage.append_comment(
-                                    selected_text.clone(),
-                                    comment_text.clone(),
-                                    min_line,
-                                    0,
-                                    max_line,
-                                    0,
-                                ) {
-                                    eprintln!("Failed to write comment: {}", e);
-                                }
-                                comment_text.clear();
-                                selection.clear();
-                            }
-
-                            if ui.button("Start Review").clicked() && !comment_text.is_empty() {
-                                // Enter batched mode: queue comment in memory
-                                *review_mode = ReviewMode::Batched;
-                                comments.push(Comment::new(
-                                    comment_text.clone(),
-                                    min_line,
-                                    0,
-                                    max_line,
-                                    0,
-                                ));
-                                comment_text.clear();
-                                selection.clear();
-                            }
-                        });
+                        if ui.button("Start Review").clicked() && !comment_text.is_empty() {
+                            // Enter batched mode: queue comment in memory
+                            *review_mode = ReviewMode::Batched;
+                            comments.push(Comment::new(
+                                comment_text.clone(),
+                                min_line,
+                                0,
+                                max_line,
+                                0,
+                            ));
+                            comment_text.clear();
+                            selection.clear();
+                        }
                     }
                     ReviewMode::Batched => {
                         if ui.button("Add to Review").clicked() && !comment_text.is_empty() {

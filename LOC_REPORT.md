@@ -1,6 +1,6 @@
 # Lines of Code Report
 
-**Last Updated**: 2025-10-29 20:39
+**Last Updated**: 2025-10-29 20:41
 **Tool**: [cloc](https://github.com/AlDanial/cloc) + wc
 
 ---
@@ -9,13 +9,13 @@
 
 | Metric | Rust Code | Documentation (.md) | Total |
 |--------|-----------|---------------------|-------|
-| **Lines** | 2,662 | 3,914 | 6,576 |
-| **Comments** | 331 | - | 331 |
-| **Blank Lines** | 346 | - | 346 |
-| **Total Lines** | 3,339 | 3,914 | 7,253 |
+| **Lines** | 2,646 | 3,933 | 6,579 |
+| **Comments** | 330 | - | 330 |
+| **Blank Lines** | 345 | - | 345 |
+| **Total Lines** | 3,321 | 3,933 | 7,254 |
 | **Files** | 35 | 34 | 69 |
 
-**Documentation Ratio**: 1.47 lines of docs per line of code
+**Documentation Ratio**: 1.49 lines of docs per line of code
 
 ---
 
@@ -24,10 +24,10 @@
 ```
 Language                     files          blank        comment           code
 -------------------------------------------------------------------------------
-Rust                            35            346            331           2662
+Rust                            35            345            330           2646
 Markdown                         6             64              0            109
 -------------------------------------------------------------------------------
-SUM:                            41            410            331           2771
+SUM:                            41            409            330           2755
 -------------------------------------------------------------------------------
 ```
 
@@ -56,7 +56,7 @@ SUM:                            41            410            331           2771
 | `rendering/chunk_renderer.rs` | 217 | 217 | 0 | 0.0% | ⚠️ Large |
 | `rendering/chunk.rs` | 50 | 50 | 0 | 0.0% | ✅ |
 | `rendering/code.rs` | 44 | 44 | 0 | 0.0% | ✅ |
-| `rendering/comments.rs` | 201 | 201 | 0 | 0.0% | ⚠️ Large |
+| `rendering/comments.rs` | 183 | 183 | 0 | 0.0% | ✅ |
 | `rendering/helpers.rs` | 46 | 20 | 26 | 56.5% | ✅ |
 | `rendering/image.rs` | 80 | 80 | 0 | 0.0% | ✅ |
 | `rendering/inline_batcher.rs` | 189 | 75 | 114 | 60.3% | ✅ |
@@ -73,7 +73,7 @@ SUM:                            41            410            331           2771
 | `theme/default.rs` | 45 | 45 | 0 | 0.0% | ✅ |
 | `theme/mod.rs` | 103 | 103 | 0 | 0.0% | ✅ |
 
-**⚠️ Warning:** 5 file(s) over 200 impl lines - consider splitting for maintainability
+**⚠️ Warning:** 4 file(s) over 200 impl lines - consider splitting for maintainability
 
 ---
 
@@ -91,7 +91,7 @@ SUM:                            41            410            331           2771
 | `learnings/.ddd/1_open_questions.md` | 216 |
 | `learnings/markdown_features.md` | 277 |
 | `LEXICON.md` | 84 |
-| `LOC_REPORT.md` | 122 |
+| `LOC_REPORT.md` | 141 |
 | `README.md` | 119 |
 | `RESEARCH_PLAN.md` | 139 |
 | `ROADMAP.md` | 427 |
@@ -122,7 +122,7 @@ SUM:                            41            410            331           2771
 
 | Metric | Target | Current | Status |
 |--------|--------|---------|--------|
-| Docs/Code Ratio | ≥0.3 | 1.47 | ✅ Excellent |
+| Docs/Code Ratio | ≥0.3 | 1.49 | ✅ Excellent |
 | README exists | Yes | ✅ | Met |
 | ARCHITECTURE.md | Optional | ✅ | Optional |
 
