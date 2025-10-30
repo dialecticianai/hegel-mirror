@@ -1,6 +1,6 @@
 # Lines of Code Report
 
-**Last Updated**: 2025-10-29 21:29
+**Last Updated**: 2025-10-29 21:36
 **Tool**: [cloc](https://github.com/AlDanial/cloc) + wc
 
 ---
@@ -10,9 +10,9 @@
 | Metric | Rust Code | Documentation (.md) | Total |
 |--------|-----------|---------------------|-------|
 | **Lines** | 2,793 | 5,005 | 7,798 |
-| **Comments** | 354 | - | 354 |
-| **Blank Lines** | 383 | - | 383 |
-| **Total Lines** | 3,530 | 5,005 | 8,535 |
+| **Comments** | 355 | - | 355 |
+| **Blank Lines** | 384 | - | 384 |
+| **Total Lines** | 3,532 | 5,005 | 8,537 |
 | **Files** | 36 | 37 | 73 |
 
 **Documentation Ratio**: 1.79 lines of docs per line of code
@@ -24,10 +24,10 @@
 ```
 Language                     files          blank        comment           code
 -------------------------------------------------------------------------------
-Rust                            36            383            354           2793
+Rust                            36            384            355           2793
 Markdown                         6             64              0            109
 -------------------------------------------------------------------------------
-SUM:                            42            447            354           2902
+SUM:                            42            448            355           2902
 -------------------------------------------------------------------------------
 ```
 
@@ -49,7 +49,7 @@ SUM:                            42            447            354           2902
 | `models/review_mode.rs` | 14 | 14 | 0 | 0.0% | ✅ |
 | `models/selection.rs` | 50 | 50 | 0 | 0.0% | ✅ |
 | `models/table.rs` | 22 | 22 | 0 | 0.0% | ✅ |
-| `parsing/chunks.rs` | 219 | 219 | 0 | 0.0% | ⚠️ Large |
+| `parsing/chunks.rs` | 221 | 221 | 0 | 0.0% | ⚠️ Large |
 | `parsing/html.rs` | 162 | 79 | 83 | 51.2% | ✅ |
 | `parsing/mod.rs` | 6 | 6 | 0 | 0.0% | ✅ |
 | `parsing/parser.rs` | 280 | 280 | 0 | 0.0% | ⚠️ Large |

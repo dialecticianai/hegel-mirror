@@ -148,7 +148,9 @@ pub fn push_image_chunk_with_alignment(
 ) {
     let (line_start, col_start) = line_offsets.byte_to_line_col(source, range.start);
     let (line_end, col_end) = line_offsets.byte_to_line_col(source, range.end);
-    let image_path = base_path.join(url).to_string_lossy().to_string();
+
+    // Store the relative URL (not full path) - ImageManager resolves against base_path
+    let image_path = url.to_string();
 
     // Load image metadata to get dimensions (fast, no texture loading)
     let image_height = if let Some((img_width, img_height)) = image_manager.load_metadata(url) {
