@@ -4,13 +4,31 @@
 
 ---
 
+## Hegel Workflow Orchestration
+
+This project uses **Hegel CLI** for structured development workflows. Quick reference:
+
+```bash
+hegel status            # Check active workflow
+hegel next              # Advance to next phase
+hegel reflect FILE.md   # Launch review GUI
+hegel astq 'pattern'    # AST-aware code search (prefer over grep)
+```
+
+**See [HEGEL.md](HEGEL.md) for complete command reference and integration patterns.**
+
+---
+
 ## Architecture
 
-**Core**: `src/{main,ui,review,storage}` - GUI → review state machine → file-based persistence
+**Core**: `src/{main,app,models,parsing,rendering,storage,syntax,theme}` - Trait-based rendering with viewport culling
 **UI**: `egui`/`eframe` - Immediate-mode GUI, native performance, cross-platform
-**Markdown**: `pulldown-cmark` + `egui_markdown` - Parse → render with selection anchoring
+**Markdown**: `pulldown-cmark` - Parse → positioned TextChunks with line/col tracking
+**Rendering**: Trait-based system (ChunkRenderer) with lazy loading and cached heights for 60fps on 11K+ line documents
 **Storage**: `.ddd/<filename>.review.N` - Append-only review logs, monotonic sequence numbers
 **Integration**: Environment passthrough (`HEGEL_STATE_DIR`, `HEGEL_SESSION_ID`) for seamless Hegel workflow integration
+
+**See [src/CODE_MAP.md](src/CODE_MAP.md) for detailed module documentation.**
 
 ---
 
