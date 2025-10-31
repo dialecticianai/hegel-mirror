@@ -24,9 +24,9 @@ struct Args {
     /// Files to review
     files: Vec<String>,
 
-    /// Output directory for review files
-    #[arg(long, default_value = ".ddd")]
-    out_dir: String,
+    /// Output directory for review files (defaults to same directory as the file being reviewed)
+    #[arg(long)]
+    out_dir: Option<String>,
 
     /// Emit JSON with review file paths on exit
     #[arg(long)]
@@ -52,9 +52,6 @@ fn main() -> Result<()> {
     // Get session ID from environment
     let session_id = std::env::var("HEGEL_SESSION_ID").ok();
 
-    // Parse out_dir as PathBuf
-    let out_dir = Path::new(&args.out_dir).to_path_buf();
-
     // Load all files into Document structs
     let mut documents = Vec::new();
     for file_path in &args.files {
@@ -72,11 +69,18 @@ fn main() -> Result<()> {
             .unwrap_or("unknown.md")
             .to_string();
 
+        // Use explicit out_dir if provided, otherwise use file's directory
+        let review_dir = if let Some(ref out_dir) = args.out_dir {
+            Path::new(out_dir).to_path_buf()
+        } else {
+            base_path.clone()
+        };
+
         documents.push(Document::new(
             filename,
             markdown_content,
             base_path,
-            out_dir.clone(),
+            review_dir,
             session_id.clone(),
         ));
     }

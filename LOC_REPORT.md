@@ -1,6 +1,6 @@
 # Lines of Code Report
 
-**Last Updated**: 2025-10-29 22:01
+**Last Updated**: 2025-10-31 15:05
 **Tool**: [cloc](https://github.com/AlDanial/cloc) + wc
 
 ---
@@ -9,13 +9,13 @@
 
 | Metric | Rust Code | Documentation (.md) | Total |
 |--------|-----------|---------------------|-------|
-| **Lines** | 2,786 | 5,110 | 7,896 |
+| **Lines** | 2,790 | 5,169 | 7,959 |
 | **Comments** | 355 | - | 355 |
 | **Blank Lines** | 384 | - | 384 |
-| **Total Lines** | 3,525 | 5,110 | 8,635 |
+| **Total Lines** | 3,529 | 5,169 | 8,698 |
 | **Files** | 36 | 38 | 74 |
 
-**Documentation Ratio**: 1.83 lines of docs per line of code
+**Documentation Ratio**: 1.85 lines of docs per line of code
 
 ---
 
@@ -24,10 +24,10 @@
 ```
 Language                     files          blank        comment           code
 -------------------------------------------------------------------------------
-Rust                            36            384            355           2786
+Rust                            36            384            355           2790
 Markdown                         6             65              0            111
 -------------------------------------------------------------------------------
-SUM:                            42            449            355           2897
+SUM:                            42            449            355           2901
 -------------------------------------------------------------------------------
 ```
 
@@ -40,7 +40,7 @@ SUM:                            42            449            355           2897
 | `app.rs` | 310 | 310 | 0 | 0.0% | ⚠️ Large |
 | `image_manager.rs` | 208 | 106 | 102 | 49.0% | ✅ |
 | `lib.rs` | 14 | 14 | 0 | 0.0% | ✅ |
-| `main.rs` | 153 | 153 | 0 | 0.0% | ✅ |
+| `main.rs` | 157 | 157 | 0 | 0.0% | ✅ |
 | `models/chunk.rs` | 49 | 49 | 0 | 0.0% | ✅ |
 | `models/comment.rs` | 34 | 34 | 0 | 0.0% | ✅ |
 | `models/document.rs` | 51 | 51 | 0 | 0.0% | ✅ |
@@ -86,7 +86,7 @@ SUM:                            42            449            355           2897
 | `.ddd/feat/image_manager/SPEC.md` | 303 |
 | `ARCHITECTURE.md` | 398 |
 | `CLAUDE.md` | 277 |
-| `COVERAGE_REPORT.md` | 56 |
+| `COVERAGE_REPORT.md` | 114 |
 | `DDD.md` | 493 |
 | `EMOJIS.md` | 139 |
 | `HEGEL.md` | 287 |
@@ -95,7 +95,7 @@ SUM:                            42            449            355           2897
 | `learnings/.ddd/1_open_questions.md` | 216 |
 | `learnings/markdown_features.md` | 277 |
 | `LEXICON.md` | 84 |
-| `LOC_REPORT.md` | 145 |
+| `LOC_REPORT.md` | 146 |
 | `README.md` | 119 |
 | `RESEARCH_PLAN.md` | 139 |
 | `ROADMAP.md` | 427 |
@@ -127,7 +127,7 @@ SUM:                            42            449            355           2897
 
 | Metric | Target | Current | Status |
 |--------|--------|---------|--------|
-| Docs/Code Ratio | ≥0.3 | 1.83 | ✅ Excellent |
+| Docs/Code Ratio | ≥0.3 | 1.85 | ✅ Excellent |
 | README exists | Yes | ✅ | Met |
 | ARCHITECTURE.md | Optional | ✅ | Optional |
 
