@@ -1,6 +1,6 @@
 # Lines of Code Report
 
-**Last Updated**: 2025-11-05 14:14
+**Last Updated**: 2025-11-05 14:31
 **Tool**: [cloc](https://github.com/AlDanial/cloc) + wc
 
 ---
@@ -9,13 +9,13 @@
 
 | Metric | Rust Code | Documentation (.md) | Total |
 |--------|-----------|---------------------|-------|
-| **Lines** | 2,807 | 5,169 | 7,976 |
-| **Comments** | 360 | - | 360 |
+| **Lines** | 2,807 | 5,323 | 8,130 |
+| **Comments** | 361 | - | 361 |
 | **Blank Lines** | 387 | - | 387 |
-| **Total Lines** | 3,554 | 5,169 | 8,723 |
+| **Total Lines** | 3,555 | 5,323 | 8,878 |
 | **Files** | 36 | 38 | 74 |
 
-**Documentation Ratio**: 1.84 lines of docs per line of code
+**Documentation Ratio**: 1.90 lines of docs per line of code
 
 ---
 
@@ -24,10 +24,10 @@
 ```
 Language                     files          blank        comment           code
 -------------------------------------------------------------------------------
-Rust                            36            387            360           2807
+Rust                            36            387            361           2807
 Markdown                         6             65              0            111
 -------------------------------------------------------------------------------
-SUM:                            42            452            360           2918
+SUM:                            42            452            361           2918
 -------------------------------------------------------------------------------
 ```
 
@@ -37,7 +37,7 @@ SUM:                            42            452            360           2918
 
 | File | Total Lines | Impl Lines | Test Lines | Test % | Status |
 |------|-------------|------------|------------|--------|--------|
-| `app.rs` | 335 | 335 | 0 | 0.0% | ⚠️ Large |
+| `app.rs` | 336 | 336 | 0 | 0.0% | ⚠️ Large |
 | `image_manager.rs` | 208 | 106 | 102 | 49.0% | ✅ |
 | `lib.rs` | 14 | 14 | 0 | 0.0% | ✅ |
 | `main.rs` | 157 | 157 | 0 | 0.0% | ✅ |
@@ -86,7 +86,7 @@ SUM:                            42            452            360           2918
 | `.ddd/feat/image_manager/SPEC.md` | 303 |
 | `ARCHITECTURE.md` | 398 |
 | `CLAUDE.md` | 277 |
-| `COVERAGE_REPORT.md` | 114 |
+| `COVERAGE_REPORT.md` | 268 |
 | `DDD.md` | 493 |
 | `EMOJIS.md` | 139 |
 | `HEGEL.md` | 287 |
@@ -127,7 +127,7 @@ SUM:                            42            452            360           2918
 
 | Metric | Target | Current | Status |
 |--------|--------|---------|--------|
-| Docs/Code Ratio | ≥0.3 | 1.84 | ✅ Excellent |
+| Docs/Code Ratio | ≥0.3 | 1.90 | ✅ Excellent |
 | README exists | Yes | ✅ | Met |
 | ARCHITECTURE.md | Optional | ✅ | Optional |
 
