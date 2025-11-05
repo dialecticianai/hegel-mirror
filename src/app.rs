@@ -105,7 +105,7 @@ impl eframe::App for MarkdownReviewApp {
                     ui.with_layout(egui::Layout::right_to_left(egui::Align::Center), |ui| {
                         // LGTM button - only show if current document has no comments
                         if !active_has_comments {
-                            if ui.button("Approve (LGTM)").clicked() {
+                            if ui.button("LGTM").clicked() {
                                 // Write approval for current document
                                 match self.documents[self.active_document_index]
                                     .storage
@@ -133,6 +133,31 @@ impl eframe::App for MarkdownReviewApp {
                                     }
                                     Err(e) => {
                                         eprintln!("Failed to write approval: {}", e);
+                                    }
+                                }
+                            }
+
+                            // Nope button - only show if current document has no comments
+                            if ui.button("Nope").clicked() {
+                                // Print rejection message with filename (no file write for rejections)
+                                let filename = &self.documents[self.active_document_index].filename;
+                                println!("User says more discussion is needed for {}.", filename);
+
+                                // Mark document as approved (treated same as LGTM for navigation)
+                                let doc = &mut self.documents[self.active_document_index];
+                                doc.approved = true;
+
+                                // Check if all documents are done (all approved)
+                                let all_done = self.documents.iter().all(|d| d.approved);
+                                if all_done {
+                                    ctx.send_viewport_cmd(egui::ViewportCommand::Close);
+                                } else {
+                                    // Switch to next unapproved document
+                                    if let Some(&next_idx) = unapproved_docs
+                                        .iter()
+                                        .find(|&&i| i != self.active_document_index)
+                                    {
+                                        self.active_document_index = next_idx;
                                     }
                                 }
                             }

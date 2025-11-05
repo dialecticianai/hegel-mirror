@@ -1,6 +1,6 @@
 # Lines of Code Report
 
-**Last Updated**: 2025-10-31 15:05
+**Last Updated**: 2025-11-05 14:14
 **Tool**: [cloc](https://github.com/AlDanial/cloc) + wc
 
 ---
@@ -9,13 +9,13 @@
 
 | Metric | Rust Code | Documentation (.md) | Total |
 |--------|-----------|---------------------|-------|
-| **Lines** | 2,790 | 5,169 | 7,959 |
-| **Comments** | 355 | - | 355 |
-| **Blank Lines** | 384 | - | 384 |
-| **Total Lines** | 3,529 | 5,169 | 8,698 |
+| **Lines** | 2,807 | 5,169 | 7,976 |
+| **Comments** | 360 | - | 360 |
+| **Blank Lines** | 387 | - | 387 |
+| **Total Lines** | 3,554 | 5,169 | 8,723 |
 | **Files** | 36 | 38 | 74 |
 
-**Documentation Ratio**: 1.85 lines of docs per line of code
+**Documentation Ratio**: 1.84 lines of docs per line of code
 
 ---
 
@@ -24,10 +24,10 @@
 ```
 Language                     files          blank        comment           code
 -------------------------------------------------------------------------------
-Rust                            36            384            355           2790
+Rust                            36            387            360           2807
 Markdown                         6             65              0            111
 -------------------------------------------------------------------------------
-SUM:                            42            449            355           2901
+SUM:                            42            452            360           2918
 -------------------------------------------------------------------------------
 ```
 
@@ -37,7 +37,7 @@ SUM:                            42            449            355           2901
 
 | File | Total Lines | Impl Lines | Test Lines | Test % | Status |
 |------|-------------|------------|------------|--------|--------|
-| `app.rs` | 310 | 310 | 0 | 0.0% | ⚠️ Large |
+| `app.rs` | 335 | 335 | 0 | 0.0% | ⚠️ Large |
 | `image_manager.rs` | 208 | 106 | 102 | 49.0% | ✅ |
 | `lib.rs` | 14 | 14 | 0 | 0.0% | ✅ |
 | `main.rs` | 157 | 157 | 0 | 0.0% | ✅ |
@@ -127,7 +127,7 @@ SUM:                            42            449            355           2901
 
 | Metric | Target | Current | Status |
 |--------|--------|---------|--------|
-| Docs/Code Ratio | ≥0.3 | 1.85 | ✅ Excellent |
+| Docs/Code Ratio | ≥0.3 | 1.84 | ✅ Excellent |
 | README exists | Yes | ✅ | Met |
 | ARCHITECTURE.md | Optional | ✅ | Optional |
 
