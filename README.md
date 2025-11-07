@@ -41,15 +41,19 @@ Mirror is a zero-friction GUI for reviewing Markdown documents in human-AI colla
   - **Batched mode** - Queue comments, submit atomically
 
 ### Review Persistence
-- JSONL format (`.ddd/<filename>.review.N`)
-- Monotonic sequence numbers (never overwrites previous reviews)
+- **Dual-mode storage routing**:
+  - **Hegel projects** (auto-detected via `.hegel/` directory) → project-global `.hegel/reviews.json`
+  - **Standalone mode** → per-file sidecar `.review.N` files
+- JSONL format with monotonic sequence numbers (never overwrites previous reviews)
 - Full metadata: timestamp, session ID, file, selection range, text snippet
-- Separate review files per document
+- Hegel mode: relative paths from project root, multiple reviews per file in single JSON map
+- Standalone mode: separate review files per document in same directory as reviewed file
 
 ### Integration
-- CLI: `--out-dir`, `--json`, `--headless`
+- CLI: `--out-dir` (standalone mode only), `--json`, `--headless`
 - Environment: `HEGEL_SESSION_ID` passthrough
 - Exit codes: 0 (success), 1 (error), 2 (cancelled)
+- Hegel project detection: automatic via `.hegel/` directory lookup
 
 See [ROADMAP.md](ROADMAP.md) for future enhancements.
 
@@ -71,7 +75,8 @@ cargo build --release
 export HEGEL_SESSION_ID="session-123"
 ./target/release/mirror SPEC.md --out-dir .reviews/
 
-# Reviews written to .ddd/SPEC.review.1
+# Standalone mode: reviews written to .reviews/SPEC.review.1
+# Hegel mode: reviews written to .hegel/reviews.json (project-global)
 ```
 
 ---
