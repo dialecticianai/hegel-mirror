@@ -64,7 +64,7 @@ impl ReviewComment {
 pub struct ReviewStorage {
     out_dir: PathBuf,
     filename: String,
-    session_id: Option<String>,
+    pub session_id: Option<String>,
 }
 
 impl ReviewStorage {
@@ -466,5 +466,189 @@ mod tests {
         assert_eq!(entries.len(), 2);
         assert_eq!(entries[0], entry1);
         assert_eq!(entries[1], entry2);
+    }
+
+    // Integration tests for dual-mode storage routing
+    mod integration {
+        use super::*;
+        use crate::models::Document;
+
+        #[test]
+        fn test_document_write_review_hegel_mode() {
+            let temp_dir = TempDir::new().unwrap();
+            let hegel_dir = temp_dir.path().join(".hegel");
+            fs::create_dir(&hegel_dir).unwrap();
+
+            let file_path = temp_dir.path().join("test.md");
+            fs::write(&file_path, "# Test").unwrap();
+
+            let project_type = ProjectType::Hegel {
+                root: hegel_dir.clone(),
+            };
+
+            let doc = Document::new(
+                "test.md".to_string(),
+                "# Test".to_string(),
+                temp_dir.path().to_path_buf(),
+                file_path.clone(),
+                temp_dir.path().to_path_buf(),
+                Some("session123".to_string()),
+                project_type,
+            );
+
+            let comments = vec![
+                ("text1".to_string(), "comment1".to_string(), 1, 0, 1, 5),
+                ("text2".to_string(), "comment2".to_string(), 2, 0, 2, 5),
+            ];
+
+            let result = doc.write_review(comments);
+            assert!(result.is_ok());
+
+            // Verify reviews.json was created
+            let reviews_json = hegel_dir.join("reviews.json");
+            assert!(reviews_json.exists());
+
+            // Verify content
+            let reviews = read_hegel_reviews(&hegel_dir).unwrap();
+            assert_eq!(reviews.len(), 1);
+            assert!(reviews.contains_key("test.md"));
+
+            let entries = reviews.get("test.md").unwrap();
+            assert_eq!(entries.len(), 1);
+            assert_eq!(entries[0].comments.len(), 2);
+        }
+
+        #[test]
+        fn test_document_write_approval_hegel_mode() {
+            let temp_dir = TempDir::new().unwrap();
+            let hegel_dir = temp_dir.path().join(".hegel");
+            fs::create_dir(&hegel_dir).unwrap();
+
+            let file_path = temp_dir.path().join("test.md");
+            fs::write(&file_path, "# Test").unwrap();
+
+            let project_type = ProjectType::Hegel {
+                root: hegel_dir.clone(),
+            };
+
+            let doc = Document::new(
+                "test.md".to_string(),
+                "# Test".to_string(),
+                temp_dir.path().to_path_buf(),
+                file_path.clone(),
+                temp_dir.path().to_path_buf(),
+                Some("session123".to_string()),
+                project_type,
+            );
+
+            let result = doc.write_approval();
+            assert!(result.is_ok());
+
+            // Verify reviews.json was created
+            let reviews_json = hegel_dir.join("reviews.json");
+            assert!(reviews_json.exists());
+
+            // Verify LGTM entry has empty comments
+            let reviews = read_hegel_reviews(&hegel_dir).unwrap();
+            assert_eq!(reviews.len(), 1);
+
+            let entries = reviews.get("test.md").unwrap();
+            assert_eq!(entries.len(), 1);
+            assert_eq!(entries[0].comments.len(), 0);
+        }
+
+        #[test]
+        fn test_document_write_review_standalone_mode() {
+            let temp_dir = TempDir::new().unwrap();
+            let file_path = temp_dir.path().join("test.md");
+            fs::write(&file_path, "# Test").unwrap();
+
+            let project_type = ProjectType::Standalone;
+
+            let doc = Document::new(
+                "test.md".to_string(),
+                "# Test".to_string(),
+                temp_dir.path().to_path_buf(),
+                file_path.clone(),
+                temp_dir.path().to_path_buf(),
+                Some("session123".to_string()),
+                project_type,
+            );
+
+            let comments = vec![("text1".to_string(), "comment1".to_string(), 1, 0, 1, 5)];
+
+            let result = doc.write_review(comments);
+            assert!(result.is_ok());
+
+            // Verify .review.1 file was created
+            let review_file = temp_dir.path().join("test.review.1");
+            assert!(review_file.exists());
+
+            // Verify no reviews.json was created
+            assert!(!temp_dir.path().join("reviews.json").exists());
+        }
+
+        #[test]
+        fn test_multi_file_hegel_reviews() {
+            let temp_dir = TempDir::new().unwrap();
+            let hegel_dir = temp_dir.path().join(".hegel");
+            fs::create_dir(&hegel_dir).unwrap();
+
+            let project_type = ProjectType::Hegel {
+                root: hegel_dir.clone(),
+            };
+
+            // Create two documents
+            let file1 = temp_dir.path().join("file1.md");
+            let file2 = temp_dir.path().join("file2.md");
+            fs::write(&file1, "# File 1").unwrap();
+            fs::write(&file2, "# File 2").unwrap();
+
+            let doc1 = Document::new(
+                "file1.md".to_string(),
+                "# File 1".to_string(),
+                temp_dir.path().to_path_buf(),
+                file1.clone(),
+                temp_dir.path().to_path_buf(),
+                Some("session123".to_string()),
+                project_type.clone(),
+            );
+
+            let doc2 = Document::new(
+                "file2.md".to_string(),
+                "# File 2".to_string(),
+                temp_dir.path().to_path_buf(),
+                file2.clone(),
+                temp_dir.path().to_path_buf(),
+                Some("session123".to_string()),
+                project_type.clone(),
+            );
+
+            // Write reviews for both
+            doc1.write_review(vec![(
+                "text1".to_string(),
+                "comment1".to_string(),
+                1,
+                0,
+                1,
+                5,
+            )])
+            .unwrap();
+            doc2.write_review(vec![(
+                "text2".to_string(),
+                "comment2".to_string(),
+                1,
+                0,
+                1,
+                5,
+            )])
+            .unwrap();
+
+            // Verify both are in reviews.json
+            let reviews = read_hegel_reviews(&hegel_dir).unwrap();
+            assert_eq!(reviews.len(), 2);
+            assert!(reviews.contains_key("file1.md"));
+            assert!(reviews.contains_key("file2.md"));
+        }
     }
 }

@@ -15,6 +15,7 @@ use models::Document;
 use std::fs;
 use std::path::Path;
 use std::sync::Arc;
+use storage::detect_project_type;
 
 /// Ephemeral Markdown review UI for Dialectic-Driven Development
 #[derive(Parser, Debug)]
@@ -52,22 +53,32 @@ fn main() -> Result<()> {
     // Get session ID from environment
     let session_id = std::env::var("HEGEL_SESSION_ID").ok();
 
+    // Detect project type
+    let project_type = detect_project_type();
+
     // Load all files into Document structs
     let mut documents = Vec::new();
-    for file_path in &args.files {
-        let markdown_content = fs::read_to_string(file_path)
-            .unwrap_or_else(|e| panic!("Failed to read {}: {}", file_path, e));
+    for file_path_str in &args.files {
+        let markdown_content = fs::read_to_string(file_path_str)
+            .unwrap_or_else(|e| panic!("Failed to read {}: {}", file_path_str, e));
 
-        let base_path = Path::new(file_path)
-            .parent()
-            .unwrap_or(Path::new("."))
-            .to_path_buf();
+        let file_path = Path::new(file_path_str);
+        let base_path = file_path.parent().unwrap_or(Path::new(".")).to_path_buf();
 
-        let filename = Path::new(file_path)
+        let filename = file_path
             .file_name()
             .and_then(|s| s.to_str())
             .unwrap_or("unknown.md")
             .to_string();
+
+        // Convert to absolute path for Hegel mode
+        let abs_file_path = if file_path.is_absolute() {
+            file_path.to_path_buf()
+        } else {
+            std::env::current_dir()
+                .unwrap_or_else(|_| Path::new(".").to_path_buf())
+                .join(file_path)
+        };
 
         // Use explicit out_dir if provided, otherwise use file's directory
         let review_dir = if let Some(ref out_dir) = args.out_dir {
@@ -80,8 +91,10 @@ fn main() -> Result<()> {
             filename,
             markdown_content,
             base_path,
+            abs_file_path,
             review_dir,
             session_id.clone(),
+            project_type.clone(),
         ));
     }
 

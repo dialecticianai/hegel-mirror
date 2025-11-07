@@ -134,7 +134,6 @@ impl eframe::App for MarkdownReviewApp {
                             if ui.button("LGTM").clicked() {
                                 // Write approval for current document
                                 match self.documents[self.active_document_index]
-                                    .storage
                                     .write_approval()
                                 {
                                     Ok(path) => {
@@ -189,7 +188,7 @@ impl eframe::App for MarkdownReviewApp {
                                     })
                                     .collect();
 
-                                match doc.storage.write_review(comment_data.clone()) {
+                                match doc.write_review(comment_data.clone()) {
                                     Ok(path) => {
                                         println!("Review written to: {:?}", path);
                                         println!();
