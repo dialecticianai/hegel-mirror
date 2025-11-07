@@ -16,7 +16,7 @@ TextChunk structure representing a parsed markdown element with source position 
 Comment structure holding review comment text with line/col position ranges. Provides format() method for display.
 
 ### **document.rs**
-Document structure encapsulating per-file review state: filename, source text, parsed chunks (lazily initialized), selection state, comment queue, loaded image textures, layout map, storage handler, and approval flag. Used for multi-file tab support.
+Document structure encapsulating per-file review state: filename, source text, file_path (absolute), parsed chunks (lazily initialized), selection state, comment queue, loaded image textures, layout map, storage handler, project_type (Hegel/Standalone), and approval flag. Provides write_review() and write_approval() methods that route to appropriate backend (.hegel/reviews.json or .review.N files). Used for multi-file tab support.
 
 ### **selection.rs**
 Selection state tracking start/end lines and drag status. Provides methods for drag lifecycle (start_drag, update_drag, end_drag), active state checking, and line containment testing.
