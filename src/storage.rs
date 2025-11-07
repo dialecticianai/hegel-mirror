@@ -172,3 +172,78 @@ impl ReviewStorage {
         Ok(review_path)
     }
 }
+
+/// Project type detection for routing review storage
+#[derive(Debug, Clone, PartialEq)]
+pub enum ProjectType {
+    /// Hegel project detected - use .hegel/reviews.json
+    Hegel { root: PathBuf },
+    /// Standalone project - use sidecar .review.N files
+    Standalone,
+}
+
+/// Detect if given path (or current working directory) is within a Hegel project
+pub fn detect_project_type_from(start_path: Option<PathBuf>) -> ProjectType {
+    match hegel::storage::FileStorage::find_project_root_from(start_path) {
+        Ok(hegel_dir) => ProjectType::Hegel { root: hegel_dir },
+        Err(_) => ProjectType::Standalone,
+    }
+}
+
+/// Detect if current working directory is within a Hegel project
+pub fn detect_project_type() -> ProjectType {
+    detect_project_type_from(None)
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use std::fs;
+    use tempfile::TempDir;
+
+    #[test]
+    fn test_detect_hegel_project() {
+        let temp_dir = TempDir::new().unwrap();
+        let hegel_dir = temp_dir.path().join(".hegel");
+        fs::create_dir(&hegel_dir).unwrap();
+
+        let project_type = detect_project_type_from(Some(temp_dir.path().to_path_buf()));
+
+        match project_type {
+            ProjectType::Hegel { root } => {
+                // Canonicalize both paths to handle macOS /var vs /private/var symlink
+                let root_canonical = root.canonicalize().unwrap();
+                let expected_canonical = hegel_dir.canonicalize().unwrap();
+                assert_eq!(root_canonical, expected_canonical);
+            }
+            ProjectType::Standalone => {
+                panic!("Expected Hegel project to be detected");
+            }
+        }
+    }
+
+    #[test]
+    fn test_detect_standalone_project() {
+        let temp_dir = TempDir::new().unwrap();
+
+        let project_type = detect_project_type_from(Some(temp_dir.path().to_path_buf()));
+
+        assert_eq!(project_type, ProjectType::Standalone);
+    }
+
+    #[test]
+    fn test_hegel_project_stores_root_path() {
+        let temp_dir = TempDir::new().unwrap();
+        let hegel_dir = temp_dir.path().join(".hegel");
+        fs::create_dir(&hegel_dir).unwrap();
+
+        let project_type = detect_project_type_from(Some(temp_dir.path().to_path_buf()));
+
+        if let ProjectType::Hegel { root } = project_type {
+            assert!(root.ends_with(".hegel"));
+            assert!(root.exists());
+        } else {
+            panic!("Expected Hegel project type");
+        }
+    }
+}

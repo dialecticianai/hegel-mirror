@@ -1,6 +1,6 @@
 # Lines of Code Report
 
-**Last Updated**: 2025-11-07 15:59
+**Last Updated**: 2025-11-07 16:01
 **Tool**: [cloc](https://github.com/AlDanial/cloc) + wc
 
 ---
@@ -9,13 +9,13 @@
 
 | Metric | Rust Code | Documentation (.md) | Total |
 |--------|-----------|---------------------|-------|
-| **Lines** | 2,807 | 5,520 | 8,327 |
-| **Comments** | 361 | - | 361 |
-| **Blank Lines** | 387 | - | 387 |
-| **Total Lines** | 3,555 | 5,520 | 9,075 |
+| **Lines** | 2,863 | 5,464 | 8,327 |
+| **Comments** | 367 | - | 367 |
+| **Blank Lines** | 400 | - | 400 |
+| **Total Lines** | 3,630 | 5,464 | 9,094 |
 | **Files** | 36 | 40 | 76 |
 
-**Documentation Ratio**: 1.97 lines of docs per line of code
+**Documentation Ratio**: 1.91 lines of docs per line of code
 
 ---
 
@@ -24,10 +24,10 @@
 ```
 Language                     files          blank        comment           code
 -------------------------------------------------------------------------------
-Rust                            36            387            361           2807
+Rust                            36            400            367           2863
 Markdown                         6             65              0            111
 -------------------------------------------------------------------------------
-SUM:                            42            452            361           2918
+SUM:                            42            465            367           2974
 -------------------------------------------------------------------------------
 ```
 
@@ -68,7 +68,7 @@ SUM:                            42            452            361           2918
 | `rendering/text.rs` | 33 | 33 | 0 | 0.0% | ✅ |
 | `rendering/ui.rs` | 123 | 123 | 0 | 0.0% | ✅ |
 | `rendering/viewport.rs` | 125 | 74 | 51 | 40.8% | ✅ |
-| `storage.rs` | 174 | 174 | 0 | 0.0% | ✅ |
+| `storage.rs` | 249 | 197 | 52 | 20.9% | ✅ |
 | `syntax/highlighter.rs` | 51 | 51 | 0 | 0.0% | ✅ |
 | `syntax/mod.rs` | 3 | 3 | 0 | 0.0% | ✅ |
 | `theme/default.rs` | 45 | 45 | 0 | 0.0% | ✅ |
@@ -88,7 +88,7 @@ SUM:                            42            452            361           2918
 | `.ddd/feat/review-json/SPEC.md` | 195 |
 | `ARCHITECTURE.md` | 398 |
 | `CLAUDE.md` | 277 |
-| `COVERAGE_REPORT.md` | 114 |
+| `COVERAGE_REPORT.md` | 56 |
 | `DDD.md` | 493 |
 | `EMOJIS.md` | 139 |
 | `HEGEL.md` | 287 |
@@ -97,7 +97,7 @@ SUM:                            42            452            361           2918
 | `learnings/.ddd/1_open_questions.md` | 216 |
 | `learnings/markdown_features.md` | 277 |
 | `LEXICON.md` | 84 |
-| `LOC_REPORT.md` | 146 |
+| `LOC_REPORT.md` | 148 |
 | `README.md` | 119 |
 | `RESEARCH_PLAN.md` | 139 |
 | `ROADMAP.md` | 427 |
@@ -129,7 +129,7 @@ SUM:                            42            452            361           2918
 
 | Metric | Target | Current | Status |
 |--------|--------|---------|--------|
-| Docs/Code Ratio | ≥0.3 | 1.97 | ✅ Excellent |
+| Docs/Code Ratio | ≥0.3 | 1.91 | ✅ Excellent |
 | README exists | Yes | ✅ | Met |
 | ARCHITECTURE.md | Optional | ✅ | Optional |
 
