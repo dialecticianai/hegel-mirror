@@ -57,13 +57,13 @@ AI generation makes artifacts cheap; clarity and validated patterns are valuable
 - Refactoring and quality improvements
 
 **Artifacts:**
-- CODE_MAP.md (living architecture map)
+- README.md (living architecture map)
 - Production codebase (`src/`)
 - LEARNINGS.md (optional, only for unexpected insights)
 
 **Discipline:**
 - Mandatory refactoring after features
-- CODE_MAP.md sync before structural commits
+- README.md sync before structural commits
 - Focus on orchestration and quality maintenance
 
 ---
@@ -262,7 +262,7 @@ From DDD book: "A base toy isolates exactly one axis of complexity."
 
 ### After Production Complete
 
-1. **Update CODE_MAP.md**: Document which toy patterns informed which `src/` modules
+1. **Update README.md**: Document which toy patterns informed which `src/` modules
 2. **Keep toys as reference**: Permanent artifacts, allowed dead code
 3. **Cite in commit messages**: `feat(ui): lazy Markdown rendering (pattern from toy2_markdown_render)`
 
@@ -310,7 +310,7 @@ Not optional. Core discipline after every feature integration.
 **Triggers:**
 - After toy → production integration (extract patterns, eliminate duplication)
 - After feature completion (simplify, reduce file sizes, improve naming)
-- Before structural commits (keep CODE_MAP.md sync, maintain clarity)
+- Before structural commits (keep README.md sync, maintain clarity)
 
 ---
 
@@ -364,7 +364,7 @@ Not optional. Core discipline after every feature integration.
 - Challenged assumptions (theory vs reality)
 - Open questions (spawned during implementation)
 
-### CODE_MAP.md (per directory)
+### README.md (per directory)
 
 **Purpose:** Living architectural map
 
@@ -397,22 +397,22 @@ src/
   main.rs
   app.rs
   parsing/
-    CODE_MAP.md
+    README.md
     mod.rs, parser.rs, chunks.rs, position.rs
   rendering/
-    CODE_MAP.md
+    README.md
     mod.rs, chunk.rs, text.rs, code.rs, image.rs, table.rs, comments.rs
   models/
-    CODE_MAP.md
+    README.md
     mod.rs, chunk.rs, selection.rs, comment.rs, layout.rs, table.rs
   syntax/
-    CODE_MAP.md
+    README.md
     mod.rs, highlighter.rs
   theme/
-    CODE_MAP.md
+    README.md
     mod.rs, default.rs
 
-CODE_MAP.md  (top-level src/ structure)
+README.md  (top-level src/ structure)
 ```
 
 ---
@@ -440,7 +440,7 @@ Use before SPEC/PLAN to encourage parsimony.
 - Minimal spike demonstrates core mechanism end-to-end
 - Tests pass (unit tests) or manual validation complete
 - LEARNINGS.md captures at least one insight/constraint
-- CODE_MAP.md in sync (for production work)
+- README.md in sync (for production work)
 - Complexity guardrails respected (file sizes, function lengths)
 - Toy patterns extracted and ready for production (Discovery mode)
 
@@ -453,7 +453,7 @@ Use before SPEC/PLAN to encourage parsimony.
 **Low uncertainty, mostly execution mode:**
 - Few toys needed (egui selection, markdown rendering)
 - Focus on production quality and refactoring
-- CODE_MAP.md central artifact
+- README.md central artifact
 
 **Key toys built:**
 - `toy1_egui_selection` - Text selection with line precision

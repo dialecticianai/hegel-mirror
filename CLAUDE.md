@@ -28,7 +28,7 @@ hegel astq 'pattern'    # AST-aware code search (prefer over grep)
 **Storage**: `.ddd/<filename>.review.N` - Append-only review logs, monotonic sequence numbers
 **Integration**: Environment passthrough (`HEGEL_STATE_DIR`, `HEGEL_SESSION_ID`) for seamless Hegel workflow integration
 
-**See [src/CODE_MAP.md](src/CODE_MAP.md) for detailed module documentation.**
+**See [src/README.md](src/README.md) for detailed module documentation.**
 
 ---
 

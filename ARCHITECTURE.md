@@ -267,7 +267,7 @@ pub struct ImageManager {
 
 ## Module Organization
 
-See [src/CODE_MAP.md](src/CODE_MAP.md) for detailed structure. High-level organization:
+See [src/README.md](src/README.md) for detailed structure. High-level organization:
 
 **Entry points**:
 - `main.rs` - CLI parsing, font loading, eframe initialization
@@ -395,4 +395,4 @@ cargo build --release
 **Last updated**: 2025-10-29
 **Status**: Phase 1 MVP complete, Phase 2 planning
 
-See [ROADMAP.md](ROADMAP.md) for feature timeline and [src/CODE_MAP.md](src/CODE_MAP.md) for implementation details.
+See [ROADMAP.md](ROADMAP.md) for feature timeline and [src/README.md](src/README.md) for implementation details.
