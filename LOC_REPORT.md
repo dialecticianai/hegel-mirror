@@ -1,6 +1,6 @@
 # Lines of Code Report
 
-**Last Updated**: 2025-11-05 14:31
+**Last Updated**: 2025-11-07 15:59
 **Tool**: [cloc](https://github.com/AlDanial/cloc) + wc
 
 ---
@@ -9,13 +9,13 @@
 
 | Metric | Rust Code | Documentation (.md) | Total |
 |--------|-----------|---------------------|-------|
-| **Lines** | 2,807 | 5,323 | 8,130 |
+| **Lines** | 2,807 | 5,520 | 8,327 |
 | **Comments** | 361 | - | 361 |
 | **Blank Lines** | 387 | - | 387 |
-| **Total Lines** | 3,555 | 5,323 | 8,878 |
-| **Files** | 36 | 38 | 74 |
+| **Total Lines** | 3,555 | 5,520 | 9,075 |
+| **Files** | 36 | 40 | 76 |
 
-**Documentation Ratio**: 1.90 lines of docs per line of code
+**Documentation Ratio**: 1.97 lines of docs per line of code
 
 ---
 
@@ -84,9 +84,11 @@ SUM:                            42            452            361           2918
 |------|-------|
 | `.ddd/feat/image_manager/PLAN.md` | 420 |
 | `.ddd/feat/image_manager/SPEC.md` | 303 |
+| `.ddd/feat/review-json/PLAN.md` | 156 |
+| `.ddd/feat/review-json/SPEC.md` | 195 |
 | `ARCHITECTURE.md` | 398 |
 | `CLAUDE.md` | 277 |
-| `COVERAGE_REPORT.md` | 268 |
+| `COVERAGE_REPORT.md` | 114 |
 | `DDD.md` | 493 |
 | `EMOJIS.md` | 139 |
 | `HEGEL.md` | 287 |
@@ -127,7 +129,7 @@ SUM:                            42            452            361           2918
 
 | Metric | Target | Current | Status |
 |--------|--------|---------|--------|
-| Docs/Code Ratio | ≥0.3 | 1.90 | ✅ Excellent |
+| Docs/Code Ratio | ≥0.3 | 1.97 | ✅ Excellent |
 | README exists | Yes | ✅ | Met |
 | ARCHITECTURE.md | Optional | ✅ | Optional |
 

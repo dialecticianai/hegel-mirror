@@ -1,11 +1,8 @@
 # Test Coverage Report
 
-**Last Updated**: 2025-11-05 14:31
+**Last Updated**: 2025-11-07 15:59
 **Tool**: cargo-llvm-cov
-**Overall Coverage**: **42.89%
-86.69%** lines | **41.88%
-85.58%** regions | **44.67%
-86.02%** functions
+**Overall Coverage**: **42.89%** lines | **41.88%** regions | **44.67%** functions
 
 ## Summary
 
@@ -17,61 +14,9 @@ TOTAL                                     3238              1882    41.88%      
 
 | Module | Line Coverage | Region Coverage | Functions | Status |
 |--------|--------------|-----------------|-----------|--------|
-| `src/adapters/claude_code.rs` | 93.82% | 94.29% | 90.00% | 🟢 Excellent |
-| `src/adapters/codex.rs` | 94.43% | 94.51% | 91.18% | 🟢 Excellent |
-| `src/adapters/cursor.rs` | 93.84% | 93.41% | 94.74% | 🟢 Excellent |
-| `src/adapters/mod.rs` | 98.91% | 99.35% | 100.00% | 🟢 Excellent |
-| `src/analyze/cleanup/aborted.rs` | 97.30% | 97.42% | 90.91% | 🟢 Excellent |
-| `src/analyze/cleanup/git.rs` | 0.00% | 0.00% | 0.00% | 🔴 Needs Work |
-| `src/analyze/cleanup/mod.rs` | 0.00% | 0.00% | 0.00% | 🔴 Needs Work |
-| `src/analyze/gap_detection.rs` | 0.00% | 0.00% | 0.00% | 🔴 Needs Work |
-| `src/analyze/repair.rs` | 0.00% | 0.00% | 0.00% | 🔴 Needs Work |
-| `src/analyze/sections.rs` | 90.62% | 85.40% | 88.89% | 🟢 Excellent |
-| `src/analyze/totals.rs` | 0.00% | 0.00% | 0.00% | 🔴 Needs Work |
 | `src/app.rs` | 0.00% | 0.00% | 0.00% | 🔴 Needs Work |
-| `src/commands/analyze/mod.rs` | 98.11% | 92.90% | 100.00% | 🟢 Excellent |
-| `src/commands/archive.rs` | 43.35% | 47.65% | 50.00% | 🟠 Moderate |
-| `src/commands/astq.rs` | 17.78% | 9.78% | 66.67% | 🔴 Needs Work |
-| `src/commands/config.rs` | 91.95% | 90.30% | 63.64% | 🟢 Excellent |
-| `src/commands/external_bin.rs` | 53.19% | 48.68% | 50.00% | 🟠 Moderate |
-| `src/commands/fork/amp.rs` | 100.00% | 100.00% | 100.00% | 🟢 Excellent |
-| `src/commands/fork/codex.rs` | 100.00% | 100.00% | 100.00% | 🟢 Excellent |
-| `src/commands/fork/cody.rs` | 100.00% | 98.41% | 100.00% | 🟢 Excellent |
-| `src/commands/fork/gemini.rs` | 100.00% | 100.00% | 100.00% | 🟢 Excellent |
-| `src/commands/fork/generic.rs` | 100.00% | 97.14% | 100.00% | 🟢 Excellent |
-| `src/commands/fork/mod.rs` | 73.68% | 73.06% | 100.00% | 🟡 Good |
-| `src/commands/fork/runtime.rs` | 44.20% | 52.80% | 63.64% | 🟠 Moderate |
-| `src/commands/git.rs` | 100.00% | 100.00% | 100.00% | 🟢 Excellent |
-| `src/commands/hook.rs` | 96.64% | 92.78% | 61.54% | 🟢 Excellent |
-| `src/commands/hooks_setup.rs` | 86.11% | 84.94% | 100.00% | 🟡 Good |
-| `src/commands/init.rs` | 93.44% | 93.56% | 100.00% | 🟢 Excellent |
-| `src/commands/meta.rs` | 64.67% | 70.71% | 83.33% | 🟠 Moderate |
-| `src/commands/pm.rs` | 60.00% | 68.42% | 50.00% | 🟠 Moderate |
-| `src/commands/reflect.rs` | 60.53% | 47.62% | 75.00% | 🟠 Moderate |
-| `src/commands/status.rs` | 43.21% | 37.42% | 50.00% | 🟠 Moderate |
-| `src/commands/workflow/claims.rs` | 100.00% | 100.00% | 100.00% | 🟢 Excellent |
-| `src/commands/workflow/context.rs` | 100.00% | 93.06% | 100.00% | 🟢 Excellent |
-| `src/commands/workflow/mod.rs` | 58.18% | 55.65% | 50.00% | 🟠 Moderate |
-| `src/commands/workflow/transitions.rs` | 83.89% | 77.83% | 56.25% | 🟡 Good |
-| `src/commands/wrapped.rs` | 71.79% | 72.44% | 80.00% | 🟡 Good |
-| `src/config.rs` | 91.67% | 91.04% | 76.92% | 🟢 Excellent |
-| `src/embedded.rs` | 82.79% | 75.56% | 50.00% | 🟡 Good |
-| `src/engine/mod.rs` | 99.83% | 99.63% | 97.50% | 🟢 Excellent |
-| `src/engine/template.rs` | 97.25% | 96.88% | 97.50% | 🟢 Excellent |
-| `src/guardrails/parser.rs` | 97.78% | 97.65% | 83.33% | 🟢 Excellent |
-| `src/guardrails/types.rs` | 94.38% | 93.60% | 100.00% | 🟢 Excellent |
 | `src/image_manager.rs` | 80.53% | 78.45% | 90.91% | 🟡 Good |
-| `src/main.rs` | 53.49% | 40.23% | 100.00% | 🟠 Moderate |
 | `src/main.rs` | 0.00% | 0.00% | 0.00% | 🔴 Needs Work |
-| `src/metamodes/mod.rs` | 99.29% | 99.56% | 100.00% | 🟢 Excellent |
-| `src/metrics/aggregation.rs` | 97.22% | 95.52% | 100.00% | 🟢 Excellent |
-| `src/metrics/cowboy.rs` | 93.69% | 89.18% | 100.00% | 🟢 Excellent |
-| `src/metrics/git.rs` | 92.43% | 91.65% | 95.45% | 🟢 Excellent |
-| `src/metrics/graph.rs` | 89.39% | 88.65% | 100.00% | 🟡 Good |
-| `src/metrics/hooks.rs` | 94.22% | 93.69% | 89.47% | 🟢 Excellent |
-| `src/metrics/mod.rs` | 96.19% | 94.97% | 84.21% | 🟢 Excellent |
-| `src/metrics/states.rs` | 100.00% | 100.00% | 100.00% | 🟢 Excellent |
-| `src/metrics/transcript.rs` | 100.00% | 100.00% | 100.00% | 🟢 Excellent |
 | `src/models/comment.rs` | 100.00% | 100.00% | 100.00% | 🟢 Excellent |
 | `src/models/document.rs` | 0.00% | 0.00% | 0.00% | 🔴 Needs Work |
 | `src/models/layout.rs` | 93.02% | 95.18% | 100.00% | 🟢 Excellent |
@@ -95,32 +40,9 @@ TOTAL                                     3238              1882    41.88%      
 | `src/rendering/text.rs` | 0.00% | 0.00% | 0.00% | 🔴 Needs Work |
 | `src/rendering/ui.rs` | 0.00% | 0.00% | 0.00% | 🔴 Needs Work |
 | `src/rendering/viewport.rs` | 57.89% | 63.10% | 60.00% | 🟠 Moderate |
-| `src/rules/evaluator.rs` | 98.43% | 97.74% | 96.15% | 🟢 Excellent |
-| `src/rules/interrupt.rs` | 100.00% | 100.00% | 100.00% | 🟢 Excellent |
-| `src/rules/types.rs` | 96.22% | 92.51% | 100.00% | 🟢 Excellent |
 | `src/storage.rs` | 0.00% | 0.00% | 0.00% | 🔴 Needs Work |
-| `src/storage/archive/aggregation.rs` | 100.00% | 100.00% | 100.00% | 🟢 Excellent |
-| `src/storage/archive/builder.rs` | 98.25% | 96.38% | 77.78% | 🟢 Excellent |
-| `src/storage/archive/mod.rs` | 93.37% | 93.73% | 75.00% | 🟢 Excellent |
-| `src/storage/archive/validation.rs` | 94.44% | 94.12% | 100.00% | 🟢 Excellent |
-| `src/storage/mod.rs` | 89.96% | 91.03% | 70.00% | 🟡 Good |
 | `src/syntax/highlighter.rs` | 100.00% | 100.00% | 100.00% | 🟢 Excellent |
-| `src/test_helpers/fixtures.rs` | 80.00% | 77.78% | 33.33% | 🟡 Good |
-| `src/test_helpers/jsonl.rs` | 100.00% | 100.00% | 100.00% | 🟢 Excellent |
-| `src/test_helpers/metrics.rs` | 100.00% | 100.00% | 100.00% | 🟢 Excellent |
-| `src/test_helpers/storage.rs` | 100.00% | 100.00% | 100.00% | 🟢 Excellent |
-| `src/test_helpers/tui.rs` | 100.00% | 100.00% | 100.00% | 🟢 Excellent |
-| `src/test_helpers/workflow.rs` | 86.11% | 81.44% | 87.50% | 🟡 Good |
-| `src/theme.rs` | 92.86% | 93.75% | 90.91% | 🟢 Excellent |
 | `src/theme/mod.rs` | 100.00% | 100.00% | 100.00% | 🟢 Excellent |
-| `src/tui/app.rs` | 87.66% | 87.90% | 87.50% | 🟡 Good |
-| `src/tui/mod.rs` | 11.36% | 13.70% | 16.67% | 🔴 Needs Work |
-| `src/tui/tabs/events.rs` | 90.24% | 87.10% | 100.00% | 🟢 Excellent |
-| `src/tui/tabs/files.rs` | 83.93% | 80.37% | 100.00% | 🟡 Good |
-| `src/tui/tabs/overview.rs` | 100.00% | 100.00% | 100.00% | 🟢 Excellent |
-| `src/tui/tabs/phases.rs` | 95.51% | 95.30% | 100.00% | 🟢 Excellent |
-| `src/tui/ui.rs` | 100.00% | 100.00% | 100.00% | 🟢 Excellent |
-| `src/tui/utils.rs` | 97.04% | 93.61% | 100.00% | 🟢 Excellent |
 
 ## Coverage Tiers
 
@@ -137,81 +59,13 @@ TOTAL                                     3238              1882    41.88%      
 - `src/rendering/inline_batcher.rs` - 99.19%
 - `src/syntax/highlighter.rs` - 100.00%
 - `src/theme/mod.rs` - 100.00%
-- `src/adapters/claude_code.rs` - 93.82%
-- `src/adapters/codex.rs` - 94.43%
-- `src/adapters/cursor.rs` - 93.84%
-- `src/adapters/mod.rs` - 98.91%
-- `src/analyze/cleanup/aborted.rs` - 97.30%
-- `src/analyze/sections.rs` - 90.62%
-- `src/commands/analyze/mod.rs` - 98.11%
-- `src/commands/config.rs` - 91.95%
-- `src/commands/fork/amp.rs` - 100.00%
-- `src/commands/fork/codex.rs` - 100.00%
-- `src/commands/fork/cody.rs` - 100.00%
-- `src/commands/fork/gemini.rs` - 100.00%
-- `src/commands/fork/generic.rs` - 100.00%
-- `src/commands/git.rs` - 100.00%
-- `src/commands/hook.rs` - 96.64%
-- `src/commands/init.rs` - 93.44%
-- `src/commands/workflow/claims.rs` - 100.00%
-- `src/commands/workflow/context.rs` - 100.00%
-- `src/config.rs` - 91.67%
-- `src/engine/mod.rs` - 99.83%
-- `src/engine/template.rs` - 97.25%
-- `src/guardrails/parser.rs` - 97.78%
-- `src/guardrails/types.rs` - 94.38%
-- `src/metamodes/mod.rs` - 99.29%
-- `src/metrics/aggregation.rs` - 97.22%
-- `src/metrics/cowboy.rs` - 93.69%
-- `src/metrics/git.rs` - 92.43%
-- `src/metrics/hooks.rs` - 94.22%
-- `src/metrics/mod.rs` - 96.19%
-- `src/metrics/states.rs` - 100.00%
-- `src/metrics/transcript.rs` - 100.00%
-- `src/rules/evaluator.rs` - 98.43%
-- `src/rules/interrupt.rs` - 100.00%
-- `src/rules/types.rs` - 96.22%
-- `src/storage/archive/aggregation.rs` - 100.00%
-- `src/storage/archive/builder.rs` - 98.25%
-- `src/storage/archive/mod.rs` - 93.37%
-- `src/storage/archive/validation.rs` - 94.44%
-- `src/test_helpers/jsonl.rs` - 100.00%
-- `src/test_helpers/metrics.rs` - 100.00%
-- `src/test_helpers/storage.rs` - 100.00%
-- `src/test_helpers/tui.rs` - 100.00%
-- `src/theme.rs` - 92.86%
-- `src/tui/tabs/events.rs` - 90.24%
-- `src/tui/tabs/overview.rs` - 100.00%
-- `src/tui/tabs/phases.rs` - 95.51%
-- `src/tui/ui.rs` - 100.00%
-- `src/tui/utils.rs` - 97.04%
 
 ### 🟡 Good (70-89% lines)
 - `src/image_manager.rs` - 80.53%
 - `src/rendering/text_builder.rs` - 73.81%
-- `src/commands/fork/mod.rs` - 73.68%
-- `src/commands/hooks_setup.rs` - 86.11%
-- `src/commands/workflow/transitions.rs` - 83.89%
-- `src/commands/wrapped.rs` - 71.79%
-- `src/embedded.rs` - 82.79%
-- `src/metrics/graph.rs` - 89.39%
-- `src/storage/mod.rs` - 89.96%
-- `src/test_helpers/fixtures.rs` - 80.00%
-- `src/test_helpers/workflow.rs` - 86.11%
-- `src/tui/app.rs` - 87.66%
-- `src/tui/tabs/files.rs` - 83.93%
 
 ### 🟠 Moderate (40-69% lines)
 - `src/rendering/viewport.rs` - 57.89%
-- `src/commands/archive.rs` - 43.35%
-- `src/commands/external_bin.rs` - 53.19%
-- `src/commands/fork/runtime.rs` - 44.20%
-- `src/commands/meta.rs` - 64.67%
-- `src/commands/pm.rs` - 60.00%
-- `src/commands/reflect.rs` - 60.53%
-- `src/commands/status.rs` - 43.21%
-- `src/commands/workflow/mod.rs` - 58.18%
-- `src/main.rs` - 53.49%
 
 ### 🔴 Needs Work (<40% lines)
 - `src/app.rs` - 0.00%
@@ -228,20 +82,12 @@ TOTAL                                     3238              1882    41.88%      
 - `src/rendering/text.rs` - 0.00%
 - `src/rendering/ui.rs` - 0.00%
 - `src/storage.rs` - 0.00%
-- `src/analyze/cleanup/git.rs` - 0.00%
-- `src/analyze/cleanup/mod.rs` - 0.00%
-- `src/analyze/gap_detection.rs` - 0.00%
-- `src/analyze/repair.rs` - 0.00%
-- `src/analyze/totals.rs` - 0.00%
-- `src/commands/astq.rs` - 17.78%
-- `src/tui/mod.rs` - 11.36%
 
 ## Coverage Targets
 
 | Tier | Target | Current | Status |
 |------|--------|---------|--------|
-| Overall | ≥80% | 42.89%
-86.69% | ⏳ In Progress |
+| Overall | ≥80% | 42.89% | ⏳ In Progress |
 | Critical Paths | ≥95% | Check modules above | Policy |
 | New Modules | ≥80% | - | Policy |
 
