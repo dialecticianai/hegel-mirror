@@ -38,6 +38,19 @@ struct Args {
     headless: bool,
 }
 
+fn load_icon() -> egui::IconData {
+    let icon_bytes = include_bytes!("../hegel-mirror.png");
+    let image = image::load_from_memory(icon_bytes)
+        .expect("Failed to load app icon")
+        .into_rgba8();
+    let (width, height) = image.dimensions();
+    egui::IconData {
+        rgba: image.into_raw(),
+        width: width as u32,
+        height: height as u32,
+    }
+}
+
 fn main() -> Result<()> {
     let args = Args::parse();
 
@@ -98,8 +111,13 @@ fn main() -> Result<()> {
         ));
     }
 
+    // Load app icon
+    let icon_data = load_icon();
+
     let options = eframe::NativeOptions {
-        viewport: egui::ViewportBuilder::default().with_inner_size([1024.0, 768.0]),
+        viewport: egui::ViewportBuilder::default()
+            .with_inner_size([1024.0, 768.0])
+            .with_icon(icon_data),
         ..Default::default()
     };
 
