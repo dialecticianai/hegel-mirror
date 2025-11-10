@@ -1,6 +1,6 @@
 # Lines of Code Report
 
-**Last Updated**: 2025-11-07 22:38
+**Last Updated**: 2025-11-10 17:17
 **Tool**: [cloc](https://github.com/AlDanial/cloc) + wc
 
 ---
@@ -9,13 +9,13 @@
 
 | Metric | Rust Code | Documentation (.md) | Total |
 |--------|-----------|---------------------|-------|
-| **Lines** | 3,270 | 5,393 | 8,663 |
-| **Comments** | 406 | - | 406 |
-| **Blank Lines** | 498 | - | 498 |
-| **Total Lines** | 4,174 | 5,393 | 9,567 |
+| **Lines** | 3,167 | 5,393 | 8,560 |
+| **Comments** | 392 | - | 392 |
+| **Blank Lines** | 478 | - | 478 |
+| **Total Lines** | 4,037 | 5,393 | 9,430 |
 | **Files** | 36 | 40 | 76 |
 
-**Documentation Ratio**: 1.65 lines of docs per line of code
+**Documentation Ratio**: 1.70 lines of docs per line of code
 
 ---
 
@@ -24,10 +24,10 @@
 ```
 Language                     files          blank        comment           code
 -------------------------------------------------------------------------------
-Rust                            36            498            406           3270
+Rust                            36            478            392           3167
 Markdown                         6             18              0             82
 -------------------------------------------------------------------------------
-SUM:                            42            516            406           3352
+SUM:                            42            496            392           3249
 -------------------------------------------------------------------------------
 ```
 
@@ -68,13 +68,13 @@ SUM:                            42            516            406           3352
 | `rendering/text.rs` | 33 | 33 | 0 | 0.0% | ✅ |
 | `rendering/ui.rs` | 123 | 123 | 0 | 0.0% | ✅ |
 | `rendering/viewport.rs` | 125 | 74 | 51 | 40.8% | ✅ |
-| `storage.rs` | 654 | 263 | 391 | 59.8% | ⚠️ Large |
+| `storage.rs` | 517 | 125 | 392 | 75.8% | ✅ |
 | `syntax/highlighter.rs` | 51 | 51 | 0 | 0.0% | ✅ |
 | `syntax/mod.rs` | 3 | 3 | 0 | 0.0% | ✅ |
 | `theme/default.rs` | 45 | 45 | 0 | 0.0% | ✅ |
 | `theme/mod.rs` | 103 | 103 | 0 | 0.0% | ✅ |
 
-**⚠️ Warning:** 5 file(s) over 200 impl lines - consider splitting for maintainability
+**⚠️ Warning:** 4 file(s) over 200 impl lines - consider splitting for maintainability
 
 ---
 
@@ -129,7 +129,7 @@ SUM:                            42            516            406           3352
 
 | Metric | Target | Current | Status |
 |--------|--------|---------|--------|
-| Docs/Code Ratio | ≥0.3 | 1.65 | ✅ Excellent |
+| Docs/Code Ratio | ≥0.3 | 1.70 | ✅ Excellent |
 | README exists | Yes | ✅ | Met |
 | ARCHITECTURE.md | Optional | ✅ | Optional |
 

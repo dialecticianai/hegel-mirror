@@ -1,64 +1,13 @@
 use anyhow::{Context, Result};
-use serde::{Deserialize, Serialize};
-use std::collections::HashMap;
 use std::fs::{self, File};
 use std::io::Write as IoWrite;
 use std::path::{Path, PathBuf};
 
-/// Review comment with full metadata for JSONL serialization
-#[derive(Serialize, Deserialize, Clone, Debug, PartialEq)]
-pub struct ReviewComment {
-    pub timestamp: String,
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub session_id: Option<String>,
-    pub file: String,
-    pub selection: SelectionRange,
-    pub text: String,
-    pub comment: String,
-}
-
-#[derive(Serialize, Deserialize, Clone, Debug, PartialEq)]
-pub struct SelectionRange {
-    pub start: Position,
-    pub end: Position,
-}
-
-#[derive(Serialize, Deserialize, Clone, Debug, PartialEq)]
-pub struct Position {
-    pub line: usize,
-    pub col: usize,
-}
-
-impl ReviewComment {
-    pub fn new(
-        file: String,
-        session_id: Option<String>,
-        text: String,
-        comment: String,
-        line_start: usize,
-        col_start: usize,
-        line_end: usize,
-        col_end: usize,
-    ) -> Self {
-        Self {
-            timestamp: chrono::Utc::now().to_rfc3339(),
-            session_id,
-            file,
-            selection: SelectionRange {
-                start: Position {
-                    line: line_start,
-                    col: col_start,
-                },
-                end: Position {
-                    line: line_end,
-                    col: col_end,
-                },
-            },
-            text,
-            comment,
-        }
-    }
-}
+// Import reviews types from hegel-cli
+pub use hegel::storage::reviews::{
+    compute_relative_path, detect_project_type, detect_project_type_from, read_hegel_reviews,
+    write_hegel_reviews, HegelReviewEntry, Position, ProjectType, ReviewComment, SelectionRange,
+};
 
 /// Storage manager for review files
 pub struct ReviewStorage {
@@ -174,96 +123,10 @@ impl ReviewStorage {
     }
 }
 
-/// Project type detection for routing review storage
-#[derive(Debug, Clone, PartialEq)]
-pub enum ProjectType {
-    /// Hegel project detected - use .hegel/reviews.json
-    Hegel { root: PathBuf },
-    /// Standalone project - use sidecar .review.N files
-    Standalone,
-}
-
-/// Detect if given path (or current working directory) is within a Hegel project
-pub fn detect_project_type_from(start_path: Option<PathBuf>) -> ProjectType {
-    match hegel::storage::FileStorage::find_project_root_from(start_path) {
-        Ok(hegel_dir) => ProjectType::Hegel { root: hegel_dir },
-        Err(_) => ProjectType::Standalone,
-    }
-}
-
-/// Detect if current working directory is within a Hegel project
-pub fn detect_project_type() -> ProjectType {
-    detect_project_type_from(None)
-}
-
-/// Single review entry for Hegel projects (stored in .hegel/reviews.json)
-#[derive(Serialize, Deserialize, Clone, Debug, PartialEq)]
-pub struct HegelReviewEntry {
-    pub comments: Vec<ReviewComment>,
-    pub timestamp: String,
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub session_id: Option<String>,
-}
-
-/// Map of filename to review entries for Hegel projects
-pub type HegelReviewsMap = HashMap<String, Vec<HegelReviewEntry>>;
-
-/// Compute relative path from project root to file
-pub fn compute_relative_path(project_root: &Path, file_path: &Path) -> Result<String> {
-    // Get parent of .hegel directory (project root)
-    let root = project_root.parent().context("Invalid project root path")?;
-
-    // Make file_path absolute if it isn't already
-    let abs_file = if file_path.is_absolute() {
-        file_path.to_path_buf()
-    } else {
-        std::env::current_dir()?.join(file_path)
-    };
-
-    // Compute relative path
-    let rel_path = abs_file
-        .strip_prefix(root)
-        .context("File is not within project root")?;
-
-    Ok(rel_path.to_string_lossy().to_string())
-}
-
-/// Read existing .hegel/reviews.json or return empty map
-pub fn read_hegel_reviews(hegel_dir: &Path) -> Result<HegelReviewsMap> {
-    let reviews_path = hegel_dir.join("reviews.json");
-
-    if !reviews_path.exists() {
-        return Ok(HashMap::new());
-    }
-
-    let content = fs::read_to_string(&reviews_path).context("Failed to read reviews.json")?;
-
-    if content.trim().is_empty() {
-        return Ok(HashMap::new());
-    }
-
-    serde_json::from_str(&content).context("Failed to parse reviews.json")
-}
-
-/// Write reviews map atomically to .hegel/reviews.json
-pub fn write_hegel_reviews(hegel_dir: &Path, reviews: &HegelReviewsMap) -> Result<()> {
-    // Ensure .hegel directory exists
-    fs::create_dir_all(hegel_dir).context(format!(
-        "Failed to create .hegel directory: {:?}",
-        hegel_dir
-    ))?;
-
-    let reviews_path = hegel_dir.join("reviews.json");
-    let json =
-        serde_json::to_string_pretty(reviews).context("Failed to serialize reviews to JSON")?;
-
-    fs::write(&reviews_path, json)
-        .context(format!("Failed to write reviews.json: {:?}", reviews_path))
-}
-
 #[cfg(test)]
 mod tests {
     use super::*;
+    use std::collections::HashMap;
     use std::fs;
     use tempfile::TempDir;
 
